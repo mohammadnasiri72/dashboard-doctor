@@ -26,10 +26,10 @@ import RtlLayout from '../components/RtlLayout';
 import ProgressBar from '../components/ProgressBar';
 import ThemeColorPresets from '../components/ThemeColorPresets';
 import MotionLazyContainer from '../components/animate/MotionLazyContainer';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-
+export const Account = createContext(null);
 // ----------------------------------------------------------------------
 
 MyApp.propTypes = {
@@ -58,21 +58,21 @@ export default function MyApp(props) {
       }
     } else {
       axios
-      .get('https://cis.aitest.ir/api/Patient/Get', {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setAccount(res.data);
-          setShow(true);
-        } else {
-          router.replace('/login');
-        }
-      })
-      .catch((err) => {
-          if (router.pathname.includes('/dashboard')){
+        .get('https://cis.aitest.ir/api/Patient/Get', {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            setAccount(res.data);
+            setShow(true);
+          } else {
+            router.replace('/login');
+          }
+        })
+        .catch((err) => {
+          if (router.pathname.includes('/dashboard')) {
             router.replace('/login');
           }
         });
@@ -88,22 +88,23 @@ export default function MyApp(props) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-
-      <CollapseDrawerProvider>
-        <SettingsProvider defaultSettings={settings}>
-          <ThemeProvider>
-            <MotionLazyContainer>
-              <ThemeColorPresets>
-                <RtlLayout>
-                  <Settings />
-                  <ProgressBar />
-                  {show && getLayout(<Component {...pageProps} />)}
-                </RtlLayout>
-              </ThemeColorPresets>
-            </MotionLazyContainer>
-          </ThemeProvider>
-        </SettingsProvider>
-      </CollapseDrawerProvider>
+      <Account.Provider value={account}>
+        <CollapseDrawerProvider>
+          <SettingsProvider defaultSettings={settings}>
+            <ThemeProvider>
+              <MotionLazyContainer>
+                <ThemeColorPresets>
+                  <RtlLayout>
+                    <Settings />
+                    <ProgressBar />
+                    {show && getLayout(<Component {...pageProps} />)}
+                  </RtlLayout>
+                </ThemeColorPresets>
+              </MotionLazyContainer>
+            </ThemeProvider>
+          </SettingsProvider>
+        </CollapseDrawerProvider>
+      </Account.Provider>
     </>
   );
 }

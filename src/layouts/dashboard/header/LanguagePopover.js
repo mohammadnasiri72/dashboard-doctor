@@ -10,19 +10,16 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 const LANGS = [
   {
+    label: 'Iran',
+    value: 'ir',
+    direction: 'rtl',
+    icon: 'https://parspng.com/wp-content/uploads/2021/10/iranpng.parspng.com-3.png',
+  },
+  {
     label: 'English',
     value: 'en',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_en.svg',
-  },
-  {
-    label: 'German',
-    value: 'de',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_de.svg',
-  },
-  {
-    label: 'French',
-    value: 'fr',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_fr.svg',
+    direction: 'ltr',
+    icon: 'https://parseflag.com/images/countries-flag/England.jpg',
   },
 ];
 
@@ -30,6 +27,8 @@ const LANGS = [
 
 export default function LanguagePopover() {
   const [open, setOpen] = useState(null);
+  const [indexLang, setIndexLang] = useState(0);
+  const [location , setLocation]=useState(LANGS[0].direction)
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -38,7 +37,15 @@ export default function LanguagePopover() {
   const handleClose = () => {
     setOpen(null);
   };
-
+  const switchLangHandler = (e,i) => {
+    handleClose();
+    setIndexLang(i);
+    if (e.target.value === 0) {
+      setLocation(LANGS[0].direction)
+    }else if (e.target.value === 1) {
+      setLocation(LANGS[1].direction)
+    }    
+  };
   return (
     <>
       <IconButtonAnimate
@@ -49,7 +56,11 @@ export default function LanguagePopover() {
           ...(open && { bgcolor: 'action.selected' }),
         }}
       >
-        <Image disabledEffect src={LANGS[0].icon} alt={LANGS[0].label} />
+        {LANGS.map(
+          (lang, i) =>
+            indexLang === i && <Image key={lang.value} disabledEffect src={LANGS[i].icon} alt={LANGS[i].label} />
+        )}
+        {/* <Image disabledEffect src={LANGS[0].icon} alt={LANGS[0].label} /> */}
       </IconButtonAnimate>
 
       <MenuPopover
@@ -64,8 +75,8 @@ export default function LanguagePopover() {
         }}
       >
         <Stack spacing={0.75}>
-          {LANGS.map((option) => (
-            <MenuItem key={option.value} selected={option.value === LANGS[0].value} onClick={handleClose}>
+          {LANGS.map((option , i) => (
+            <MenuItem key={option.value} selected={i === indexLang} onClick={(e) => switchLangHandler(e , i)}>
               <Image disabledEffect alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} />
 
               {option.label}

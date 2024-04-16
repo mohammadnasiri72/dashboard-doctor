@@ -38,18 +38,17 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
       lastName.length > 2 &&
       gender.length !== 0 &&
       code.length === 6 &&
-      (registerModel.abroad === false || password.match(paternPassword))
+      (registerModel.abroad === false || password.length>6)
     ) {
       setIsLoading(true);
       axios
         .post('https://cis.aitest.ir/api/Patient/Register', registerModel)
         .then((response) => {
-          console.log(response);
-          window.localStorage.setItem("token" , response.data.token)
-          window.localStorage.setItem("userId" , response.data.userId)
-          window.localStorage.setItem("refreshToken" , response.data.refreshToken)
-          window.localStorage.setItem("roles" , response.data.roles)
-          window.localStorage.setItem("expiration" , response.data.expiration)
+          localStorage.setItem("token" , response.data.token)
+          localStorage.setItem("userId" , response.data.userId)
+          localStorage.setItem("refreshToken" , response.data.refreshToken)
+          localStorage.setItem("roles" , response.data.roles)
+          localStorage.setItem("expiration" , response.data.expiration)
           // response.setHeader("Set-Cookie", serialize("token", fristName , {
           //   httpOnly:true,
           //   path:"/",
@@ -88,15 +87,15 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
         icon: 'error',
         text: 'لطفا جنسیت خود را به درستی وارد کنید(جنسیت نمیتواند خالی باشد)',
       });
-    } else if (code.length !== 6) {
+    } else if (registerModel.abroad === true && password.length<=6) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا پسورد خود را به درستی وارد کنید(پسورد باید بیشتر از 6 رقم باشد)',
+      });
+    }else if (code.length !== 6) {
       Toast.fire({
         icon: 'error',
         text: 'لطفا کد ارسال شده را به درستی وارد کنید(کد ارسال شده باید 6 رقم باشد)',
-      });
-    } else if (registerModel.abroad === true && !password.match(paternPassword)) {
-      Toast.fire({
-        icon: 'error',
-        text: 'لطفا پسورد خود را به درستی وارد کنید(پسورد باید بیشتر از 8 عدد و شامل حروف بزرگ و کوچک و عدد و علامت باشد)',
       });
     }
   };
@@ -120,10 +119,10 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
             <InputName fristName={fristName} setFristName={setFristName} />
             <InputLastName lastName={lastName} setLastName={setLastName} />
             <SelectGender gender={gender} setGender={setGender} />
-            <InputFillCode setCode={setCode} />
             {registerModel.abroad && 
               <InputPassword setPassword={setPassword} password={password}/>
             }
+            <InputFillCode setCode={setCode} />
             <div className="flex justify-center items-stretch mt-4">
               <div className="px-2 bg-green-500 rounded-md flex items-center">
                 <button type="submit" onClick={submitHandler} className=" text-white px-5 py-2 ">
