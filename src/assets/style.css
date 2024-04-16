@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    text-align: center;
+    direction: rtl;
+}
+
+
+.bg-register{
+    background-image: url('./../../public/images/bg-register.jpg');
+}
+@font-face{
+    font-family: "iransans";
+    src: url("./../../public/fonts/IRANSansWeb\(FaNum\)_Light.ttf");
+}
+*{
+    font-family: "iransans" !important;
+}
+.bg-login{
+    background-image: url('./../../public/images/bg.jpeg');
+}
