@@ -1,52 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { UploadAvatar } from '../upload'
+import axios from 'axios'
 
 export default function UploaderImage() {
+  const [file , setFile] = useState('')
+  // console.log(file);
+  const viewImgHandler = (e)=>{
+    setFile(e.target.files[0])
+    
+  }
+  const sendImgHakdler = ()=>{
+    const token = localStorage.getItem('token')
+    const fileData = new FormData()
+    fileData.append("file" , file)
+    axios
+    .post('https://cis.aitest.ir/api/File/Upload/Image', fileData ,{
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        } )
+        .then((res)=>{
+          const fileSrc = new FormData()
+          fileSrc.append('fileSrc' , res.request.response)
+          axios
+          .post('https://cis.aitest.ir/api/Patient/Avatar/Update' , fileSrc , {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            }
+          })
+          .then((res)=>{
+            console.log('don');
+          })
+          .catch((err)=>{})
+        })
+        .catch((err)=>{
+          // console.log(err);
+        })
+  }
   return (
     <>
     <div className="border rounded-lg h-full pt-5 relative">
-              {/* <UploadAvatar /> */}
+              <input onChange={viewImgHandler} type="file" />
+              <UploadAvatar file={file}/>
 
-              {/* <input
-                className="border rounded-full w-36 h-36 absolute top-5 left-0 translate-x-1/2 opacity-0 cursor-pointer"
-                type="file"
-                onChange={(e) => {
-                  setFileimg(e.target.files[0].name);
-                  console.log(fileimg);
-                }}
-              /> */}
-              <div>
-                {/* <RHFUploadAvatar
-                name="avatarUrl"
-                accept="image/*"
-                maxSize={3145728}
-                
-                
-              /> */}
-
-                {/* <RHFUploadAvatar
-                  name="avatarUrl"
-                  accept="image/*"
-                  maxSize={3145728}
-                  onDrop={handleDrop}
-                  helperText={
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        mt: 2,
-                        mx: 'auto',
-                        display: 'block',
-                        textAlign: 'center',
-                        color: 'text.secondary',
-                      }}
-                    >
-                      Allowed *.jpeg, *.jpg, *.png, *.gif
-                      <br /> max size of {fData(3145728)}
-                    </Typography>
-                  }
-                /> */}
-              </div>
+             
+             
               <p className="text-xs mt-2">Allowed *.jpeg, *.jpg, *.png, *.gif</p>
               <p className="text-xs mt-2"> max size of 3.1 MB</p>
+            <button onClick={sendImgHakdler}>ذخیره</button>
             </div>
     </>
   )

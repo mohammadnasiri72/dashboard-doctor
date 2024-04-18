@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import InputFillCode from '../register/fillCode';
 import InputTimerLogin from './InputTimerLogin';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
+import { Account } from '../../pages/_app';
 
 export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, setMobileNumber , setIsLoading}) {
+  const account = useContext(Account);
+  console.log(account);
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -32,13 +35,14 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('roles', res.data.roles);
             localStorage.setItem('expiration', res.data.expiration);
+            localStorage.setItem("fullName" , account.firstName)
             Toast.fire({
               icon: 'success',
               text: 'با موفقیت وارد شدید',
             });
           }
           setTimeout(() => {
-            route.replace('/dashboard/one');
+            route.replace('/dashboard');
           }, 1000);
         })
         .catch((err) => {

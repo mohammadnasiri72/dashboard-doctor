@@ -24,6 +24,7 @@ export default function InputLastName({lastName , setLastName}) {
                 dir="rtl"
                 maxRows={4}
                 color={colorLName}
+                InputProps={{className:'textfield-style'}}
               />
             </div>
           

@@ -1,5 +1,4 @@
-import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext , useState } from 'react';
 
 import axios from 'axios';
 import InputNameUpdateProfile from './inputNameUpdateProfile';
@@ -10,8 +9,10 @@ import DatePickerUpdateProfile from './datePickerUpdateProfile';
 import InputTelUpdateProfile from './inputTelUpdateProfile';
 import SelectCityUpdateProfile from './selectCityUpdateProfile';
 import TextareaAddressUpdateProfile from './textareaAddressUpdateProfile';
-import { Account } from '../../pages/_app';
+import { Account, Change } from '../../pages/_app';
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/router';
+import { getAccount } from '../../utils/getAccount';
 
 export default function FormUpdateProfile() {
   const Toast = Swal.mixin({
@@ -20,68 +21,113 @@ export default function FormUpdateProfile() {
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
+    customClass: 'toast-modal',
   });
+  // const route = useRouter()
+  let token = localStorage.getItem('token')
+  console.log(getAccount(token));
   const account = useContext(Account);
-  const [name, setName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [fatherName, setFatherName] = useState('');
-  const [gender, setGender] = useState('m');
-  const [date, setDate] = useState();
-  const [tel, setTel] = useState('');
-  const [province, setProvince] = useState('');
-  const [city, setCity] = useState('');
-  const [address, setAddress] = useState('');
-  //   console.log(localStorage.getItem("userId"));
+  const setChange = useContext(Change)
+  const [name, setName] = useState(account.firstName);
+  const [lastName, setLastName] = useState(account.lastName);
+  const [fatherName, setFatherName] = useState(account.fatherName);
+  const [gender, setGender] = useState(account.gender);
+  const [date, setDate] = useState(account.dateOfBirthFa);
+  const [tel, setTel] = useState(account.tel);
+  const [province, setProvince] = useState(account.province);
+  const [city, setCity] = useState(account.city);
+  const [address, setAddress] = useState(account.address);
+ const dataProfile = {
+       userId: localStorage.getItem('userId'),
+       firstName: name,
+       lastName,
+       gender,
+       abroad: account.abroad,
+       fatherName,
+       dateOfBirthFa: date,
+       tel,
+       province,
+       city,
+       address,
+     };
   const updateProfileHandler = () => {
-    const data = {
-      userId: localStorage.getItem('userId'),
-      firstName: name,
-      lastName,
-      gender,
-      abroad: account.abroad,
-      fatherName,
-      dateOfBirthFa: date,
-      tel,
-      province,
-      city,
-      address,
-    };
-    axios
-      .post('https://cis.aitest.ir/api/PatientHistory/Update', data)
-      .then((response) => {
-        if (response.status === 200) {
+    if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
+      axios
+        .post('https://cis.aitest.ir/api/Patient/Update', dataProfile ,{
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        } )
+        .then((response) => {
+          if (response.status === 200) {
+            Toast.fire({
+              icon: 'success',
+              text: 'اطلاعات با موفقیت ذخیره شد',
+            });
+            localStorage.setItem('fullName' , name)
+            setChange((e)=> !e)
+            // setTimeout(() => {
+            //   route.reload('/dashboard')
+            // }, 1000);
+          }
+        })
+        .catch((error) => {
+          // console.log(error);
           Toast.fire({
-            icon: 'success',
-            text: 'اطلاعات با موفقیت ذخیره شد',
+            icon: 'error',
+            text: error.response.data,
           });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        Toast.fire({
-          icon: 'error',
-          text: 'err',
         });
+    }else if (name.length <= 2) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نام خود را به درستی وارد کنید (نام باید بزرگتر از 2 کاراکتر باشد)',
       });
+    }else if (lastName.length <= 2) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نام خانوادگی خود را به درستی وارد کنید (نام خانوادگی باید بزرگتر از 2 کاراکتر باشد)',
+      });
+    }else if (fatherName.length <= 2) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا نام پدر را به درستی وارد کنید (نام پدر باید بزرگتر از 2 کاراکتر باشد)',
+      });
+    }else if (!date) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا تاریخ تولد خود را وارد کنید',
+      });
+    }else if (!province || !city) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا استان و شهر محل سکونت خود را وارد کنید',
+      });
+    }else if (!address) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا آدرس محل سکونت خود را وارد کنید',
+      });
+    }
   };
   return (
     <>
       <div className="lg:w-1/2 w-full p-4">
         <div className="border rounded-lg pb-5">
           <div className="flex">
-            <InputNameUpdateProfile setName={setName} />
-            <InputLastNameProfileUpdate setLastName={setLastName} />
+            <InputNameUpdateProfile name={name} setName={setName} />
+            <InputLastNameProfileUpdate lastName={lastName} setLastName={setLastName} />
           </div>
           <div className="flex">
-            <InputFatherNameUpdateProfile setFatherName={setFatherName} />
+            <InputFatherNameUpdateProfile fatherName={fatherName} setFatherName={setFatherName} />
             <SelectGenderUpdateProfile setGender={setGender} gender={gender} />
           </div>
           <div className="flex">
             <DatePickerUpdateProfile date={date} setDate={setDate} />
-            <InputTelUpdateProfile setTel={setTel} />
+            <InputTelUpdateProfile setTel={setTel} tel={tel}/>
           </div>
-          <SelectCityUpdateProfile province={province} setProvince={setProvince} setCity={setCity} />
-          <TextareaAddressUpdateProfile setAddress={setAddress} />
+          <SelectCityUpdateProfile province={province} setProvince={setProvince} setCity={setCity} city={city}/>
+          <TextareaAddressUpdateProfile setAddress={setAddress} address={address}/>
           <div className="text-start mt-4 px-5">
             <button
               onClick={updateProfileHandler}

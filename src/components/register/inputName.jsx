@@ -22,6 +22,7 @@ export default function InputName({ fristName, setFristName }) {
           multiline
           maxRows={4}
           color={colorName}
+          InputProps={{className:'textfield-style'}}
         />
       </div>
     </>

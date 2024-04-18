@@ -23,6 +23,7 @@ export default function InputEmailLogin({setEmail , email}) {
           multiline
           color={colorEmail}
           maxRows={4}
+          InputProps={{className:'textfield-style'}}
         />
       </div>
     </>

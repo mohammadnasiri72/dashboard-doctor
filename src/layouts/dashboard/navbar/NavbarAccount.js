@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Link, Typography, Avatar } from '@mui/material';
-import { useContext } from 'react';
-import { Account } from 'src/pages/_app';
+
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +24,7 @@ NavbarAccount.propTypes = {
 };
 
 export default function NavbarAccount({ isCollapse }) {
-  const account = useContext(Account);
+  
   return (
     <Link underline="none" color="inherit">
       <RootStyle
@@ -51,9 +50,7 @@ export default function NavbarAccount({ isCollapse }) {
           }}
         >
           <Typography variant="subtitle2" noWrap>
-            {account.firstName}
-            {' '}
-            {account.lastName}
+            {localStorage.getItem('fullName')}
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
             user

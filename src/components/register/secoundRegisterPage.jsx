@@ -49,6 +49,7 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
           localStorage.setItem("refreshToken" , response.data.refreshToken)
           localStorage.setItem("roles" , response.data.roles)
           localStorage.setItem("expiration" , response.data.expiration)
+          localStorage.setItem("fullName" , fristName)
           // response.setHeader("Set-Cookie", serialize("token", fristName , {
           //   httpOnly:true,
           //   path:"/",
@@ -60,7 +61,7 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
             text: 'ثبت نام شما با موفقیت انجام شد',
           });
           setTimeout(() => {
-            route.replace('/dashboard/one')
+            route.replace('/dashboard')
           }, 1000);
         })
         .catch((error) => {

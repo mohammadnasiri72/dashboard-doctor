@@ -21,3 +21,10 @@ body{
 .bg-login{
     background-image: url('./../../public/images/bg.jpeg');
 }
+.toast-modal{
+    margin-top: 50px;
+}
+.textfield-style{
+    color: white !important;
+    font-size: 20px !important;
+}

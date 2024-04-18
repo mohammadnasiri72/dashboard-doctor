@@ -19,6 +19,7 @@ export default function SelectGender({ gender, setGender }) {
                   label="Gender"
                   color="primary"
                   onChange={(e) => setGender(e.target.value)}
+                  InputProps={{className:'textfield-style'}}
                 >
                   <MenuItem value="m">مرد</MenuItem>
                   <MenuItem value="f">زن</MenuItem>

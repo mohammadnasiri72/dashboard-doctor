@@ -30,6 +30,7 @@ import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 export const Account = createContext(null);
+export const Change = createContext(null);
 // ----------------------------------------------------------------------
 
 MyApp.propTypes = {
@@ -41,8 +42,9 @@ MyApp.propTypes = {
 export default function MyApp(props) {
   const [account, setAccount] = useState('');
   const [show, setShow] = useState(false);
+  const [change, setChang] = useState(false);
   const router = useRouter();
-  console.log(account);
+  // console.log(account);
   useEffect(() => {
     if (!router.pathname.includes('/dashboard')) {
       setShow(true);
@@ -88,23 +90,25 @@ export default function MyApp(props) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <Account.Provider value={account}>
-        <CollapseDrawerProvider>
-          <SettingsProvider defaultSettings={settings}>
-            <ThemeProvider>
-              <MotionLazyContainer>
-                <ThemeColorPresets>
-                  <RtlLayout>
-                    <Settings />
-                    <ProgressBar />
-                    {show && getLayout(<Component {...pageProps} />)}
-                  </RtlLayout>
-                </ThemeColorPresets>
-              </MotionLazyContainer>
-            </ThemeProvider>
-          </SettingsProvider>
-        </CollapseDrawerProvider>
-      </Account.Provider>
+      <Change.Provider value={setChang}>
+        <Account.Provider value={account}>
+          <CollapseDrawerProvider>
+            <SettingsProvider defaultSettings={settings}>
+              <ThemeProvider>
+                <MotionLazyContainer>
+                  <ThemeColorPresets>
+                    <RtlLayout>
+                      <Settings />
+                      <ProgressBar />
+                      {show && getLayout(<Component {...pageProps} />)}
+                    </RtlLayout>
+                  </ThemeColorPresets>
+                </MotionLazyContainer>
+              </ThemeProvider>
+            </SettingsProvider>
+          </CollapseDrawerProvider>
+        </Account.Provider>
+      </Change.Provider>
     </>
   );
 }

@@ -15,6 +15,7 @@ export default function InputPassword({ password, setPassword }) {
           label="پسورد"
           type="password"
           value={password}
+          InputProps={{className:'textfield-style'}}
         />
       </div>
     </>

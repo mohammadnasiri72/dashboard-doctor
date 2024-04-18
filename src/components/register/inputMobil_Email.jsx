@@ -34,6 +34,7 @@ export default function InputMobilEmail({ abroad, email, setEmail, mobile, setMo
             multiline
             color={colorEmailOrMobile}
             maxRows={4}
+            InputProps={{className:'textfield-style'}}
           />
         </div>
           

@@ -27,6 +27,7 @@ export default function InputNationalId({ nationalId, setNationalId }) {
                 value={nationalId}
                 color={colorNationId}
                 maxRows={4}
+                InputProps={{className:'textfield-style'}}
               />
             </div>
           

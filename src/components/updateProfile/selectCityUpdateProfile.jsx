@@ -2,7 +2,7 @@ import { Autocomplete, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export default function SelectCityUpdateProfile({province , setProvince , setCity}) {
+export default function SelectCityUpdateProfile({province , setProvince , setCity , city}) {
     const [provinces, setProvinces] = useState([{ name: 'تهران' }, { name: 'مشهد' }]);
     const [cities, setCities] = useState([{ name: 'لطفا اول استان را انتخاب کنید' }]);
     useEffect(() => {
@@ -33,6 +33,7 @@ export default function SelectCityUpdateProfile({province , setProvince , setCit
       <div className="flex">
         <div className="w-1/2 mt-6 px-5">
           <Autocomplete
+          value={province}
             onChange={(e) => setProvince(e.target.innerText)}
             id="province"
             options={provinces.map((option) => option.name)}
@@ -41,6 +42,7 @@ export default function SelectCityUpdateProfile({province , setProvince , setCit
         </div>
         <div className="w-1/2 mt-6 px-5">
           <Autocomplete
+          value={city}
             onChange={(e) => setCity(e.target.innerText)}
             id="شهر محل سکونت"
             freeSolo

@@ -69,12 +69,13 @@ export default function MobileLoginPageOne({
         <TextField
           onChange={(e) => setMobileNumber(e.target.value)}
           value={mobileNumber}
-          className="w-full"
+          className="w-full text-white"
           id="outlined-multiline-flexible"
           label={'شماره موبایل'}
           multiline
           color={colorMobile}
           maxRows={4}
+          InputProps={{className:'textfield-style'}}
         />
         <div>
           <div className="flex justify-center items-center">

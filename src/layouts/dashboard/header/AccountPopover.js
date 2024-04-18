@@ -7,21 +7,21 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar } from '@mui/material
 // components
 import MenuPopover from '../../../components/MenuPopover';
 import { IconButtonAnimate } from '../../../components/animate';
-import { Account } from '../../../pages/_app';
-
+import { useRouter } from 'next/router';
+import axios from 'axios';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
+    label: 'تست1',
     linkTo: '/',
   },
   {
-    label: 'Profile',
+    label: 'تست2',
     linkTo: '/',
   },
   {
-    label: 'Settings',
+    label: 'تست3',
     linkTo: '/',
   },
 ];
@@ -29,8 +29,9 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  const account = useContext(Account);
   
+  const route = useRouter();
+
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -39,6 +40,26 @@ export default function AccountPopover() {
 
   const handleClose = () => {
     setOpen(null);
+  };
+
+  const logoutHandler = () => {
+    // const userIdData = new FormData();
+    // userIdData.append('userId', localStorage.getItem('userId'));
+    const token = localStorage.getItem('token')
+    axios
+    .post('https://cis.aitest.ir/api/Authenticate/Logout' ,null, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      }
+    })
+    .then((response) => {
+      // console.log(response);
+    })
+    .catch((error) => {
+      // console.log(error);
+    });
+    localStorage.removeItem('token');
+    route.replace('/login');
   };
 
   return (
@@ -79,8 +100,9 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.firstName}
-            {account.lastName}
+            {/* {dataProfile} */}
+            {/* {account.lastName} */}
+            {localStorage.getItem('fullName')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             rayan.moran@gmail.com
@@ -101,7 +123,9 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem sx={{ m: 1 }}>Logout</MenuItem>
+        <MenuItem onClick={logoutHandler} sx={{ m: 1, color: 'red' }}>
+          خروج از حساب کاربری
+        </MenuItem>
       </MenuPopover>
     </>
   );
