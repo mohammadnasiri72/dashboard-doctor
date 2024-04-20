@@ -35,7 +35,6 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
             localStorage.setItem('refreshToken', res.data.refreshToken);
             localStorage.setItem('roles', res.data.roles);
             localStorage.setItem('expiration', res.data.expiration);
-            localStorage.setItem("fullName" , account.firstName)
             Toast.fire({
               icon: 'success',
               text: 'با موفقیت وارد شدید',

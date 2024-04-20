@@ -1,34 +1,15 @@
 import {
-  Autocomplete,
   Container,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
+  Typography
 } from '@mui/material';
-import * as Yup from 'yup';
 // layouts
 import Layout from '../../layouts';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
-import UploadAvatar from '../../components/upload/UploadAvatar';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
-import DatePicker from 'react-multi-date-picker';
-import persian from 'react-date-object/calendars/persian';
-import persian_fa from 'react-date-object/locales/persian_fa';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm, useFormContext } from 'react-hook-form';
-import { RHFUploadAvatar } from '../../components/hook-form';
-import { useRouter } from 'next/router';
-import { fData } from '../../utils/formatNumber';
-import UploaderImage from '../../components/updateProfile/uploaderImage';
 import FormUpdateProfile from '../../components/updateProfile/formUpdateProfile';
+import UploaderImage from '../../components/updateProfile/uploaderImage';
 // import { RHFUploadAvatar } from '../../components/hook-form';
 
 // ----------------------------------------------------------------------

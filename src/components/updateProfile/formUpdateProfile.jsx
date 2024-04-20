@@ -11,8 +11,7 @@ import SelectCityUpdateProfile from './selectCityUpdateProfile';
 import TextareaAddressUpdateProfile from './textareaAddressUpdateProfile';
 import { Account, Change } from '../../pages/_app';
 import Swal from 'sweetalert2';
-import { useRouter } from 'next/router';
-import { getAccount } from '../../utils/getAccount';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function FormUpdateProfile() {
   const Toast = Swal.mixin({
@@ -25,7 +24,6 @@ export default function FormUpdateProfile() {
   });
   // const route = useRouter()
   let token = localStorage.getItem('token')
-  console.log(getAccount(token));
   const account = useContext(Account);
   const setChange = useContext(Change)
   const [name, setName] = useState(account.firstName);
@@ -53,18 +51,18 @@ export default function FormUpdateProfile() {
   const updateProfileHandler = () => {
     if (name.length > 2 && lastName.length > 2 && fatherName.length > 2 && date && province && city && address) {
       axios
-        .post('https://cis.aitest.ir/api/Patient/Update', dataProfile ,{
+        .post(mainDomain+'/api/Patient/Update', dataProfile ,{
           headers: {
             Authorization: 'Bearer ' + token,
           }
         } )
         .then((response) => {
           if (response.status === 200) {
+           
             Toast.fire({
               icon: 'success',
               text: 'اطلاعات با موفقیت ذخیره شد',
             });
-            localStorage.setItem('fullName' , name)
             setChange((e)=> !e)
             // setTimeout(() => {
             //   route.reload('/dashboard')
@@ -134,6 +132,7 @@ export default function FormUpdateProfile() {
               className="px-5 py-2 rounded-md bg-green-500 duration-300 hover:bg-green-600 text-white"
             >
               ذخیره تغییرات
+              
             </button>
           </div>
         </div>

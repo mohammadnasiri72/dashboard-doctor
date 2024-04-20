@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import Image from '../Image';
 import Iconify from '../Iconify';
 import RejectionFiles from './RejectionFiles';
+import { useRef } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -87,7 +88,7 @@ export default function UploadAvatar({ error, file, helperText, sx, ...other }) 
         >
           <input {...getInputProps()} />
 
-          {file && <Image alt="avatar" src={'/images/bg.jpeg'} sx={{ zIndex: 8 }} />}
+          {file && <Image alt="avatar" src={file} sx={{ zIndex: 8 }} />}
          
 
           <PlaceholderStyle

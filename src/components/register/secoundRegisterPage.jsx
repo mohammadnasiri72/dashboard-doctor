@@ -49,7 +49,6 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
           localStorage.setItem("refreshToken" , response.data.refreshToken)
           localStorage.setItem("roles" , response.data.roles)
           localStorage.setItem("expiration" , response.data.expiration)
-          localStorage.setItem("fullName" , fristName)
           // response.setHeader("Set-Cookie", serialize("token", fristName , {
           //   httpOnly:true,
           //   path:"/",

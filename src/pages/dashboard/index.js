@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Loader from '../../components/loader';
 
 // ----------------------------------------------------------------------
 
@@ -11,5 +12,5 @@ export default function Index() {
     }
   });
 
-  return null;
+  return <Loader />;
 }

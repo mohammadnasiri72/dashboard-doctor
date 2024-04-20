@@ -14,7 +14,6 @@ RHFUploadAvatar.propTypes = {
 
 export function RHFUploadAvatar({ name, ...other }) {
   const { control } = useFormContext();
-  console.log(useFormContext());
 
   return (
     <Controller

@@ -45,7 +45,7 @@ const verifyToken = (token)=>{
     const validationResoult = verify(token,)
     return validationResoult
  }catch (err){
-   console.log(err)
+  //  console.log(err)
   return false
  }
 }

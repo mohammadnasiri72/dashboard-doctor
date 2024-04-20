@@ -28,3 +28,7 @@ body{
     color: white !important;
     font-size: 20px !important;
 }
+
+.box-avatar:hover img{
+    filter: brightness(50%);
+}

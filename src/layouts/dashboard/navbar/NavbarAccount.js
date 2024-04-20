@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Link, Typography, Avatar } from '@mui/material';
+import { useContext } from 'react';
+import { Account } from '../../../pages/_app';
+import { mainDomain } from '../../../utils/mainDomain';
 
 
 // ----------------------------------------------------------------------
@@ -24,7 +27,7 @@ NavbarAccount.propTypes = {
 };
 
 export default function NavbarAccount({ isCollapse }) {
-  
+  const account = useContext(Account);
   return (
     <Link underline="none" color="inherit">
       <RootStyle
@@ -34,7 +37,7 @@ export default function NavbarAccount({ isCollapse }) {
           }),
         }}
       >
-        <Avatar src="https://minimal-assets-api.vercel.app/assets/images/avatars/avatar_5.jpg" alt="Rayan Moran" />
+        <Avatar src={mainDomain+account.avatar} alt="Rayan Moran" />
 
         <Box
           sx={{
@@ -50,10 +53,12 @@ export default function NavbarAccount({ isCollapse }) {
           }}
         >
           <Typography variant="subtitle2" noWrap>
-            {localStorage.getItem('fullName')}
+            {account.firstName}
+            {' '}
+            {account.lastName}
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            user
+            بیمار
           </Typography>
         </Box>
       </RootStyle>

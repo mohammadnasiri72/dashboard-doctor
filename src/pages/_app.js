@@ -29,8 +29,10 @@ import MotionLazyContainer from '../components/animate/MotionLazyContainer';
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import Loader from '../components/loader';
 export const Account = createContext(null);
 export const Change = createContext(null);
+
 // ----------------------------------------------------------------------
 
 MyApp.propTypes = {
@@ -44,15 +46,12 @@ export default function MyApp(props) {
   const [show, setShow] = useState(false);
   const [change, setChang] = useState(false);
   const router = useRouter();
-  // console.log(account);
+
   useEffect(() => {
     if (!router.pathname.includes('/dashboard')) {
       setShow(true);
     }
-  });
-  let token = '';
-  useEffect(() => {
-    token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       if (router.pathname.includes('/dashboard')) {
         router.replace('/login');
@@ -73,13 +72,13 @@ export default function MyApp(props) {
             router.replace('/login');
           }
         })
-        .catch((err) => {
+        .catch(() => {
           if (router.pathname.includes('/dashboard')) {
             router.replace('/login');
           }
         });
     }
-  }, []);
+  }, [router, change]);
 
   const { Component, pageProps, settings } = props;
 
@@ -101,6 +100,7 @@ export default function MyApp(props) {
                       <Settings />
                       <ProgressBar />
                       {show && getLayout(<Component {...pageProps} />)}
+                      {!show && <Loader />}
                     </RtlLayout>
                   </ThemeColorPresets>
                 </MotionLazyContainer>
