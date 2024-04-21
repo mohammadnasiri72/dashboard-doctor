@@ -6,6 +6,7 @@ import InputNationalId from './inputNationalId';
 import SelectAbroad from './selectAbroad';
 import InputDelete from './inputDelete';
 import { useRouter } from 'next/router';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function MainRegisterPage({ setIsRegister, setRegisterModel, setIsLoading }) {
   const [abroad, setAbroad] = useState(false);
@@ -37,7 +38,7 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
       setIsLoading(true);
       setRegisterModel(registerModel);
       axios
-        .post('https://cis.aitest.ir/api/Patient/PreRegister', registerModel)
+        .post(mainDomain+'/api/Patient/PreRegister', registerModel)
         .then((response) => {
           setIsLoading(false);
           if (response.status === 200) {

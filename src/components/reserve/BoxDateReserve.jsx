@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import SimpleBackdrop from '../backdrop';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function BoxDateReserve({ doctorId , setDates , setIsBackdrop , setDateReserved}) {
   const [dateFa, setDateFa] = useState([]);
@@ -7,7 +9,7 @@ export default function BoxDateReserve({ doctorId , setDates , setIsBackdrop , s
   useEffect(() => {
     if (doctorId) {
       axios
-        .get('https://cis.aitest.ir/api/ReservationTime/GetList', {
+        .get(mainDomain+'/api/ReservationTime/GetList', {
           params: {
             doctorId,
             dateFa: '',
@@ -20,7 +22,7 @@ export default function BoxDateReserve({ doctorId , setDates , setIsBackdrop , s
           setDateFa(res.data);
         })
         .catch((err) => {
-          //   console.log('err');
+            console.log(err);
         });
     }
   }, [doctorId]);
@@ -28,7 +30,7 @@ export default function BoxDateReserve({ doctorId , setDates , setIsBackdrop , s
     setDateReserved(e.target.value)
     setIsBackdrop(true)
     axios
-        .get('https://cis.aitest.ir/api/ReservationTime/GetList', {
+        .get(mainDomain+'/api/ReservationTime/GetList', {
           params: {
             doctorId,
             dateFa: e.target.value,
@@ -42,7 +44,7 @@ export default function BoxDateReserve({ doctorId , setDates , setIsBackdrop , s
           setDates(res.data[0].reservationTimes)
         })
         .catch((err) => {
-          //   console.log('err');
+            console.log(err);
           setIsBackdrop(false)
         });
   }
@@ -53,6 +55,10 @@ export default function BoxDateReserve({ doctorId , setDates , setIsBackdrop , s
         {dateFa.map((date) => (
           <button onClick={selectDateHandler} key={date.dateFa} value={date.dateFa} className="p-5 rounded-md bg-slate-200 hover:bg-slate-300 duration-300 mt-2">{date.dateFa}</button>
         ))}
+        {
+          dateFa.length === 0 &&
+          <SimpleBackdrop />
+        }
       </div>
     </>
   );

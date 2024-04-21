@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export default function InputPasswordLogin({ password, setPassword }) {
    

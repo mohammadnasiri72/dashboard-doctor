@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import SelectAbroadLogin from './SelectAbroadLogin';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function MobileLoginPageOne({
   mobileNumber,
@@ -36,7 +37,7 @@ export default function MobileLoginPageOne({
     if (mobileNumber.match(paternMobile)) {
       setIsLoading(true);
       axios
-        .post('https://cis.aitest.ir/api/Authenticate/SendOtp', mobileNumberData)
+        .post(mainDomain+'/api/Authenticate/SendOtp', mobileNumberData)
         .then((res) => {
           setIsLoading(false);
           if (res.status === 200) {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function InputDelete() {
     const[nationalId , setDel] = useState('')
@@ -9,7 +10,7 @@ export default function InputDelete() {
     }
     const delHandler = ()=>{
         axios
-        .post(`https://cis.aitest.ir/api/Patient/Delete2?nationalId=${delId.nationalId}`)
+        .post(mainDomain`/api/Patient/Delete2?nationalId=${delId.nationalId}`)
         .then((response) => {
           console.log("ok");
         })

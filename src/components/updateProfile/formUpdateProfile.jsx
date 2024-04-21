@@ -70,7 +70,7 @@ export default function FormUpdateProfile() {
           }
         })
         .catch((error) => {
-          // console.log(error);
+          console.log(error);
           Toast.fire({
             icon: 'error',
             text: error.response.data,

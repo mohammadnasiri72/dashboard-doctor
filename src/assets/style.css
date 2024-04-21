@@ -15,6 +15,10 @@ body{
     font-family: "iransans";
     src: url("./../../public/fonts/IRANSansWeb\(FaNum\)_Light.ttf");
 }
+@font-face {
+    font-family: "IranNastaliq";
+    src: url('./../../public/fonts/IranNastaliq.ttf') ;
+}
 *{
     font-family: "iransans" !important;
 }
@@ -31,4 +35,7 @@ body{
 
 .box-avatar:hover img{
     filter: brightness(50%);
+}
+.font-nastaligh{
+    font-family: 'IranNastaliq' !important;
 }

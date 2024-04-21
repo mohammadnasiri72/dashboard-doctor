@@ -4,11 +4,9 @@ import InputTimerLogin from './InputTimerLogin';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
-import { Account } from '../../pages/_app';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, setMobileNumber , setIsLoading}) {
-  const account = useContext(Account);
-  console.log(account);
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -26,7 +24,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
     if (code.length === 6) {
       setIsLoading(true)
       axios
-        .post('https://cis.aitest.ir/api/Authenticate/LoginOtp', data)
+        .post(mainDomain+'/api/Authenticate/LoginOtp', data)
         .then((res) => {
           setIsLoading(false)
           if (res.status === 200) {
@@ -73,7 +71,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
             تایید
           </button>
         </div>
-        <InputTimerLogin setMobileNumber={setMobileNumber} mobileNumber={mobileNumber} />
+        <InputTimerLogin mobileNumber={mobileNumber} />
       </div>
     </>
   );

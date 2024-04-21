@@ -5,13 +5,11 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 
 export default function DatePickerUpdateProfile({ date, setDate }) {
   const datePic = useRef();
-  // console.log(date?.getTime?.());
-  // console.log(new Date().getTime);
+ 
   const setDateHandler = ()=>{
     setDate(datePic.current?.children[0]?.value)
   }
-  // console.log(datePic.current?.children[0]?.value);
-  // console.log(date);
+  
   return (
     <>
       <div className="mt-6 px-4">

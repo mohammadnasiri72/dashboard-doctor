@@ -9,6 +9,7 @@ import InputTimer from './inputTimer';
 import SelectGender from './selectGender';
 import InputPassword from './inputPassword';
 import { useRouter } from 'next/router';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function SecoundRegisterPage({ registerModel, setIsRegister, setIsLoading }) {
   const [fristName, setFristName] = useState('');
@@ -42,7 +43,7 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
     ) {
       setIsLoading(true);
       axios
-        .post('https://cis.aitest.ir/api/Patient/Register', registerModel)
+        .post(mainDomain+'/api/Patient/Register', registerModel)
         .then((response) => {
           localStorage.setItem("token" , response.data.token)
           localStorage.setItem("userId" , response.data.userId)

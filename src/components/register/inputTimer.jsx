@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
 
 export default function InputTimer({registerModel , setIsLoading}) {
@@ -26,7 +27,7 @@ export default function InputTimer({registerModel , setIsLoading}) {
         setShowBtnSendCode(false)
         setIsLoading(true)
         axios
-          .post("https://cis.aitest.ir/api/Patient/PreRegister", registerModel)
+          .post(mainDomain+"/api/Patient/PreRegister", registerModel)
           .then( () => {
             setIsLoading(false)
             Toast.fire({

@@ -14,7 +14,6 @@ export default function Reserve() {
   const [dates , setDates] = useState([]);
   const [isBackdrop , setIsBackdrop] = useState(false);
   const [dateReserved , setDateReserved] = useState('')
-  console.log(doctors);
   useEffect(() => {
     axios
       .get(mainDomain+'/api/BasicInfo/Specialization/GetList', {
@@ -26,7 +25,7 @@ export default function Reserve() {
         setExpertises(res.data);
       })
       .catch((err) => {
-        //   console.log('err');
+          console.log(err);
       });
   }, []);
   useEffect(() => {
@@ -41,7 +40,7 @@ export default function Reserve() {
         setDoctor(res.data[0].doctorId)
       })
       .catch((err) => {
-        //   console.log('err');
+          console.log(err);
       });
   }, []);
   return (

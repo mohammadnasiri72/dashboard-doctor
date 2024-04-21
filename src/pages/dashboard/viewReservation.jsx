@@ -9,9 +9,7 @@ ViewReservation.getLayout = function getLayout(page) {
 export default function ViewReservation() {
   return (
     <>
-        <div className='text-start'>
-            <h3 className='text-3xl font-bold'>نوبت های من</h3>
-        </div>
+        
         <MyReservation />
     </>
   )

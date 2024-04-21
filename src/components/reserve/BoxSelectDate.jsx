@@ -4,9 +4,11 @@ import Swal from 'sweetalert2';
 import { Account } from '../../pages/_app';
 import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
+import { useRouter } from 'next/router';
 
 export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBackdrop , doctor}) {
   const account = useContext(Account);
+  const route = useRouter()
   const setTimeHandler = (e) => {
     Swal.fire({
       title: `شما تاریخ${dateReserved} و زمان ${e.fromTime} تا ${e.toTime} را برای ${doctor.firstName} ${doctor.lastName} انتخاب کردین`,
@@ -37,6 +39,7 @@ export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBa
               text: 'درخواست شما با موفقیت ثبت شد',
               icon: 'success',
             });
+            route.replace('/dashboard/viewReservation')
           })
           .catch((err) => {
             setIsBackdrop(false);

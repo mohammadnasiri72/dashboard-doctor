@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NationalIdLogin from './nationalIdLogin';
 import MobileLogin from './mobileLogin';
-import Loader from '../loader';
+import SimpleBackdrop from '../backdrop';
 
 export default function MainLoginPage() {
   const [abroad, setAbroad] = useState(false);
@@ -15,15 +15,9 @@ export default function MainLoginPage() {
           {abroad && <NationalIdLogin abroad={abroad} setAbroad={setAbroad} setIsLoading={setIsLoading}/>}
         </div>
       </div>
-      {/* <div
-        style={{ display: isLoading ? "flex" : "none" }}
-        className="bg-[#0009] fixed top-0 left-0 right-0 bottom-0 justify-center items-center"
-      >
-        <img className="w-52" src={"/images/preloader.gif"} alt="" />
-      </div> */}
       {
         isLoading &&
-        <Loader />
+        <SimpleBackdrop />
       }
     </>
   );

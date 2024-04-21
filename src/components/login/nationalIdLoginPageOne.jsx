@@ -5,6 +5,7 @@ import InputPasswordLogin from './inputPasswordLogin';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function NationalIdLoginPageOne({abroad , setAbroad , setIsLoading , setForgotPassword}) {
     const paternNationalId = /^[0-9]{10}$/;
@@ -26,7 +27,7 @@ export default function NationalIdLoginPageOne({abroad , setAbroad , setIsLoadin
         if (nationalId.match(paternNationalId) && password.length > 6) {
           setIsLoading(true);
           axios
-            .post('https://cis.aitest.ir/api/Authenticate/Login', data)
+            .post(mainDomain+'/api/Authenticate/Login', data)
             .then((res) => {
               setIsLoading(false);
               if (res.status === 200) {
@@ -41,7 +42,7 @@ export default function NationalIdLoginPageOne({abroad , setAbroad , setIsLoadin
                 });
               }
               setTimeout(() => {
-                route.replace('/dashboard/one');
+                route.replace('/dashboard');
               }, 1000);
             })
             .catch((err) => {

@@ -29,7 +29,7 @@ import MotionLazyContainer from '../components/animate/MotionLazyContainer';
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import Loader from '../components/loader';
+import SimpleBackdrop from '../components/backdrop';
 export const Account = createContext(null);
 export const Change = createContext(null);
 
@@ -100,7 +100,7 @@ export default function MyApp(props) {
                       <Settings />
                       <ProgressBar />
                       {show && getLayout(<Component {...pageProps} />)}
-                      {!show && <Loader />}
+                      {!show && <SimpleBackdrop />}
                     </RtlLayout>
                   </ThemeColorPresets>
                 </MotionLazyContainer>

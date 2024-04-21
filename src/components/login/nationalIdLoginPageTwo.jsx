@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import InputEmailLogin from './inputEmailLogin';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function NationalIdLoginPageTwo({ setForgotPassword , setIsLoading}) {
   const paternEmail = /[a-zA-Z0-9.-]+@[a-z-]+\.[a-z]{2,3}/;
@@ -24,7 +25,7 @@ export default function NationalIdLoginPageTwo({ setForgotPassword , setIsLoadin
     if (email.match(paternEmail)) {
         setIsLoading(true)
       axios
-        .post('https://cis.aitest.ir/api/Authenticate/ResetPassword', emailData)
+        .post(mainDomain+'/api/Authenticate/ResetPassword', emailData)
         .then((res) => {
             setIsLoading(false)
             if (res.status === 200) {

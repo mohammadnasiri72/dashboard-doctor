@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
-export default function InputTimerLogin({setMobileNumber , mobileNumber}) {
+export default function InputTimerLogin({ mobileNumber}) {
     const [timeResendCode, setTimeResendCode] = useState(120);
     const [showBtnSendCode, setShowBtnSendCode] = useState(false);
     const Toast = Swal.mixin({

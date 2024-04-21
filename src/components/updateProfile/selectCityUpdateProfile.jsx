@@ -10,11 +10,10 @@ export default function SelectCityUpdateProfile({province , setProvince , setCit
           axios
             .get(`https://iran-locations-api.ir/api/v1/fa/cities?state=${province}`)
             .then((res) => {
-            //   console.log(res.data.cities);
               setCities(res.data.cities);
             })
             .catch((err) => {
-            //   console.log(err);
+              console.log(err);
             });
       }, [province]);
     
@@ -25,7 +24,7 @@ export default function SelectCityUpdateProfile({province , setProvince , setCit
             setProvinces(res.data);
           })
           .catch((err) => {
-            // console.log(err);
+            console.log(err);
           });
       }, []);
   return (

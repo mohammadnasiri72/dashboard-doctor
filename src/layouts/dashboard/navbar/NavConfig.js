@@ -19,6 +19,7 @@ const sidebarConfig = [
       { title: 'ویرایش پروفایل', path: '/dashboard/updateProfile', icon: <LiaUserEditSolid /> },
       { title: 'نوبت دهی اینترنتی', path: '/dashboard/reserve', icon: <FaRegCalendarCheck /> },
       { title: 'نوبت های من', path: '/dashboard/viewReservation', icon: <FaRegCalendarAlt /> },
+      { title: 'لیست بیماری های من', path: '/dashboard/patientList', icon: <FaRegCalendarAlt /> },
     ],
   },
 
