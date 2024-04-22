@@ -4,7 +4,7 @@ import React from 'react'
 export default function InputAge({setAge , age}) {
   return (
     <>
-    <div className=" text-start px-3" dir="rtl">
+    <div className=" text-start" dir="rtl">
         <TextField
           onChange={(e) => setAge(e.target.value)}
           className="w-full text-end"

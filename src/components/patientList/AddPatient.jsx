@@ -12,14 +12,8 @@ export default function AddPatient() {
   const [age, setAge] = useState('');
   const [isPatientActive, setIsPatientActive] = useState(true);
   const [desc, setDesc] = useState('');
-  const [medicine, setMedicine] = useState([]);
-    console.log(medicine);
-  const medicationIdList = [];
-  medicine.map((m) => {
-    if (m) {
-      medicationIdList.push(m.medicationId);
-    }
-  });
+  const [medicationIdList , setMedicationIdList] = useState([])
+  console.log(medicationIdList);
   const setPatientHandler = () => {
     const dataPatient = {
       title: patientName,
@@ -28,19 +22,18 @@ export default function AddPatient() {
       description: desc,
       medicationIdList: medicationIdList,
     };
-    // console.log(dataPatient);
-    // axios
-    //   .post(mainDomain + '/api/PatientHistory/Add', dataPatient, {
-    //     headers: {
-    //       Authorization: 'Bearer ' + localStorage.getItem('token'),
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(mainDomain + '/api/PatientHistory/Add', dataPatient, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div className="flex items-center">
@@ -54,7 +47,7 @@ export default function AddPatient() {
         <SwitchPatientActive setIsPatientActive={setIsPatientActive} isPatientActive={isPatientActive} />
       </div>
       <div className="flex justify-center items-center xl:w-1/3 ">
-        <MedicineList setMedicine={setMedicine} isPatientActive={isPatientActive} medicine={medicine} />
+        <MedicineList  isPatientActive={isPatientActive} setMedicationIdList={setMedicationIdList}/>
       </div>
       <div className="flex justify-center items-center xl:w-1/6 ">
         <DescriptionPatient setDesc={setDesc} desc={desc} />

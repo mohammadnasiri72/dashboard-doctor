@@ -6,9 +6,9 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function MedicineList({ setMedicine , isPatientActive , medicine}) {
+export default function MedicineList({ isPatientActive, setMedicationIdList , valueMedicine , setValueMedicine}) {
   const [medicines, setMedicines] = useState([]);
-  
+
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Medication/GetList', {
@@ -24,20 +24,24 @@ export default function MedicineList({ setMedicine , isPatientActive , medicine}
       })
       .catch((err) => {});
   }, []);
-  const getListMedicine = (e)=>{
-    if (medicines.find((ev)=> ev.name === e.target.innerText)) {
-        setMedicine([ medicines.find((ev)=> ev.name === e.target.innerText)]);
-        
-    }
-  }
+  const changMedicineHandler = (event, newValue) => {
+    setValueMedicine(newValue);
+    let arr = [];
+    newValue.map((e) => {
+      arr.push(e.medicationId);
+    });
+    setMedicationIdList(arr);
+  };
   return (
     <>
-      <div className="w-56">
+      <div>
         <Stack spacing={3}>
           <Autocomplete
-          disabled={!isPatientActive}
-            //   value={medicine}
-            onChange={getListMedicine}
+            value={isPatientActive? valueMedicine : []}
+            disabled={!isPatientActive}
+            onChange={(event, newValue) => {
+              changMedicineHandler(event, newValue);
+            }}
             multiple
             id="tags-outlined"
             options={medicines}
