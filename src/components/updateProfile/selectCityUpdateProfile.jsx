@@ -13,7 +13,7 @@ export default function SelectCityUpdateProfile({province , setProvince , setCit
               setCities(res.data.cities);
             })
             .catch((err) => {
-              console.log(err);
+              
             });
       }, [province]);
     

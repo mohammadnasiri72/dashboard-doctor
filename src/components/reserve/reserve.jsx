@@ -25,7 +25,7 @@ export default function Reserve() {
         setExpertises(res.data);
       })
       .catch((err) => {
-          console.log(err);
+          
       });
   }, []);
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function Reserve() {
         setDoctor(res.data[0].doctorId)
       })
       .catch((err) => {
-          console.log(err);
+          
       });
   }, []);
   return (

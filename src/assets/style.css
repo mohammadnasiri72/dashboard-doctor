@@ -26,7 +26,7 @@ body{
     background-image: url('./../../public/images/bg.jpeg');
 }
 .toast-modal{
-    margin-top: 50px;
+    margin-top: 70px;
 }
 .textfield-style{
     color: white !important;
@@ -38,4 +38,5 @@ body{
 }
 .font-nastaligh{
     font-family: 'IranNastaliq' !important;
+    
 }

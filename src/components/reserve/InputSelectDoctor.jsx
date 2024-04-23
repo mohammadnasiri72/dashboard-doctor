@@ -27,7 +27,6 @@ export default function InputSelectDoctor({doctors , expertise , doctor , setDoc
                     <MenuItem key={doctor.doctorId} value={doctor.doctorId}>{doctor.firstName} {doctor.lastName}</MenuItem>
                 ))
             }
-          {/* <MenuItem>Ten</MenuItem> */}
           
         </Select>
       </FormControl>

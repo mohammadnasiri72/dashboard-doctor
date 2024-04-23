@@ -4,6 +4,8 @@ import { FaRegUser } from "react-icons/fa";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import { LiaUserEditSolid } from "react-icons/lia";
+import { CiViewList } from "react-icons/ci";
+import { MdSupportAgent } from "react-icons/md";
 // ----------------------------------------------------------------------
 
 
@@ -19,7 +21,8 @@ const sidebarConfig = [
       { title: 'ویرایش پروفایل', path: '/dashboard/updateProfile', icon: <LiaUserEditSolid /> },
       { title: 'نوبت دهی اینترنتی', path: '/dashboard/reserve', icon: <FaRegCalendarCheck /> },
       { title: 'نوبت های من', path: '/dashboard/viewReservation', icon: <FaRegCalendarAlt /> },
-      { title: 'لیست بیماری های من', path: '/dashboard/patientList', icon: <FaRegCalendarAlt /> },
+      { title: 'لیست بیماری های من', path: '/dashboard/patientList', icon: <CiViewList /> },
+      { title: 'مشاوره آنلاین', path: '/dashboard/counseling', icon: <MdSupportAgent /> },
     ],
   },
 

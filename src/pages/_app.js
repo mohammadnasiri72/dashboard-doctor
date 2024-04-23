@@ -78,6 +78,7 @@ export default function MyApp(props) {
           }
         });
     }
+    
   }, [router, change]);
 
   const { Component, pageProps, settings } = props;

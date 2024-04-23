@@ -67,7 +67,6 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
         .catch((error) => {
           document.cookie = `token=${fristName}`;
           setIsLoading(false);
-          console.log(error);
           Toast.fire({
             icon: 'error',
             text: error.response.data,

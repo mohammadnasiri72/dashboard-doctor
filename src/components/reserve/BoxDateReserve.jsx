@@ -22,7 +22,7 @@ export default function BoxDateReserve({ doctorId , setDates , setIsBackdrop , s
           setDateFa(res.data);
         })
         .catch((err) => {
-            console.log(err);
+          
         });
     }
   }, [doctorId]);

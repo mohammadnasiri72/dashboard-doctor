@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useState } from 'react';
 import InputNamePatient from './InputNamePatient';
-import { FaAngleLeft } from 'react-icons/fa6';
 import InputAge from './InputAge';
 import SwitchPatientActive from './SwitchPatientActive';
 import MedicineList from './MedicineList';
@@ -9,10 +8,26 @@ import DescriptionPatient from './DescriptionPatient';
 import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
-import { Change } from '../../pages/_app';
 import Swal from 'sweetalert2';
+import { IoClose } from "react-icons/io5";
 
-export default function AddPatientPopUp({ isOpenAddPatient, setIsOpenAddPatient }) {
+export default function AddPatientPopUp({
+  isOpenAddPatient,
+  setIsOpenAddPatient,
+  patientName,
+  setPatientName,
+  age,
+  setAge,
+  isPatientActive,
+  setIsPatientActive,
+  medicationIdList,
+  setMedicationIdList,
+  desc,
+  setDesc,
+  valueMedicine,
+  setValueMedicine,
+  patId,
+}) {
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -21,14 +36,8 @@ export default function AddPatientPopUp({ isOpenAddPatient, setIsOpenAddPatient 
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
-  const [patientName, setPatientName] = useState('');
-  const [age, setAge] = useState('');
-  const [isPatientActive, setIsPatientActive] = useState(true);
-  const [medicationIdList, setMedicationIdList] = useState([]);
-  const [desc, setDesc] = useState('');
-  const [valueMedicine , setValueMedicine] = useState([])
+
   const [isLoading, setIsLoading] = useState(false);
-  const setChange = useContext(Change);
   const setPatientHandler = () => {
     setIsLoading(true);
     const dataPatient = {
@@ -46,13 +55,12 @@ export default function AddPatientPopUp({ isOpenAddPatient, setIsOpenAddPatient 
       })
       .then((res) => {
         setIsLoading(false);
-        setChange((e) => !e);
-        setIsOpenAddPatient(!isOpenAddPatient)
-        setPatientName('')
-        setAge('')
-        setIsPatientActive(true)
-        setDesc('')
-        setValueMedicine([])
+        setIsOpenAddPatient(!isOpenAddPatient);
+        setPatientName('');
+        setAge('');
+        setIsPatientActive(true);
+        setDesc('');
+        setValueMedicine([]);
         Toast.fire({
           icon: 'success',
           text: 'بیماری با موفقیت ثبت شد',
@@ -60,21 +68,48 @@ export default function AddPatientPopUp({ isOpenAddPatient, setIsOpenAddPatient 
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
         Toast.fire({
           icon: 'error',
           text: err.response.data,
         });
       });
   };
+  const editPatientHandler = () => {
+    setIsLoading(true);
+    const dataEdit = {
+      patientHistoryId: patId,
+      title: patientName,
+      statusId: isPatientActive? 1:0,
+      age,
+      description: desc,
+      medicationIdList,
+    }
+    axios
+    .post(mainDomain+'/api/PatientHistory/Update' , dataEdit , {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+    .then((res)=>{
+      setIsLoading(false);
+      Toast.fire({
+        icon: 'success',
+        text: 'بیماری با موفقیت ثبت شد',
+      });
+      setIsOpenAddPatient(!isOpenAddPatient)
+    })
+    .catch((err)=>{
+      setIsLoading(false);
+    })
+  };
   return (
     <>
       <div
         style={{ zIndex: '1300', transform: isOpenAddPatient ? 'translateX(0)' : 'translateX(-100%)' }}
-        className="fixed top-0 bottom-0 right-2/3 left-0 bg-slate-50 duration-500 p-5 shadow-lg"
+        className="fixed top-0 bottom-0 right-2/3 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
       >
         <h3 className="text-2xl font-semibold ">افزودن بیماری</h3>
-        <FaAngleLeft
+        <IoClose
           onClick={() => setIsOpenAddPatient(!isOpenAddPatient)}
           className="absolute right-5 top-5 text-4xl hover:scale-125 cursor-pointer duration-300 rounded-full bg-slate-300 p-2"
         />
@@ -88,15 +123,26 @@ export default function AddPatientPopUp({ isOpenAddPatient, setIsOpenAddPatient 
           <SwitchPatientActive setIsPatientActive={setIsPatientActive} isPatientActive={isPatientActive} />
         </div>
         <div className="mt-6">
-          <MedicineList isPatientActive={isPatientActive} setMedicationIdList={setMedicationIdList} valueMedicine={valueMedicine} setValueMedicine={setValueMedicine}/>
+          <MedicineList
+            isPatientActive={isPatientActive}
+            setMedicationIdList={setMedicationIdList}
+            valueMedicine={valueMedicine}
+            setValueMedicine={setValueMedicine}
+          />
         </div>
         <div className="mt-6">
           <DescriptionPatient setDesc={setDesc} desc={desc} />
         </div>
         <div className="p-2">
-          <button onClick={setPatientHandler} className="bg-green-500 p-3 whitespace-nowrap text-white rounded-md ">
-            ثبت بیماری
-          </button>
+          {patId ? (
+            <button onClick={editPatientHandler} className="bg-green-500 p-3 whitespace-nowrap text-white rounded-md ">
+              ویرایش بیماری
+            </button>
+          ) : (
+            <button onClick={setPatientHandler} className="bg-green-500 p-3 whitespace-nowrap text-white rounded-md ">
+              ثبت بیماری
+            </button>
+          )}
         </div>
       </div>
       {isOpenAddPatient && (

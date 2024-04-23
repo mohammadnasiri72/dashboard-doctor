@@ -10,7 +10,7 @@ export default function InputDelete() {
     }
     const delHandler = ()=>{
         axios
-        .post(mainDomain`/api/Patient/Delete2?nationalId=${delId.nationalId}`)
+        .post(mainDomain+`/api/Patient/Delete2?nationalId=${delId.nationalId}`)
         .then((response) => {
           console.log("ok");
         })

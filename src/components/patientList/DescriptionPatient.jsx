@@ -6,6 +6,7 @@ export default function DescriptionPatient({desc , setDesc}) {
     <>
       <div className=" text-start" dir="rtl">
         <TextField
+        minRows={2}
           onChange={(e) => setDesc(e.target.value)}
           className="w-full text-end"
           id="outlined-multiline-flexible"
