@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
-export default function SelecDoctor({ expertise }) {
+export default function SelecDoctor({ expertise , valDoctor , setValDoctor}) {
   const [doctors, setDoctors] = useState([]);
-  const [valDoctor, setValDoctor] = useState([]);
+  
   // console.log(doctors);
   useEffect(() => {
     axios
