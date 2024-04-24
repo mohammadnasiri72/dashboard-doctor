@@ -4,6 +4,7 @@ import { MdAddAPhoto } from 'react-icons/md';
 import { Account, Change } from '../../pages/_app';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
+import { Box, CircularProgress, LinearProgress, Typography } from '@mui/material';
 
 export default function UploaderImage() {
   const account = useContext(Account);
@@ -19,6 +20,7 @@ export default function UploaderImage() {
 
   const [file, setFile] = useState('');
   const [fileUpload, setFileUpload] = useState('');
+  const [valProgres, setValProgres] = useState(0);
   const setChange = useContext(Change);
   const viewImgHandler = (e) => {
     setFile(e.target.files[0]);
@@ -28,7 +30,7 @@ export default function UploaderImage() {
     const fileData = new FormData();
     fileData.append('file', file);
     axios
-      .post(mainDomain+'/api/File/Upload/Image', fileData, {
+      .post(mainDomain + '/api/File/Upload/Image', fileData, {
         headers: {
           Authorization: 'Bearer ' + token,
         },
@@ -37,12 +39,17 @@ export default function UploaderImage() {
         const fileSrc = new FormData();
         fileSrc.append('fileSrc', res.request.response);
         axios
-          .post(mainDomain+'/api/Patient/Avatar/Update', fileSrc, {
+          .post(mainDomain + '/api/Patient/Avatar/Update', fileSrc, {
             headers: {
               Authorization: 'Bearer ' + token,
             },
+            
+            onUploadProgress: (val) => {
+              setValProgres(parseInt(Math.round((val.loaded * 100) / val.total)));
+            },
           })
           .then(() => {
+            setValProgres(0);
             setChange((e) => !e);
             Toast.fire({
               icon: 'success',
@@ -67,8 +74,9 @@ export default function UploaderImage() {
           className="border-dashed relative border border-black w-32 h-32 bg-slate-200 rounded-full flex justify-center items-center cursor-pointer mx-auto  box-avatar"
         >
           {(fileUpload || account.picture) && (
-            <img className="w-full h-full rounded-full duration-300" src={mainDomain+account.avatar} alt="" />
+            <img className="w-full h-full rounded-full duration-300" src={mainDomain + account.avatar} alt="" />
           )}
+
           {!fileUpload && !account.picture && (
             <div className="flex justify-center items-center flex-col opacity-50 hover:opacity-100 duration-300 w-full h-full rounded-full absolute">
               <MdAddAPhoto className="text-2xl" />
@@ -83,9 +91,17 @@ export default function UploaderImage() {
           )}
         </div>
 
+        <div className='p-5 mx-auto'>
+          <LinearProgress variant="determinate" value={valProgres} />
+        </div>
         <p className="text-xs mt-2">Allowed *.jpeg, *.jpg, *.png, *.gif</p>
         <p className="text-xs mt-2"> max size of 3.1 MB</p>
-        <button className='bg-green-500 px-5 py-2 absolute bottom-5 right-5 text-white rounded-md duration-300 hover:bg-green-600' onClick={sendImgHakdler}>ذخیره</button>
+        <button
+          className="bg-green-500 px-5 py-2 absolute bottom-5 right-5 text-white rounded-md duration-300 hover:bg-green-600"
+          onClick={sendImgHakdler}
+        >
+          ذخیره
+        </button>
       </div>
     </>
   );

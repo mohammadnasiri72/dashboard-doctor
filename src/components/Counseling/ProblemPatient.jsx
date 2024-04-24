@@ -5,10 +5,12 @@ import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
 import { Account } from '../../pages/_app';
 
-export default function ProblemPatient({ setPageNumber, valDoctor , service}) {
+export default function ProblemPatient({ setPageNumber, valDoctor , service , setApointmentId}) {
   const [problemList, setProblemList] = useState([]);
   const [desc, setDesc] = useState('');
   const [valProblem, setValProblem] = useState([]);
+  const [complaints , setComplaints] = useState([]);
+  
   const account = useContext(Account);
   const Toast = Swal.mixin({
     toast: true,
@@ -48,14 +50,46 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service}) {
                 number:1
             }
         ],
-        
+        complaints,
       };
-
-      setPageNumber(4);
+      axios
+      .post(mainDomain + '/api/AppointmentCounseling/Add', data , {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setApointmentId(res.data);
+        setPageNumber(4);
+        Toast.fire({
+          icon: 'success',
+          text: 'مشخصات شما با موفقیت ثبت شد',
+        });
+      })
+      .catch((err) => {
+        Toast.fire({
+          icon: 'error',
+          text: err.response.data,
+        });
+      });
+      
     }
   };
   const changProblem = (event, newValue) => {
     setValProblem(newValue);
+    if (newValue.length>0) {
+      let arr = []
+      newValue.map((e)=>{
+        let complaintsChild =
+        {
+          appointmentId: 0,
+          typeId: 2,
+          medicalItemId: e.itemId,
+        }
+        arr.push(complaintsChild)
+      })
+      setComplaints(arr)
+    }
   };
   return (
     <>

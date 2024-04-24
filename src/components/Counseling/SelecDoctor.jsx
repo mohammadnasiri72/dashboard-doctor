@@ -6,7 +6,6 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 export default function SelecDoctor({ expertise , valDoctor , setValDoctor}) {
   const [doctors, setDoctors] = useState([]);
   
-  // console.log(doctors);
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Doctor/GetList', {
