@@ -38,6 +38,6 @@ CircularProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function ProgressBarUpload({ valProgres }) {
+export default function ProgressBarUpdateProfile({ valProgres }) {
   return <CircularProgressWithLabel value={valProgres} />;
 }

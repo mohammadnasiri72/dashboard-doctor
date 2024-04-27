@@ -16,13 +16,8 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
   const paternNationalId = /^[0-9]{10}$/;
   const paternMobile = /09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/;
   const paternEmail = /[a-zA-Z0-9.-]+@[a-z-]+\.[a-z]{2,3}/;
-  const route = useRouter()
-  const registerModel = {
-    nationalId,
-    abroad,
-    mobile,
-    email,
-  };
+  const route = useRouter();
+  
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -30,30 +25,34 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
     timer: 3000,
     timerProgressBar: true,
   });
-  const goToLogin = ()=>{
-    route.replace('/login')
-  }
+  const goToLogin = () => {
+    route.replace('/login');
+  };
   const submitForm = () => {
+    const registerModel = {
+      nationalId,
+      abroad,
+      mobile,
+      email,
+    };
     if (nationalId.match(paternNationalId) && (mobile.match(paternMobile) || email.match(paternEmail))) {
       setIsLoading(true);
       setRegisterModel(registerModel);
       axios
-        .post(mainDomain+'/api/Patient/PreRegister', registerModel)
-        .then((response) => {
+        .post(mainDomain + '/api/Patient/PreRegister', registerModel)
+        .then((res) => {
           setIsLoading(false);
-          if (response.status === 200) {
-            setIsRegister(true);
-            Toast.fire({
-              icon: 'success',
-              text: 'با موفقیت وارد شدید لطفا اطلاعات خود را وارد کنید',
-            });
-          }
+          setIsRegister(true);
+          Toast.fire({
+            icon: 'success',
+            text: 'با موفقیت وارد شدید لطفا اطلاعات خود را وارد کنید',
+          });
         })
-        .catch((error) => {
+        .catch((err) => {
           setIsLoading(false);
           Toast.fire({
             icon: 'error',
-            text: error.response.data,
+            text: err.response ? err.response.data : 'خطای شبکه',
           });
         });
     }
@@ -84,8 +83,8 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
           <SelectAbroad abroad={abroad} setAbroad={setAbroad} setMobile={setMobile} setEmail={setEmail} />
           <InputNationalId nationalId={nationalId} setNationalId={setNationalId} />
           <InputMobilEmail abroad={abroad} email={email} setEmail={setEmail} mobile={mobile} setMobile={setMobile} />
-          <div className='flex justify-center'>
-            <div className='px-3'>
+          <div className="flex justify-center">
+            <div className="px-3">
               <button
                 type="button"
                 onClick={submitForm}
@@ -94,8 +93,13 @@ export default function MainRegisterPage({ setIsRegister, setRegisterModel, setI
                 مرحله بعد
               </button>
             </div>
-            <div className='px-3'>
-              <button onClick={goToLogin} className='bg-blue-500 px-5 py-2 rounded-md text-white duration-300 hover:bg-blue-600 mt-10'>قبلا حساب ساخته ام</button>
+            <div className="px-3">
+              <button
+                onClick={goToLogin}
+                className="bg-blue-500 px-5 py-2 rounded-md text-white duration-300 hover:bg-blue-600 mt-10"
+              >
+                قبلا حساب ساخته ام
+              </button>
             </div>
           </div>
         </div>

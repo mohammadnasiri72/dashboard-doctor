@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import SimpleBackdrop from '../components/backdrop';
 
 // ----------------------------------------------------------------------
 
@@ -11,29 +11,13 @@ export default function Index() {
 
   useEffect(() => {
     if (router.pathname == '/') {
-      router.push('/login');
+      router.push('/dashboard');
     }
   });
 
   return (
     <>
-      {/* <div className="flex justify-center">
-        <div className='px-3'>
-          <Link className="text-3xl" href={'/register'}>
-            عضویت
-          </Link>
-        </div>
-        <div className='px-3'>
-          <Link className="text-3xl" href={'/login'}>
-            ورود
-          </Link>
-        </div>
-      </div> */}
-      {/* {
-        localStorage.getItem('token')?
-        router.push('/dashboard/one'):
-        router.push('/login')
-      } */}
+      <SimpleBackdrop />
     </>
   );
 }

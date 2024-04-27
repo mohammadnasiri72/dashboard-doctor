@@ -16,7 +16,7 @@ export default function InputEmailLogin({setEmail , email}) {
       <div className="mt-5 px-10">
         <TextField
           onChange={(e) => setEmail(e.target.value)}
-        //   value={abroad ? email : mobile}
+          value={email}
           className="w-full"
           id="outlined-multiline-flexible"
           label={'ایمیل'}

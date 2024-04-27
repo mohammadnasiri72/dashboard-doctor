@@ -12,14 +12,14 @@ import { useRouter } from 'next/router';
 import { mainDomain } from '../../utils/mainDomain';
 
 export default function SecoundRegisterPage({ registerModel, setIsRegister, setIsLoading }) {
-  const [fristName, setFristName] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('m');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
- 
-  const route = useRouter()
-  const paternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+
+  const route = useRouter();
+  // const paternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -28,28 +28,28 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
     timerProgressBar: true,
   });
   const submitHandler = (e) => {
-    e.preventDefault()
-    registerModel.fristName = fristName;
+    e.preventDefault();
+    registerModel.firstName = firstName;
     registerModel.lastName = lastName;
     registerModel.gender = gender;
     registerModel.password = password;
     registerModel.code = code;
     if (
-      fristName.length > 2 &&
+      firstName.length > 2 &&
       lastName.length > 2 &&
       gender.length !== 0 &&
       code.length === 6 &&
-      (registerModel.abroad === false || password.length>6)
+      (registerModel.abroad === false || password.length > 6)
     ) {
       setIsLoading(true);
       axios
-        .post(mainDomain+'/api/Patient/Register', registerModel)
+        .post(mainDomain + '/api/Patient/Register', registerModel)
         .then((response) => {
-          localStorage.setItem("token" , response.data.token)
-          localStorage.setItem("userId" , response.data.userId)
-          localStorage.setItem("refreshToken" , response.data.refreshToken)
-          localStorage.setItem("roles" , response.data.roles)
-          localStorage.setItem("expiration" , response.data.expiration)
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('userId', response.data.userId);
+          localStorage.setItem('refreshToken', response.data.refreshToken);
+          localStorage.setItem('roles', response.data.roles);
+          localStorage.setItem('expiration', response.data.expiration);
           // response.setHeader("Set-Cookie", serialize("token", fristName , {
           //   httpOnly:true,
           //   path:"/",
@@ -61,18 +61,17 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
             text: 'ثبت نام شما با موفقیت انجام شد',
           });
           setTimeout(() => {
-            route.replace('/dashboard')
+            route.replace('/dashboard');
           }, 1000);
         })
-        .catch((error) => {
-          document.cookie = `token=${fristName}`;
+        .catch((err) => {
           setIsLoading(false);
           Toast.fire({
             icon: 'error',
-            text: error.response.data,
+            text: err.response ? err.response.data : 'خطای شبکه',
           });
         });
-    } else if (fristName.length <= 2) {
+    } else if (firstName.length <= 2) {
       Toast.fire({
         icon: 'error',
         text: 'لطفا نام خود را به درستی وارد کنید(نام باید بیشتر از دو حرف باشد)',
@@ -87,12 +86,12 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
         icon: 'error',
         text: 'لطفا جنسیت خود را به درستی وارد کنید(جنسیت نمیتواند خالی باشد)',
       });
-    } else if (registerModel.abroad === true && password.length<=6) {
+    } else if (registerModel.abroad === true && password.length <= 6) {
       Toast.fire({
         icon: 'error',
         text: 'لطفا پسورد خود را به درستی وارد کنید(پسورد باید بیشتر از 6 رقم باشد)',
       });
-    }else if (code.length !== 6) {
+    } else if (code.length !== 6) {
       Toast.fire({
         icon: 'error',
         text: 'لطفا کد ارسال شده را به درستی وارد کنید(کد ارسال شده باید 6 رقم باشد)',
@@ -116,12 +115,10 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
             </button>
           </div>
           <div className=" mt-5">
-            <InputName fristName={fristName} setFristName={setFristName} />
+            <InputName fristName={firstName} setFristName={setFirstName} />
             <InputLastName lastName={lastName} setLastName={setLastName} />
             <SelectGender gender={gender} setGender={setGender} />
-            {registerModel.abroad && 
-              <InputPassword setPassword={setPassword} password={password}/>
-            }
+            {registerModel.abroad && <InputPassword setPassword={setPassword} password={password} />}
             <InputFillCode setCode={setCode} />
             <div className="flex justify-center items-stretch mt-4">
               <div className="px-2 bg-green-500 rounded-md flex items-center">
@@ -133,7 +130,6 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
             </div>
           </div>
         </div>
-        
       </div>
     </>
   );

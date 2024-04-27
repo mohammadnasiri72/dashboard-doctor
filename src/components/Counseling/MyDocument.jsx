@@ -14,22 +14,21 @@ import { RiFileVideoLine } from 'react-icons/ri';
 import { IoIosDocument } from 'react-icons/io';
 import { FaImage } from 'react-icons/fa6';
 import { MdAudioFile } from 'react-icons/md';
+import Swal from 'sweetalert2';
+import SimpleBackdrop from '../backdrop';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-export default function MyDocumentSend({ apointmentId, flagUpload }) {
+export default function MyDocumentSend({ apointmentId, flagUpload , setFlagUpload}) {
   const [filesUpload, setFilesUpload] = useState([]);
-  console.log(filesUpload);
+  const [isLoading , setIsLoading] = useState(false);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: 'toast-modal',
+  });
   useEffect(() => {
     axios
       .get(mainDomain + '/api/MedicalRecord/GetList', {
@@ -47,22 +46,48 @@ export default function MyDocumentSend({ apointmentId, flagUpload }) {
       .catch((err) => {});
   }, [flagUpload]);
   const deleteFileHandler = (e) => {
-    const data = {
-        appointmentId: apointmentId,
-        medicalRecordId: e.id,
-    }
-    axios
-    .post(mainDomain+'/api/MedicalRecord/Delete' , data , {
-        headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-          },
-    })
-    .then((res)=>{
-        console.log(res);
-    })
-    .catch((err)=>{
+    Swal.fire({
+      title: 'حذف فایل',
+      text: 'آیا از حذف فایل خود مطمئن هستید؟',
 
-    })
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: 'green',
+      cancelButtonText: 'انصراف',
+      confirmButtonText: 'حذف ',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true)
+        const dataDeleteFile = {
+          appointmentId: apointmentId,
+          medicalRecordId: e.id,
+      }
+      axios
+      .post(mainDomain+'/api/MedicalRecord/Delete' , dataDeleteFile , {
+          headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+      })
+      .then((res)=>{
+        Toast.fire({
+          icon: 'success',
+          text: 'فایل با موفقیت حذف شد',
+        });
+        setIsLoading(false)
+          // console.log(res);
+          setFlagUpload(!flagUpload)
+      })
+      .catch((err)=>{
+        setIsLoading(false)
+        Toast.fire({
+          icon: 'error',
+          text: err.response.data? err.response.data : 'خطای شبکه',
+        });
+      })
+      }
+    });
+
+   
   };
   return (
     <>
@@ -115,6 +140,10 @@ export default function MyDocumentSend({ apointmentId, flagUpload }) {
           </TableContainer>
         )}
       </div>
+      {
+        isLoading &&
+        <SimpleBackdrop />
+      }
     </>
   );
 }

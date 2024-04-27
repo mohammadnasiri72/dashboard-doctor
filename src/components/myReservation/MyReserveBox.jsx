@@ -6,16 +6,16 @@ import { Change } from '../../pages/_app';
 import SimpleBackdrop from '../backdrop';
 
 export default function MyReserveBox({ list, doctor }) {
-    const [isBackDrop , setIsBackDrop] = useState(false)
-    const setChange = useContext(Change)
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-start',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        customClass: 'toast-modal',
-      });
+  const [isBackDrop, setIsBackDrop] = useState(false);
+  const setChange = useContext(Change);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: 'toast-modal',
+  });
   const deleteReservationHandler = () => {
     const reservationIdData = new FormData();
     reservationIdData.append('reservationId', list.reservationId);
@@ -29,7 +29,7 @@ export default function MyReserveBox({ list, doctor }) {
       cancelButtonText: 'مرحله قبل',
       confirmButtonText: 'حذف نوبت',
     }).then((result) => {
-        setIsBackDrop(true)
+      setIsBackDrop(true);
       if (result.isConfirmed) {
         axios
           .post(mainDomain + '/api/Reservation/Delete', reservationIdData, {
@@ -38,26 +38,26 @@ export default function MyReserveBox({ list, doctor }) {
             },
           })
           .then((res) => {
-            setIsBackDrop(false)
-            setChange((e)=>!e)
+            setIsBackDrop(false);
+            setChange((e) => !e);
             Toast.fire({
-                icon: 'success',
-                text: 'نوبت شما با موفقیت حذف شد',
-              });
+              icon: 'success',
+              text: 'نوبت شما با موفقیت حذف شد',
+            });
           })
           .catch((err) => {
-            console.log(err);
-            setIsBackDrop(false)
+            setIsBackDrop(false);
+            Toast.fire({
+              icon: 'success',
+              text: err.response ? err.response.data : 'خطای شبکه',
+            });
           });
       }
     });
   };
   return (
     <>
-    {
-        isBackDrop &&
-        <SimpleBackdrop />
-    }
+      {isBackDrop && <SimpleBackdrop />}
       <div className="flex items-center">
         <div className="w-1/6 p-3">
           <div className="w-20 h-20 border rounded-full cursor-pointer">

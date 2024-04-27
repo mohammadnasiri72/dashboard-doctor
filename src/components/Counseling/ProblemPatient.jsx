@@ -4,12 +4,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
 import { Account } from '../../pages/_app';
+import SimpleBackdrop from '../backdrop';
 
-export default function ProblemPatient({ setPageNumber, valDoctor , service , setApointmentId}) {
+export default function ProblemPatient({ setPageNumber, valDoctor , service , setApointmentId , flagUpload , setFlagUpload}) {
   const [problemList, setProblemList] = useState([]);
   const [desc, setDesc] = useState('');
   const [valProblem, setValProblem] = useState([]);
   const [complaints , setComplaints] = useState([]);
+  const [isLoading , setIsLoading] = useState(false);
   
   const account = useContext(Account);
   const Toast = Swal.mixin({
@@ -39,6 +41,7 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
         text: 'لطفا مشخصات خواسته شده را وارد کنید',
       });
     } else {
+      setIsLoading(true)
       const data = {
         patientUserId: account.userId,
         doctorId: valDoctor,
@@ -59,14 +62,17 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setApointmentId(res.data);
         setPageNumber(4);
+        setFlagUpload(!flagUpload)
         Toast.fire({
           icon: 'success',
           text: 'مشخصات شما با موفقیت ثبت شد',
         });
       })
       .catch((err) => {
+        setIsLoading(false)
         Toast.fire({
           icon: 'error',
           text: err.response.data,
@@ -134,10 +140,14 @@ export default function ProblemPatient({ setPageNumber, valDoctor , service , se
             onClick={goToNext}
             className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600"
           >
-            مرحله بعد
+             ثبت درخواست
           </button>
         </div>
       </div>
+      {
+        isLoading &&
+        <SimpleBackdrop />
+      }
     </>
   );
 }

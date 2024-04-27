@@ -4,7 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function NationalIdLoginPageTwo({ setForgotPassword , setIsLoading}) {
+export default function NationalIdLoginPageTwo({ setForgotPassword, setIsLoading }) {
   const paternEmail = /[a-zA-Z0-9.-]+@[a-z-]+\.[a-z]{2,3}/;
   const [email, setEmail] = useState('');
 
@@ -16,38 +16,35 @@ export default function NationalIdLoginPageTwo({ setForgotPassword , setIsLoadin
     timerProgressBar: true,
   });
 
-
-
-
   const emailData = new FormData();
   emailData.append('email', email);
   const resetPasswordHandler = () => {
     if (email.match(paternEmail)) {
-        setIsLoading(true)
+      setIsLoading(true);
       axios
-        .post(mainDomain+'/api/Authenticate/ResetPassword', emailData)
+        .post(mainDomain + '/api/Authenticate/ResetPassword', emailData)
         .then((res) => {
-            setIsLoading(false)
-            if (res.status === 200) {
-                setForgotPassword(false)
-                Toast.fire({
-                    icon: 'success',
-                    text: 'رمز عبور جدید به ایمیل شما ارسال شد',
-                  });
-            }
+          setIsLoading(false);
+          if (res.status === 200) {
+            setForgotPassword(false);
+            Toast.fire({
+              icon: 'success',
+              text: 'رمز عبور جدید به ایمیل شما ارسال شد',
+            });
+          }
         })
         .catch((err) => {
-            setIsLoading(false)
-            Toast.fire({
-                icon: 'success',
-                text: err.response.data
-              });
-        });
-    }else{
-        Toast.fire({
+          setIsLoading(false);
+          Toast.fire({
             icon: 'success',
-            text: 'لطفا ایمیل خود را به درستی وارد کنید',
+            text: err.response ? err.response.data : 'خطای شبکه',
           });
+        });
+    } else {
+      Toast.fire({
+        icon: 'success',
+        text: 'لطفا ایمیل خود را به درستی وارد کنید',
+      });
     }
   };
 

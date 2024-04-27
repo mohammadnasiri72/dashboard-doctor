@@ -21,7 +21,7 @@ export default function MyReservation() {
         setDoctors(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, []);
   useEffect(() => {
@@ -39,21 +39,19 @@ export default function MyReservation() {
         setDoctor(doctors.find((e) => e.doctorId === res.data[0]?.reservationTimeDoctorId));
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, [doctors, account]);
   return (
     <>
-    <div className='text-start'>
-            <h3 className='text-3xl font-bold'>نوبت های من</h3>
+      <div className="text-start">
+        <h3 className="text-3xl font-bold">نوبت های من</h3>
+      </div>
+      {reserveList.filter((e) => e.status === 'Active').length === 0 && (
+        <div className="w-5/6 mx-auto border rounded-lg mt-5 pt-2 pb-6">
+          <p className="mt-3">نوبت های شما خالی است</p>
         </div>
-        {
-          reserveList
-          .filter((e) => e.status === 'Active').length===0 &&
-          <div className='w-5/6 mx-auto border rounded-lg mt-5 pt-2 pb-6'>
-            <p className='mt-3'>نوبت های شما خالی است</p>
-        </div>
-        }
+      )}
       {reserveList
         .filter((e) => e.status === 'Active')
         .map((list) => (
@@ -61,7 +59,7 @@ export default function MyReservation() {
             <MyReserveBox list={list} doctor={doctor} />
           </div>
         ))}
-      {reserveList.filter((e) => e.status !== 'Active').length>0 && (
+      {reserveList.filter((e) => e.status !== 'Active').length > 0 && (
         <p className="text-xl text-start font-semibold mt-6">نوبت های ویزیت شده</p>
       )}
       <div className="flex w-5/6 mx-auto">

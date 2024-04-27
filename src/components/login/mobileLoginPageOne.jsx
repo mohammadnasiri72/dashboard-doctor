@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import SelectAbroadLogin from './SelectAbroadLogin';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ export default function MobileLoginPageOne({
   setAbroad,
   setIsLoading,
 }) {
-  const paternMobile = /09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/;
+  const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
   const route = useRouter()
   const Toast = Swal.mixin({
     toast: true,
@@ -52,7 +52,7 @@ export default function MobileLoginPageOne({
           setIsLoading(false);
           Toast.fire({
             icon: 'error',
-            text: err.response.data,
+            text: err.response? err.response?.data : 'خطای شبکه'
           });
         });
     } else {

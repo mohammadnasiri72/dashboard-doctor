@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, setMobileNumber , setIsLoading}) {
+export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, setMobileNumber, setIsLoading }) {
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -22,38 +22,36 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
       code,
     };
     if (code.length === 6) {
-      setIsLoading(true)
+      setIsLoading(true);
       axios
-        .post(mainDomain+'/api/Authenticate/LoginOtp', data)
+        .post(mainDomain + '/api/Authenticate/LoginOtp', data)
         .then((res) => {
-          setIsLoading(false)
-          if (res.status === 200) {
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('userId', res.data.userId);
-            localStorage.setItem('refreshToken', res.data.refreshToken);
-            localStorage.setItem('roles', res.data.roles);
-            localStorage.setItem('expiration', res.data.expiration);
-            Toast.fire({
-              icon: 'success',
-              text: 'با موفقیت وارد شدید',
-            });
-          }
+          setIsLoading(false);
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('userId', res.data.userId);
+          localStorage.setItem('refreshToken', res.data.refreshToken);
+          localStorage.setItem('roles', res.data.roles);
+          localStorage.setItem('expiration', res.data.expiration);
+          Toast.fire({
+            icon: 'success',
+            text: 'با موفقیت وارد شدید',
+          });
           setTimeout(() => {
             route.replace('/dashboard');
           }, 1000);
         })
         .catch((err) => {
-          setIsLoading(false)
+          setIsLoading(false);
           Toast.fire({
             icon: 'error',
-            text: err.response.data,
+            text: err.response ? err.response.data : 'خطای شبکه',
           });
         });
-    }else{
-        Toast.fire({
-            icon: 'error',
-            text: 'لطفا کد ارسال شده را به درستی وارد کنید',
-          });
+    } else {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا کد ارسال شده را به درستی وارد کنید',
+      });
     }
   };
   return (

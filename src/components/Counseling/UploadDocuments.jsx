@@ -18,22 +18,22 @@ import Swal from 'sweetalert2';
 import MyDocumentSend from './MyDocument';
 import SimpleBackdrop from '../backdrop';
 import ProgressBarUpload from './ProgressBarUpload';
-export default function UploadDocuments({ setPageNumber, apointmentId }) {
+export default function UploadDocuments({ setPageNumber, apointmentId, flagUpload, setFlagUpload }) {
   const [fileType, setFileType] = useState([]);
   const [fileVal, setFileVal] = useState('');
-  const [savedfile, setSavedFile] = useState('');
-  const [flagUpload, setFlagUpload] = useState(false);
+
   const [valProgres, setValProgres] = useState(0);
   const [addressType, setAddressType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [desc , setDesc] = useState('')
+  const [desc, setDesc] = useState('');
+  const [dataAttachment, setDataAttachment] = useState('');
   const inpRef = useRef();
-  useEffect(() => {
-    if (valProgres === 100) {
-      setValProgres(0);
-      setIsLoading(true);
-    }
-  }, [valProgres]);
+  // useEffect(() => {
+  //   if (valProgres === 100) {
+  //     setValProgres(0);
+  //     setIsLoading(true);
+  //   }
+  // }, [valProgres]);
 
   // get type file
   useEffect(() => {
@@ -69,54 +69,67 @@ export default function UploadDocuments({ setPageNumber, apointmentId }) {
     }
   };
   const uploadDocumentHandler = (e) => {
-    setSavedFile(e.target.files[0]);
-
     const fileData = new FormData();
     fileData.append('file', e.target.files[0]);
-    axios
-      .post(mainDomain + '/api/File/Upload/' + addressType, fileData, {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
-        },
-        onUploadProgress: (val) => {
-          setValProgres(parseInt(Math.round((val.loaded * 100) / val.total)));
-        },
-      })
-      .then((res) => {
-        const data = {
-          appointmentId: apointmentId,
-          typeId: 6,
-          medicalItemId: fileVal,
-          attachment: res.data,
-          description: desc
-        };
-        axios
-          .post(mainDomain + '/api/MedicalRecord/Add', data, {
-            headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-          })
-          .then((res) => {
-            Toast.fire({
-              icon: 'success',
-              text: 'فایل با موفقیت آپلود شد',
+    if (
+      (e.target.files[0].type.includes('image') && fileVal === 4) ||
+      (e.target.files[0].type.includes('video') && fileVal === 5) ||
+      (e.target.files[0].type.includes('pdf') && fileVal === 7) ||
+      (e.target.files[0].type.includes('audio') && fileVal === 6)
+    ) {
+      axios
+        .post(mainDomain + '/api/File/Upload/' + addressType, fileData, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+          onUploadProgress: (val) => {
+            setValProgres(parseInt(Math.round((val.loaded * 100) / val.total)));
+          },
+        })
+        .then((res) => {
+          setDataAttachment(res.data);
+          const data = {
+            appointmentId: apointmentId,
+            typeId: 6,
+            medicalItemId: fileVal,
+            attachment: res.data,
+            description: desc,
+          };
+          setIsLoading(true);
+          axios
+            .post(mainDomain + '/api/MedicalRecord/Add', data, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+              },
+            })
+            .then((res) => {
+              setValProgres(0);
+              Toast.fire({
+                icon: 'success',
+                text: 'فایل با موفقیت آپلود شد',
+              });
+              setIsLoading(false);
+              setFlagUpload(!flagUpload);
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              setValProgres(0);
             });
-            setIsLoading(false);
-            setFlagUpload(!flagUpload);
-          })
-          .catch((err) => {
-            setIsLoading(false);
+        })
+        .catch((err) => {
+          Toast.fire({
+            icon: 'error',
+            text: err.response.data ? err.response.data : 'خطای شبکه',
           });
-      })
-      .catch((err) => {
-        Toast.fire({
-          icon: 'error',
-          text: err.response.data,
         });
-        setValProgres(0);
-        setIsLoading(false);
+    } else {
+      Toast.fire({
+        icon: 'error',
+        text: 'فرمت فایل انتخاب شده صحیح نیست',
       });
+    }
   };
+
   const changTypeFileHandler = (e) => {
     setFileVal(e.target.value);
     fileType.map((t) => {
@@ -152,7 +165,7 @@ export default function UploadDocuments({ setPageNumber, apointmentId }) {
             </Select>
           </FormControl>
           <div>
-          <div className=" text-start px-2" dir="rtl">
+            <div className=" text-start px-2" dir="rtl">
               <TextField
                 onChange={(e) => setDesc(e.target.value)}
                 className="w-full text-end"
@@ -162,19 +175,11 @@ export default function UploadDocuments({ setPageNumber, apointmentId }) {
                 dir="rtl"
                 maxRows={4}
                 value={desc}
-                
               />
             </div>
           </div>
           <input className="opacity-0 invisible absolute" ref={inpRef} type="file" onChange={uploadDocumentHandler} />
-          {/* <Tooltip onClick={selectFileHandler} title="آپلود فایل">
-            <div className="px-3">
-              <button className="text-2xl bg-slate-100 rounded-full p-4 cursor-pointer hover:bg-slate-300 duration-300">
-                <MdDriveFolderUpload />
-                <span>آپلود فایل</span>
-              </button>
-            </div>
-          </Tooltip> */}
+
           <div className="px-3">
             <button
               onClick={selectFileHandler}
@@ -184,29 +189,30 @@ export default function UploadDocuments({ setPageNumber, apointmentId }) {
               <MdDriveFolderUpload className="text-3xl" />
             </button>
           </div>
-          <div>{<span dir="ltr">{savedfile.name}</span>}</div>
+          {/* <div>{<span dir="ltr">{savedfile.name}</span>}</div> */}
           {/* <CircularProgress variant="determinate" value={valProgres} /> */}
           <div className="px-5">
             <ProgressBarUpload valProgres={valProgres} />
           </div>
         </div>
+
         <div className="p-5">
-          <MyDocumentSend apointmentId={apointmentId} flagUpload={flagUpload} />
+          <MyDocumentSend apointmentId={apointmentId} flagUpload={flagUpload} setFlagUpload={setFlagUpload} />
         </div>
 
-        <div className="flex justify-between mt-5 px-4">
+        <div className="flex justify-center mt-5 px-4">
           <button
-            onClick={() => setPageNumber(3)}
-            className="px-5 py-2 rounded-md bg-red-500 text-white duration-300 hover:bg-red-600"
+            onClick={() => setPageNumber(0)}
+            className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600"
           >
-            برگشت به صفحه قبل
+            برگشت به صفحه لیست درخواست ها
           </button>
-          <button
+          {/* <button
             // onClick={goToNext}
             className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600"
           >
             مرحله بعد
-          </button>
+          </button> */}
         </div>
       </div>
       {isLoading && <SimpleBackdrop />}

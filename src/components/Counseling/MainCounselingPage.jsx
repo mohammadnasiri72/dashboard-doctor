@@ -14,6 +14,7 @@ export default function MainCounselingPage() {
   const [service, setService] = useState([]);
   const [reqPatient , setReqPatient] = useState([])
   const [apointmentId , setApointmentId] = useState('')
+  const [flagUpload, setFlagUpload] = useState(false);
   const setRequestHandler = () => {
     setPageNumber(1);
   };
@@ -35,7 +36,7 @@ export default function MainCounselingPage() {
         setReqPatient(res.data);
       })
       .catch((err) => {});
-  }, []);
+  }, [flagUpload]);
   return (
     <>
     {pageNumber !==0 &&
@@ -66,7 +67,7 @@ export default function MainCounselingPage() {
           }
           {
             reqPatient.length>0 &&
-            <TableReqPatient reqPatient={reqPatient}/>
+            <TableReqPatient reqPatient={reqPatient} setApointmentId={setApointmentId} apointmentId={apointmentId} setPageNumber={setPageNumber} setFlagUpload={setFlagUpload} flagUpload={flagUpload}/>
           }
           
         </div>
@@ -81,9 +82,9 @@ export default function MainCounselingPage() {
       ) : pageNumber === 2 ? (
         <PatientListVisit setPageNumber={setPageNumber} />
       ) : pageNumber === 3 ? (
-        <ProblemPatient setPageNumber={setPageNumber} valDoctor={valDoctor} service={service} setApointmentId={setApointmentId}/>
+        <ProblemPatient setPageNumber={setPageNumber} valDoctor={valDoctor} service={service} setApointmentId={setApointmentId} flagUpload={flagUpload} setFlagUpload={setFlagUpload}/>
       ) : (
-        <UploadDocuments setPageNumber={setPageNumber} apointmentId={apointmentId}/>
+        <UploadDocuments setPageNumber={setPageNumber} apointmentId={apointmentId} flagUpload={flagUpload} setFlagUpload={setFlagUpload}/>
       )}
     </>
   );

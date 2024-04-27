@@ -7,8 +7,8 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function NationalIdLoginPageOne({abroad , setAbroad , setIsLoading , setForgotPassword}) {
-    const paternNationalId = /^[0-9]{10}$/;
+export default function NationalIdLoginPageOne({ abroad, setAbroad, setIsLoading, setForgotPassword }) {
+  const paternNationalId = /^[0-9]{10}$/;
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -16,54 +16,54 @@ export default function NationalIdLoginPageOne({abroad , setAbroad , setIsLoadin
     timer: 3000,
     timerProgressBar: true,
   });
-    const route = useRouter();
+  const route = useRouter();
   const [nationalId, setNationalId] = useState('');
   const [password, setPassword] = useState('');
-    const loginHandler = () => {
-        const data = {
-          userName: nationalId,
-          password,
-        };
-        if (nationalId.match(paternNationalId) && password.length > 6) {
-          setIsLoading(true);
-          axios
-            .post(mainDomain+'/api/Authenticate/Login', data)
-            .then((res) => {
-              setIsLoading(false);
-              if (res.status === 200) {
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('userId', res.data.userId);
-                localStorage.setItem('refreshToken', res.data.refreshToken);
-                localStorage.setItem('roles', res.data.roles);
-                localStorage.setItem('expiration', res.data.expiration);
-                Toast.fire({
-                  icon: 'success',
-                  text: 'با موفقیت وارد شدید',
-                });
-              }
-              setTimeout(() => {
-                route.replace('/dashboard');
-              }, 1000);
-            })
-            .catch((err) => {
-              setIsLoading(false);
-              Toast.fire({
-                icon: 'error',
-                text: err.response.data,
-              });
+  const loginHandler = () => {
+    const data = {
+      userName: nationalId,
+      password,
+    };
+    if (nationalId.match(paternNationalId) && password.length > 6) {
+      setIsLoading(true);
+      axios
+        .post(mainDomain + '/api/Authenticate/Login', data)
+        .then((res) => {
+          setIsLoading(false);
+          if (res.status === 200) {
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('userId', res.data.userId);
+            localStorage.setItem('refreshToken', res.data.refreshToken);
+            localStorage.setItem('roles', res.data.roles);
+            localStorage.setItem('expiration', res.data.expiration);
+            Toast.fire({
+              icon: 'success',
+              text: 'با موفقیت وارد شدید',
             });
-        } else if (!nationalId.match(paternNationalId)) {
+          }
+          setTimeout(() => {
+            route.replace('/dashboard');
+          }, 1000);
+        })
+        .catch((err) => {
+          setIsLoading(false);
           Toast.fire({
             icon: 'error',
-            text: 'نام کاربری صحیح نیست',
+            text: err.response ? err.response.data : 'خطای شبکه',
           });
-        } else if (password.length <= 6) {
-          Toast.fire({
-            icon: 'error',
-            text: 'رمز عبور صحیح نیست (رمز عبور باید بزرگتر از 6 رقم باشد)',
-          });
-        }
-      };
+        });
+    } else if (!nationalId.match(paternNationalId)) {
+      Toast.fire({
+        icon: 'error',
+        text: 'نام کاربری صحیح نیست',
+      });
+    } else if (password.length <= 6) {
+      Toast.fire({
+        icon: 'error',
+        text: 'رمز عبور صحیح نیست (رمز عبور باید بزرگتر از 6 رقم باشد)',
+      });
+    }
+  };
   return (
     <>
       <h2 className="text-3xl font-semibold text-white">صفحه ورود</h2>
@@ -80,7 +80,10 @@ export default function NationalIdLoginPageOne({abroad , setAbroad , setIsLoadin
           </button>
         </div>
         <div className="px-2">
-          <button onClick={()=> setForgotPassword(true)} className="px-5 py-2 rounded-md bg-blue-500 hover:bg-blue-600 duration-300 text-white">
+          <button
+            onClick={() => setForgotPassword(true)}
+            className="px-5 py-2 rounded-md bg-blue-500 hover:bg-blue-600 duration-300 text-white"
+          >
             فراموشی رمز عبور
           </button>
         </div>

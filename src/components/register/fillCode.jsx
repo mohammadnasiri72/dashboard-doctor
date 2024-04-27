@@ -17,7 +17,6 @@ export default function InputFillCode({ setCode }) {
       }
     }
     valueInputCode.map((e) => numCodHandler(e));
-
     setCode(numberCode);
   };
   function numCodHandler(e) {

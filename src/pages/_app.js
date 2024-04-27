@@ -48,6 +48,7 @@ export default function MyApp(props) {
   const router = useRouter();
 
   useEffect(() => {
+    const role = localStorage.getItem('roles')
     if (!router.pathname.includes('/dashboard')) {
       setShow(true);
     }
@@ -59,7 +60,7 @@ export default function MyApp(props) {
       }
     } else {
       axios
-        .get('https://cis.aitest.ir/api/Patient/Get', {
+        .get(`https://cis.aitest.ir/api/${role}/Get`, {
           headers: {
             Authorization: 'Bearer ' + token,
           },
