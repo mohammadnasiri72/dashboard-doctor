@@ -16,8 +16,7 @@ export default function TableReqPatient({ setEditState, setAccountUpdate }) {
   const [patientList, setPatientList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
-  
- 
+
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Patient/GetList', {
@@ -31,9 +30,6 @@ export default function TableReqPatient({ setEditState, setAccountUpdate }) {
       .catch((err) => {});
   }, [flag]);
 
-  
-  
-  
   return (
     <>
       <TableContainer component={Paper}>
@@ -69,8 +65,13 @@ export default function TableReqPatient({ setEditState, setAccountUpdate }) {
                   </div>
                 </TableCell>
                 <TableCell align="center">
-                  
-                  <OperationMenu setEditState={setEditState} setAccountUpdate={setAccountUpdate} pat={pat} setIsLoading={setIsLoading} setFlag={setFlag}/>
+                  <OperationMenu
+                    setEditState={setEditState}
+                    setAccountUpdate={setAccountUpdate}
+                    pat={pat}
+                    setIsLoading={setIsLoading}
+                    setFlag={setFlag}
+                  />
                 </TableCell>
               </TableRow>
             ))}

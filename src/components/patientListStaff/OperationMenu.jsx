@@ -9,10 +9,25 @@ import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
 import { TiGroup } from 'react-icons/ti';
 import { IconButton, Tooltip } from '@mui/material';
+import { useState } from 'react';
+import RelativePatient from './RealativePatient';
+import AddRelativePatient from './AddRelativePatient';
+import { useEffect } from 'react';
+import { MdOutlineMoreTime } from "react-icons/md";
 
 export default function OperationMenu({ setAccountUpdate, setEditState, pat, setIsLoading, setFlag }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [isOpenAccompanying , setIsOpenAccompanying] = React.useState(false)
+  const [isOpenAccompanying, setIsOpenAccompanying] = useState(false);
+  const [isOpenAddRelative , setIsOpenAddRelative] = useState(false);
+  const [PatientRelative, setPatientRelative] = useState([]);
+  const [patient , setPatient] = useState({});
+  useEffect(()=>{
+    if (isOpenAccompanying || isOpenAddRelative) {
+      document.body.style.overflowY = 'hidden'
+    }else {
+      document.body.style.overflowY = 'auto'
+    }
+  },[isOpenAccompanying , isOpenAddRelative])
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -29,10 +44,12 @@ export default function OperationMenu({ setAccountUpdate, setEditState, pat, set
     setAnchorEl(null);
   };
   const editPatientHandler = (e) => {
+    handleClose()
     setEditState(true);
     setAccountUpdate(e);
   };
   const deletePatientHandler = (e) => {
+    handleClose()
     Swal.fire({
       title: 'حذف بیمار',
       text: 'آیا از ثبت درخواست خود مطمئن هستید؟',
@@ -72,9 +89,30 @@ export default function OperationMenu({ setAccountUpdate, setEditState, pat, set
       }
     });
   };
-  const accompanyingPatientHandler = () => {
-    setIsOpenAccompanying(true)
+  const accompanyingPatientHandler = (e) => {
+    setIsOpenAccompanying(true);
+    handleClose()
+    setPatient(e)
   };
+  useEffect(()=>{
+    console.log(patient);
+    if (patient.nationalId) {
+      
+      axios
+    .get(mainDomain + '/api/PatientRelative/Patient/GetList', {
+      params:{
+        nationalId: patient.nationalId
+      },
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+    .then((res) => {
+      setPatientRelative(res.data)
+    })
+    .catch((err) => {});
+    }
+},[patient , isOpenAccompanying , isOpenAddRelative])
   return (
     <>
       <div>
@@ -117,22 +155,32 @@ export default function OperationMenu({ setAccountUpdate, setEditState, pat, set
           <div className="px-4">
             <Tooltip title="همراه" placement="right">
               <IconButton>
-                <TiGroup onClick={accompanyingPatientHandler} />
+                <TiGroup onClick={() => accompanyingPatientHandler(pat)} />
+              </IconButton>
+            </Tooltip>
+          </div>
+          <div className="px-4">
+            <Tooltip title="نوبت دهی اینترنتی" placement="right">
+              <IconButton>
+                <MdOutlineMoreTime />
               </IconButton>
             </Tooltip>
           </div>
         </Menu>
       </div>
-      <div
-        style={{ zIndex: '2300', transform: isOpenAccompanying ? 'translateX(0)' : 'translateX(-100%)' }}
-        className="fixed top-0 bottom-0 right-2/3 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
-      >
-        1
-      </div>
-      {
-        isOpenAccompanying &&
-        <div onClick={()=> setIsOpenAccompanying(false)} className='fixed top-0 left-0 right-0 bottom-0 bg-[#000c] '/>
-      }
+
+      <RelativePatient isOpenAccompanying={isOpenAccompanying} PatientRelative={PatientRelative} setIsOpenAddRelative={setIsOpenAddRelative} setIsOpenAccompanying={setIsOpenAccompanying}/>
+      <AddRelativePatient isOpenAddRelative={isOpenAddRelative} setIsOpenAddRelative={setIsOpenAddRelative} patient={patient}/>
+      {(isOpenAccompanying || isOpenAddRelative) && (
+        <div
+          style={{ zIndex: 1200 }}
+          onClick={() => {
+            setIsOpenAccompanying(false)
+            setIsOpenAddRelative(false)
+          }}
+          className="fixed top-0 left-0 right-0 bottom-0 bg-[#000c]"
+        />
+      )}
     </>
   );
 }

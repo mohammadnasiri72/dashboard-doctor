@@ -3,7 +3,7 @@ import React from 'react';
 import { FaPlus } from "react-icons/fa6";
 
 
-export default function NavBarListPatient() {
+export default function NavBarListPatient({setRegisterPatient}) {
   return (
     <>
       <div className="flex justify-between w-5/6 mx-auto">
@@ -17,7 +17,7 @@ export default function NavBarListPatient() {
           maxRows={4}
           InputProps={{ className: 'textfield-style' }}
         />
-        <button className="flex justify-center items-center bg-green-500 px-5  rounded-md duration-300 hover:bg-green-600 text-white">
+        <button onClick={()=> setRegisterPatient(true)} className="flex justify-center items-center bg-green-500 px-5  rounded-md duration-300 hover:bg-green-600 text-white">
           <span className="px-1">بیمار جدید</span>
           <FaPlus />
         </button>

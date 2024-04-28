@@ -28,6 +28,9 @@ body{
 .toast-modal{
     margin-top: 70px;
 }
+.swal2-container {
+    z-index: 99999999999999999999999;
+  }
 .textfield-style{
     color: white !important;
     font-size: 20px !important;
@@ -38,5 +41,4 @@ body{
 }
 .font-nastaligh{
     font-family: 'IranNastaliq' !important;
-    
 }

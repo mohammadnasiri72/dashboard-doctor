@@ -11,7 +11,7 @@ import InputPassword from './inputPassword';
 import { useRouter } from 'next/router';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function SecoundRegisterPage({ registerModel, setIsRegister, setIsLoading }) {
+export default function SecoundRegisterPage({ registerModel, setIsRegister, setIsLoading, registerPatient , setRegisterPatient}) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('m');
@@ -29,7 +29,7 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
   });
   const submitHandler = (e) => {
     e.preventDefault();
-    registerModel.firstName = firstName;
+    registerModel.fristName = firstName;
     registerModel.lastName = lastName;
     registerModel.gender = gender;
     registerModel.password = password;
@@ -45,24 +45,35 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
       axios
         .post(mainDomain + '/api/Patient/Register', registerModel)
         .then((response) => {
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('userId', response.data.userId);
-          localStorage.setItem('refreshToken', response.data.refreshToken);
-          localStorage.setItem('roles', response.data.roles);
-          localStorage.setItem('expiration', response.data.expiration);
+          if (!registerPatient) {
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userId', response.data.userId);
+            localStorage.setItem('refreshToken', response.data.refreshToken);
+            localStorage.setItem('roles', response.data.roles);
+            localStorage.setItem('expiration', response.data.expiration);
+          }
           // response.setHeader("Set-Cookie", serialize("token", fristName , {
           //   httpOnly:true,
           //   path:"/",
           //   maxAge:60*60*24
           // }))
           setIsLoading(false);
-          Toast.fire({
-            icon: 'success',
-            text: 'ثبت نام شما با موفقیت انجام شد',
-          });
-          setTimeout(() => {
-            route.replace('/dashboard');
-          }, 1000);
+          if (!registerPatient) {
+            Toast.fire({
+              icon: 'success',
+              text: 'ثبت نام شما با موفقیت انجام شد',
+            });
+            setTimeout(() => {
+              route.replace('/dashboard');
+            }, 1000);
+          }else{
+            Toast.fire({
+              icon: 'success',
+              text: 'ثبت نام بیمار با موفقیت انجام شد',
+            });
+            setRegisterPatient(false)
+            setIsRegister(false)
+          }
         })
         .catch((err) => {
           setIsLoading(false);
