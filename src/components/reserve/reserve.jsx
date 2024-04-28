@@ -6,7 +6,7 @@ import BoxDateReserve from './BoxDateReserve';
 import BoxSelectDate from './BoxSelectDate';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function Reserve() {
+export default function Reserve({accountUpdate , setPageState}) {
   const [expertises, setExpertises] = useState([]);
   const [expertise, setExpertise] = useState('همه');
   const [doctors, setDoctors] = useState([]);
@@ -58,7 +58,7 @@ export default function Reserve() {
             <BoxDateReserve doctorId={doctor} setDates={setDates} setIsBackdrop={setIsBackdrop} setDateReserved={setDateReserved}/>
         </div>
         <div className='w-4/5 p-3'>
-            <BoxSelectDate doctor={doctors.find((e)=>e.doctorId === doctor)} dates={dates} isBackdrop={isBackdrop} setIsBackdrop={setIsBackdrop} dateReserved={dateReserved}/>
+            <BoxSelectDate doctor={doctors.find((e)=>e.doctorId === doctor)} dates={dates} isBackdrop={isBackdrop} setIsBackdrop={setIsBackdrop} dateReserved={dateReserved} accountUpdate={accountUpdate} setPageState={setPageState}/>
         </div>
       </div>
     </>

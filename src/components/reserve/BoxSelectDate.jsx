@@ -6,14 +6,14 @@ import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
 import { useRouter } from 'next/router';
 
-export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBackdrop , doctor}) {
+export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBackdrop, doctor, accountUpdate , setPageState}) {
   const account = useContext(Account);
-  const route = useRouter()
+  const route = useRouter();
   const setTimeHandler = (e) => {
     Swal.fire({
       title: `شما تاریخ${dateReserved} و زمان ${e.fromTime} تا ${e.toTime} را برای ${doctor.firstName} ${doctor.lastName} انتخاب کردین`,
       text: 'آیا از ثبت درخواست خود مطمئن هستید؟',
-      
+
       showCancelButton: true,
       confirmButtonColor: 'green',
       cancelButtonColor: '#d33',
@@ -23,7 +23,7 @@ export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBa
       if (result.isConfirmed) {
         setIsBackdrop(true);
         const reserveData = {
-          patientUserId: account.userId,
+          patientUserId: accountUpdate? accountUpdate.userId : account.userId,
           reservationTimeId: e.reservationTimeId,
           description: e.description,
         };
@@ -39,7 +39,12 @@ export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBa
               text: 'درخواست شما با موفقیت ثبت شد',
               icon: 'success',
             });
-            route.replace('/dashboard/viewReservation')
+            if (!accountUpdate) {
+              route.replace('/dashboard/viewReservation');
+              
+            }else{
+              setPageState(0)
+            }
           })
           .catch((err) => {
             setIsBackdrop(false);

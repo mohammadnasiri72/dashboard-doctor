@@ -15,7 +15,7 @@ import AddRelativePatient from './AddRelativePatient';
 import { useEffect } from 'react';
 import { MdOutlineMoreTime } from "react-icons/md";
 
-export default function OperationMenu({ setAccountUpdate, setEditState, pat, setIsLoading, setFlag }) {
+export default function OperationMenu({ setAccountUpdate, setPageState, pat, setIsLoading, setFlag }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isOpenAccompanying, setIsOpenAccompanying] = useState(false);
   const [isOpenAddRelative , setIsOpenAddRelative] = useState(false);
@@ -45,7 +45,7 @@ export default function OperationMenu({ setAccountUpdate, setEditState, pat, set
   };
   const editPatientHandler = (e) => {
     handleClose()
-    setEditState(true);
+    setPageState(1);
     setAccountUpdate(e);
   };
   const deletePatientHandler = (e) => {
@@ -94,6 +94,10 @@ export default function OperationMenu({ setAccountUpdate, setEditState, pat, set
     handleClose()
     setPatient(e)
   };
+  const reserveToPatientHandler = (e)=>{
+    setAccountUpdate(e)
+    setPageState(3)
+  }
   useEffect(()=>{
     console.log(patient);
     if (patient.nationalId) {
@@ -162,7 +166,7 @@ export default function OperationMenu({ setAccountUpdate, setEditState, pat, set
           <div className="px-4">
             <Tooltip title="نوبت دهی اینترنتی" placement="right">
               <IconButton>
-                <MdOutlineMoreTime />
+                <MdOutlineMoreTime onClick={()=> reserveToPatientHandler(pat)}/>
               </IconButton>
             </Tooltip>
           </div>

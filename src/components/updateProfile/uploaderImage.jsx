@@ -8,7 +8,7 @@ import { Box, CircularProgress, LinearProgress, Typography } from '@mui/material
 import ProgressBarUpdateProfile from './ProgressBarUpdateProfile';
 import SimpleBackdrop from '../backdrop';
 
-export default function UploaderImage({accountUpdate , setEditState}) {
+export default function UploaderImage({accountUpdate , setPageState}) {
   const account = useContext(Account);
   let avatar = ''
   if (accountUpdate) {
@@ -62,7 +62,7 @@ export default function UploaderImage({accountUpdate , setEditState}) {
             setIsLoading(false)
             setValProgres(0);
             setChange((e) => !e);
-            setEditState(false)
+            setPageState(0)
             Toast.fire({
               icon: 'success',
               text: 'تصویر پروفایل با موفقیت بروز رسانی شد',

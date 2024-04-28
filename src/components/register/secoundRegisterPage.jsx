@@ -11,7 +11,7 @@ import InputPassword from './inputPassword';
 import { useRouter } from 'next/router';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function SecoundRegisterPage({ registerModel, setIsRegister, setIsLoading, registerPatient , setRegisterPatient}) {
+export default function SecoundRegisterPage({ registerModel, setIsRegister, setIsLoading, pageState , setPageState}) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('m');
@@ -45,7 +45,7 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
       axios
         .post(mainDomain + '/api/Patient/Register', registerModel)
         .then((response) => {
-          if (!registerPatient) {
+          if (!pageState) {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userId', response.data.userId);
             localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -58,7 +58,7 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
           //   maxAge:60*60*24
           // }))
           setIsLoading(false);
-          if (!registerPatient) {
+          if (!pageState) {
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام شما با موفقیت انجام شد',
@@ -71,7 +71,7 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
               icon: 'success',
               text: 'ثبت نام بیمار با موفقیت انجام شد',
             });
-            setRegisterPatient(false)
+            setPageState(0)
             setIsRegister(false)
           }
         })

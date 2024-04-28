@@ -3,21 +3,22 @@ import React from 'react';
 import { FaPlus } from "react-icons/fa6";
 
 
-export default function NavBarListPatient({setRegisterPatient}) {
+export default function NavBarListPatient({setPageState}) {
   return (
     <>
-      <div className="flex justify-between w-5/6 mx-auto">
+    <div className="flex justify-between w-5/6 mx-auto">
+         <div className=" px-5">
         <TextField
-          //   onChange={(e) => setEmail(e.target.value)}
-          //   value={email}
-          className="w-1/3"
+          // onChange={(e) => setDescRelative(e.target.value)}
+          className="w-full"
           id="outlined-multiline-flexible"
-          label={'کد ملی / نام / نام خانوادگی'}
+          label="کدملی / نام / نام خانوادگی"
           multiline
-          maxRows={4}
-          InputProps={{ className: 'textfield-style' }}
+          // value={descRelative}
+          minRows={1}
         />
-        <button onClick={()=> setRegisterPatient(true)} className="flex justify-center items-center bg-green-500 px-5  rounded-md duration-300 hover:bg-green-600 text-white">
+      </div>
+        <button onClick={()=> setPageState(2)} className="flex justify-center items-center bg-green-500 px-5  rounded-md duration-300 hover:bg-green-600 text-white">
           <span className="px-1">بیمار جدید</span>
           <FaPlus />
         </button>

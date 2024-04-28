@@ -12,7 +12,7 @@ import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 import OperationMenu from './OperationMenu';
 
-export default function TableReqPatient({ setEditState, setAccountUpdate }) {
+export default function TableReqPatient({ setPageState, setAccountUpdate }) {
   const [patientList, setPatientList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -66,7 +66,7 @@ export default function TableReqPatient({ setEditState, setAccountUpdate }) {
                 </TableCell>
                 <TableCell align="center">
                   <OperationMenu
-                    setEditState={setEditState}
+                    setPageState={setPageState}
                     setAccountUpdate={setAccountUpdate}
                     pat={pat}
                     setIsLoading={setIsLoading}

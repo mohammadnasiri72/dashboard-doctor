@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 
-export default function FormUpdateProfile({ accountUpdate, setEditState }) {
+export default function FormUpdateProfile({ accountUpdate, setPageState }) {
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -87,7 +87,7 @@ export default function FormUpdateProfile({ accountUpdate, setEditState }) {
             text: 'اطلاعات با موفقیت ذخیره شد',
           });
           setChange((e) => !e);
-          setEditState(false);
+          setPageState(0);
         })
         .catch((error) => {
           setIsLoading(false);
@@ -156,7 +156,7 @@ export default function FormUpdateProfile({ accountUpdate, setEditState }) {
             {accountUpdate && (
               <div className="px-3">
                 <button
-                  onClick={() => setEditState(false)}
+                  onClick={() => setPageState(0)}
                   className="bg-blue-500 px-5 py-2 rounded-md duration-300 text-white hover:bg-blue-600 flex items-center"
                 >
                   <FaArrowRight />
