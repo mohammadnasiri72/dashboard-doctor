@@ -6,7 +6,15 @@ import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
 import { useRouter } from 'next/router';
 
-export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBackdrop, doctor, accountUpdate , setPageState}) {
+export default function BoxSelectDate({
+  dates,
+  isBackdrop,
+  dateReserved,
+  setIsBackdrop,
+  doctor,
+  accountUpdate,
+  setPageState,
+}) {
   const account = useContext(Account);
   const route = useRouter();
   const setTimeHandler = (e) => {
@@ -23,7 +31,7 @@ export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBa
       if (result.isConfirmed) {
         setIsBackdrop(true);
         const reserveData = {
-          patientUserId: accountUpdate? accountUpdate.userId : account.userId,
+          patientUserId: accountUpdate ? accountUpdate.userId : account.userId,
           reservationTimeId: e.reservationTimeId,
           description: e.description,
         };
@@ -41,9 +49,8 @@ export default function BoxSelectDate({ dates, isBackdrop, dateReserved, setIsBa
             });
             if (!accountUpdate) {
               route.replace('/dashboard/viewReservation');
-              
-            }else{
-              setPageState(0)
+            } else {
+              setPageState(4);
             }
           })
           .catch((err) => {

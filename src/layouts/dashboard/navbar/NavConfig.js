@@ -32,6 +32,7 @@ const sidebarConfig = [
     subheader: 'management',
     items: [
       { title: 'لیست بیماران', path: '/dashboard/patientListStaff', icon: <CgProfile /> },
+      { title: 'پذیرش', path: '/dashboard/reception', icon: <CgProfile /> },
       {
         title: 'user',
         path: '/dashboard/user',

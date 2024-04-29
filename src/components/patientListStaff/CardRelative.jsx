@@ -18,7 +18,6 @@ import SimpleBackdrop from '../backdrop';
 
 
 export default function CardRelative({ title, fullName, mobile, desc, address , rel , setIsLoading}) {
-    console.log(rel);
   const [expanded, setExpanded] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   

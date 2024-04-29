@@ -5,7 +5,8 @@ import { Account } from '../../pages/_app';
 import MyReserveBox from './MyReserveBox';
 import MyVisitedBox from './MyVisitedBox';
 
-export default function MyReservation() {
+export default function MyReservation({accountUpdate , setPageState}) {
+  // console.log(accountUpdate.patientId);
   const account = useContext(Account);
   const [doctors, setDoctors] = useState([]);
   const [doctor, setDoctor] = useState('');
@@ -19,6 +20,7 @@ export default function MyReservation() {
       })
       .then((res) => {
         setDoctors(res.data);
+        
       })
       .catch((err) => {
         // console.log(err);
@@ -28,7 +30,7 @@ export default function MyReservation() {
     axios
       .get(mainDomain + '/api/Reservation/GetList', {
         params: {
-          patientUserId: account.patientId,
+          patientUserId: accountUpdate? accountUpdate.userId : account.userId,
         },
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -45,18 +47,18 @@ export default function MyReservation() {
   return (
     <>
       <div className="text-start">
-        <h3 className="text-3xl font-bold">نوبت های من</h3>
+        <h3 className="text-3xl font-bold">نوبت های {accountUpdate? 'بیمار': 'من'}</h3>
       </div>
       {reserveList.filter((e) => e.status === 'Active').length === 0 && (
         <div className="w-5/6 mx-auto border rounded-lg mt-5 pt-2 pb-6">
-          <p className="mt-3">نوبت های شما خالی است</p>
+          <p className="mt-3">نوبت های {accountUpdate? 'بیمار': 'شما'} خالی است</p>
         </div>
       )}
       {reserveList
         .filter((e) => e.status === 'Active')
         .map((list) => (
           <div key={list.reservationId} className="w-5/6 mx-auto border rounded-lg mt-5 pt-2 pb-6">
-            <MyReserveBox list={list} doctor={doctor} />
+            <MyReserveBox list={list} doctor={doctor} accountUpdate={accountUpdate}/>
           </div>
         ))}
       {reserveList.filter((e) => e.status !== 'Active').length > 0 && (

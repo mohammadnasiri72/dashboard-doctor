@@ -13,7 +13,6 @@ import SimpleBackdrop from '../backdrop';
 import OperationMenu from './OperationMenu';
 
 export default function TableRelative({ PatientRelative }) {
-  console.log(PatientRelative);
   const [patientList, setPatientList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);

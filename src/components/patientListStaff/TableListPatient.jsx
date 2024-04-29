@@ -12,7 +12,7 @@ import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
 import OperationMenu from './OperationMenu';
 
-export default function TableReqPatient({ setPageState, setAccountUpdate }) {
+export default function TableReqPatient({ setPageState, setAccountUpdate , searchValue}) {
   const [patientList, setPatientList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -47,7 +47,7 @@ export default function TableReqPatient({ setPageState, setAccountUpdate }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {patientList.map((pat, index) => (
+            {patientList.filter((ev)=> ev.firstName.includes(searchValue) || ev.lastName.includes(searchValue) || ev.nationalId.includes(searchValue)).map((pat, index) => (
               <TableRow key={pat.patientId} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell>
                   <span className="pr-2 font-semibold">{index + 1}</span>

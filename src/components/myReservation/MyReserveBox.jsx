@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { Change } from '../../pages/_app';
 import SimpleBackdrop from '../backdrop';
 
-export default function MyReserveBox({ list, doctor }) {
+export default function MyReserveBox({ list, doctor , accountUpdate}) {
   const [isBackDrop, setIsBackDrop] = useState(false);
   const setChange = useContext(Change);
   const Toast = Swal.mixin({
@@ -42,7 +42,7 @@ export default function MyReserveBox({ list, doctor }) {
             setChange((e) => !e);
             Toast.fire({
               icon: 'success',
-              text: 'نوبت شما با موفقیت حذف شد',
+              text: `نوبت ${accountUpdate? 'بیمار':'شما'} با موفقیت حذف شد`,
             });
           })
           .catch((err) => {

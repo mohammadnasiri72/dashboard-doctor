@@ -7,6 +7,7 @@ import UploadDocuments from './UploadDocuments';
 import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
 import TableReqPatient from './TableReqPatient';
+import StepperService from './StepperService';
 
 export default function MainCounselingPage() {
   const [pageNumber, setPageNumber] = useState(0);
@@ -15,6 +16,10 @@ export default function MainCounselingPage() {
   const [reqPatient , setReqPatient] = useState([])
   const [apointmentId , setApointmentId] = useState('')
   const [flagUpload, setFlagUpload] = useState(false);
+  const [activeStep, setActiveStep] = React.useState(pageNumber-1);
+  useEffect(()=>{
+    setActiveStep(pageNumber-1)
+  },[pageNumber])
   const setRequestHandler = () => {
     setPageNumber(1);
   };
@@ -40,13 +45,8 @@ export default function MainCounselingPage() {
   return (
     <>
     {pageNumber !==0 &&
-      <div className='w-full bg-slate-100 text-start p-3 mb-3 text-xl font-semibold'>
-      {
-        pageNumber === 1 ?'مرحله اول':
-        pageNumber === 2 ?'مرحله دوم':
-        pageNumber === 3 ?'مرحله سوم':
-        pageNumber === 4 ?'مرحله چهارم': ''
-      }
+      <div className='w-full bg-slate-50 text-start p-3 mb-3 text-xl font-semibold'>
+      <StepperService activeStep={activeStep} setActiveStep={setActiveStep}/>
     </div>
     }
       {pageNumber === 0 ? (

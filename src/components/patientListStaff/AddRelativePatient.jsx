@@ -27,7 +27,6 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
-  // console.log(patient.patientId);
   const setNewRelativeHandler = () => {
     if (fullName.length > 0 && relative.length > 0 && mobileRelative.match(paternMobile)) {
       setIsLoading(true);
@@ -53,7 +52,6 @@ export default function AddRelativePatient({ isOpenAddRelative, setIsOpenAddRela
           setMobileRelative('');
           setAddressRelative('');
           setDescRelative('');
-          console.log(res);
           Toast.fire({
             icon: 'success',
             text: 'بیمار با موفقیت ثبت شد',

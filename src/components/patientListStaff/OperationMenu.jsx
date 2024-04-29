@@ -99,7 +99,6 @@ export default function OperationMenu({ setAccountUpdate, setPageState, pat, set
     setPageState(3)
   }
   useEffect(()=>{
-    console.log(patient);
     if (patient.nationalId) {
       
       axios
