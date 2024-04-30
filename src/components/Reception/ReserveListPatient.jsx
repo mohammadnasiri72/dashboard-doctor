@@ -51,7 +51,7 @@ export default function ReserveListPatient({
                   </span>
                 </MenuItem>
               ))}
-            {reservUser.length === 0 && <MenuItem>صفحه رزرو خالی است</MenuItem>}
+            {reservUser.length === 0 && <MenuItem disabled value={'not'}>صفحه رزرو خالی است</MenuItem>}
           </Select>
         </FormControl>
       </div>

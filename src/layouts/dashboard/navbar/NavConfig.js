@@ -15,7 +15,7 @@ const sidebarConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
-    subheader: 'general v3.3.0',
+    subheader: 'patient',
     items: [
       { title: 'پروفایل', path: '/dashboard/profile', icon: <CgProfile /> },
       { title: 'ویرایش پروفایل', path: '/dashboard/updateProfile', icon: <LiaUserEditSolid /> },
@@ -29,7 +29,7 @@ const sidebarConfig = [
   // MANAGEMENT
   // ----------------------------------------------------------------------
   {
-    subheader: 'management',
+    subheader: 'staff',
     items: [
       { title: 'لیست بیماران', path: '/dashboard/patientListStaff', icon: <CgProfile /> },
       { title: 'پذیرش', path: '/dashboard/reception', icon: <CgProfile /> },
