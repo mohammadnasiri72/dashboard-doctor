@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputCondition() {
+export default function InputCondition({conditionVal , setConditionVal}) {
   const [conditionList, setConditionList] = useState([]);
-  const [valCondition , setValCondition] = useState('all')
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Appointment/GetStatusList', {
@@ -32,18 +31,18 @@ export default function InputCondition() {
             وضعیت
           </InputLabel>
           <Select
-            onChange={(e) => setValCondition(e.target.value)}
+            onChange={(e) => setConditionVal(e.target.value)}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="وضعیت"
             color="primary"
-            value={valCondition}
+            value={conditionVal}
           >
-            <MenuItem value="all">
+            <MenuItem value={-1}>
               <span>همه</span>
             </MenuItem>
             {conditionList.map((e, i) => (
-              <MenuItem value={e} key={i}><span>{e}</span></MenuItem>
+              <MenuItem value={i+1} key={i}><span>{e}</span></MenuItem>
             ))}
           </Select>
         </FormControl>

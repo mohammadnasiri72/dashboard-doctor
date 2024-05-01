@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputTypeReception from './InputTypeReception';
 import InputDoctorSelect from './InputDoctorSelect';
 import InputPatientList from './InputPatientList';
@@ -19,6 +19,8 @@ import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import MainRegisterPage from '../register/mainRegisterPage';
 import SecoundRegisterPage from '../register/secoundRegisterPage';
 import SimpleBackdrop from '../backdrop';
+import axios from 'axios';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function MainPageReception() {
   const [pageStateReception, setPageStateReception] = useState(0);
@@ -26,11 +28,67 @@ export default function MainPageReception() {
   const [userSelected, setUserSelected] = useState([]);
   const [reservUser, setReservUser] = useState([]);
   const [showAddInsurance, setShowAddInsurance] = useState(false);
-  const [isRegister , setIsRegister] = useState(false)
-  const [registerModel , setRegisterModel] = useState({})
+  const [isRegister, setIsRegister] = useState(false);
+  const [registerModel, setRegisterModel] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
+  const [flag, setFlag] = useState(false);
+  const [paid, setPaid] = useState(false);
+  const [doctorId, setDoctorId] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [valTimeStart, setValTimeStart] = useState('');
+  const [valTimeEnd, setValTimeEnd] = useState('');
   const [insuranceListSelected, setInsuranceListSelected] = useState([]);
+  const [insuranceList, setInsuranceList] = useState([]);
+  const [serviceList , setServiceList] = useState([])
+  const [valCondition, setValCondition] = useState('');
+  const [patientList, setPatientList] = useState([]);
+  const [turn , setTurn] = useState(1)
+  const [notes , setNotes] = useState('')
+  const [statusId , setStatusId] = useState(1)
+  const [valType, setValType] = useState(1);
+  const [conditionVal , setConditionVal] = useState(-1);
+  const [receptions , setReceptions] = useState([])
+  const [fromPersianDate , setFromPersianDate] = useState('')
+  const [toPersianDate , setToPersianDate] = useState('')
+
+  console.log(fromPersianDate);
+  console.log(toPersianDate);
+  useEffect(()=>{
+    axios
+    .get(mainDomain+'/api/Appointment/GetList' , {
+      params:{
+        typeId: valType,
+        patientNationalId: userSelected.nationalId,
+        doctorMedicalSystemId: -1,
+        fromPersianDate: '۱۴۰۱/۰۲/۱۲',
+        toPersianDate: '۱۴۰۴/۰۲/۱۲',
+        statusId: -1
+      },
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+    .then((res)=>{
+      setReceptions(res.data);
+    })
+    .catch((err)=>{
+
+    })
+  },[])
+
+  useEffect(()=>{
+    let arr =[]
+    insuranceListSelected.map((e)=>{
+
+      arr.push({
+        appointmentId: 0,
+        insuranceId: e.insuranceId
+      }) 
+       
+    })
+    setInsuranceList(arr)
+  },[insuranceListSelected])
+
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -49,16 +107,60 @@ export default function MainPageReception() {
       setShowAddInsurance(true);
     }
   };
+  const submitFormHandler = () => {
+    setIsLoading(true)
+    const dataForm = {
+      patientId: userSelected.patientId,
+      paid,
+      doctorId,
+      dateFa: date,
+      startTime: valTimeStart,
+      endTime: valTimeEnd,
+      insuranceList,
+      serviceList,
+      statusAdmissionIdList: valCondition,
+      turn,
+      notes,
+      statusId
+    };
+    axios.post(mainDomain+'/api/Appointment/Add' , dataForm , {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+    .then((res)=>{
+      setIsLoading(false)
+      Toast.fire({
+        icon: 'success',
+        text: 'پذیرش با موفقیت انجام شد',
+      });
+      setPageStateReception(0)
+      setNotes('')
+      setTurn(1)
+      setPaid(false)
+      setValReservPatient('')
+      setStatusId(1)
+      setReservUser([])
+      setUserSelected([])
+    })
+    .catch((err)=>{
+      setIsLoading(false)
+      Toast.fire({
+        icon: 'error',
+        text: err.response ? err.response.data : 'خطای شبکه',
+      });
+    })
+  };
   return (
     <>
       {pageStateReception === 0 && (
         <div>
           <div className="flex justify-start">
-            <InputTypeReception />
-            <InputCondition />
-            <InputDoctorSelect pageStateReception={pageStateReception} />
-            <InputPatientList pageStateReception={pageStateReception} />
-            <InputDate />
+            <InputTypeReception valType={valType} setValType={setValType}/>
+            <InputCondition conditionVal={conditionVal} setConditionVal={setConditionVal}/>
+            <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId}/>
+            <InputPatientList pageStateReception={pageStateReception} setUserSelected={setUserSelected} patientList={patientList} setPatientList={setPatientList}/>
+            <InputDate setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate}/>
             <div className="px-5 py-2 rounded-md text-white bg-green-500 duration-300 hover:bg-green-600 flex items-center">
               <button onClick={() => setPageStateReception(1)} className=" flex items-center">
                 <span className="px-2 whitespace-nowrap">پذیرش جدید</span>
@@ -67,7 +169,7 @@ export default function MainPageReception() {
             </div>
           </div>
           <div className="mt-5">
-            <BoxReception />
+            <BoxReception receptions={receptions} patientList={patientList}/>
           </div>
         </div>
       )}
@@ -83,9 +185,12 @@ export default function MainPageReception() {
           </div>
           <div className="flex justify-start">
             <InputTypeReception />
-            <InputDoctorSelect pageStateReception={pageStateReception} />
+            <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId} />
             <InputPatientList pageStateReception={pageStateReception} setUserSelected={setUserSelected} />
-            <button onClick={()=> setPageStateReception(2)} className="px-5 py-2 rounded-md text-white bg-green-500 duration-300 hover:bg-green-600">
+            <button
+              onClick={() => setPageStateReception(2)}
+              className="px-5 py-2 rounded-md text-white bg-green-500 duration-300 hover:bg-green-600"
+            >
               <FaPlus />
             </button>
           </div>
@@ -97,13 +202,24 @@ export default function MainPageReception() {
               reservUser={reservUser}
               setReservUser={setReservUser}
             />
-            <BoxChangDate valReservPatient={valReservPatient} reservUser={reservUser} />
+            <BoxChangDate
+              valReservPatient={valReservPatient}
+              reservUser={reservUser}
+              userSelected={userSelected}
+              setDate={setDate}
+              date={date}
+              valTimeStart={valTimeStart}
+              setValTimeStart={setValTimeStart}
+              setValTimeEnd={setValTimeEnd}
+              valTimeEnd={valTimeEnd}
+              setTurn={setTurn}
+              turn={turn}
+            />
           </div>
           <div className="flex items-center">
             <InsuranceList
+              flag={flag}
               userSelected={userSelected}
-              showAddInsurance={showAddInsurance}
-              insuranceListSelected={insuranceListSelected}
               setInsuranceListSelected={setInsuranceListSelected}
             />
             <div className="px-4">
@@ -124,35 +240,45 @@ export default function MainPageReception() {
             <TableInsuranceSelected insuranceListSelected={insuranceListSelected} />
           </div>
           <div>
-            <ServicesList userSelected={userSelected} />
+            <ServicesList userSelected={userSelected} setServiceList={setServiceList}/>
           </div>
-          <div className='mt-10'>
-            <CheckBoxDoctor />
+          <div className="mt-10">
+            <CheckBoxDoctor valCondition={valCondition} setValCondition={setValCondition}/>
           </div>
           <div className="mt-5 flex items-center">
-            <InputConditionReception />
-            <FormControlLabel className="px-10" control={<Checkbox />} label={'پرداخت شده'} />
+            <InputConditionReception setStatusId={setStatusId} statusId={statusId}/>
+            <FormControlLabel
+              onChange={() => setPaid(!paid)}
+              className="px-10"
+              control={<Checkbox />}
+              label={'پرداخت شده'}
+            />
           </div>
           <div className=" text-start mt-4" dir="rtl">
             <TextField
-              // onChange={(e) => setCoverageType(e.target.value)}
+              onChange={(e) => setNotes(e.target.value)}
               className="w-1/2 text-end"
               id="outlined-multiline-flexible"
               label="یادداشت"
               multiline
               dir="rtl"
-              // value={coverageType}
+              value={notes}
               minRows={4}
             />
           </div>
-          <div className='text-start mt-5'>
-            <button className='px-5 py-2 bg-green-500 text-white rounded-md duration-300 hover:bg-green-600'>ثبت پذیرش</button>
+          <div className="text-start mt-5">
+            <button
+              onClick={submitFormHandler}
+              className="px-5 py-2 bg-green-500 text-white rounded-md duration-300 hover:bg-green-600"
+            >
+              ثبت پذیرش
+            </button>
           </div>
           <div
             style={{ zIndex: '1300', transform: showAddInsurance ? 'translateX(0)' : 'translateX(-100%)' }}
             className="fixed top-0 bottom-0 right-2/3 left-0 bg-slate-50 duration-500 p-5 shadow-lg overflow-y-auto"
           >
-            <AddInsurance userSelected={userSelected} setShowAddInsurance={setShowAddInsurance} />
+            <AddInsurance userSelected={userSelected} setShowAddInsurance={setShowAddInsurance} setFlag={setFlag} />
           </div>
           <div
             style={{ zIndex: '1299', display: showAddInsurance ? 'block' : 'none' }}
@@ -161,35 +287,41 @@ export default function MainPageReception() {
           />
         </div>
       )}
-      {pageStateReception === 2 &&
-         <div>
-         { (
-           <div className="px-3">
-             <button
-               onClick={() => setPageStateReception(1)}
-               className="bg-blue-500 px-5 py-2 rounded-md duration-300 text-white hover:bg-blue-600 flex items-center"
-             >
-               <FaArrowRight />
-               <span className="px-2">برگشت به صفخه قبل</span>
-             </button>
-           </div>
-         )}
-         {!isRegister && (
-           <MainRegisterPage
-             setIsRegister={setIsRegister}
-             setRegisterModel={setRegisterModel}
-             setIsLoading={setIsLoading}
-           />
-         )}
-         {isRegister && (
-           <SecoundRegisterPage
-             registerModel={registerModel}
-             setIsRegister={setIsRegister}
-             setIsLoading={setIsLoading}
-           />
-         )}
-         {isLoading && <SimpleBackdrop />}
-       </div>
+      {pageStateReception === 2 && (
+        <div>
+          {
+            <div className="px-3">
+              <button
+                onClick={() => setPageStateReception(1)}
+                className="bg-blue-500 px-5 py-2 rounded-md duration-300 text-white hover:bg-blue-600 flex items-center"
+              >
+                <FaArrowRight />
+                <span className="px-2">برگشت به صفخه قبل</span>
+              </button>
+            </div>
+          }
+          {!isRegister && (
+            <MainRegisterPage
+              setIsRegister={setIsRegister}
+              setRegisterModel={setRegisterModel}
+              setIsLoading={setIsLoading}
+            />
+          )}
+          {isRegister && (
+            <SecoundRegisterPage
+              setPageStateReception={setPageStateReception}
+              pageStateReception={pageStateReception}
+              registerModel={registerModel}
+              setIsRegister={setIsRegister}
+              setIsLoading={setIsLoading}
+            />
+          )}
+          {isLoading && <SimpleBackdrop />}
+        </div>
+      )}
+      {
+        isLoading &&
+        <SimpleBackdrop />
       }
     </>
   );

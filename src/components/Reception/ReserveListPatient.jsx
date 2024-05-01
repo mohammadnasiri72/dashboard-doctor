@@ -23,8 +23,12 @@ export default function ReserveListPatient({
         })
         .then((res) => {
           setReservUser(res.data);
+          setValReservPatient(res.data.length !==0 ? res.data[0].reservationTimeId : '');
         })
         .catch((err) => {});
+    }else{
+      setReservUser([])
+      setValReservPatient([])
     }
   }, [userSelected]);
   return (
@@ -44,14 +48,18 @@ export default function ReserveListPatient({
           >
             {reservUser.length > 0 &&
               reservUser.map((e) => (
-                <MenuItem key={e.reservationId} value="all">
+                <MenuItem key={e.reservationId} value={e.reservationTimeId}>
                   <span>{e.reservationTimeDateFA}</span>
                   <span>
                     ساعت {e.reservationTimeFromTime} تا {e.reservationTimeToTime}
                   </span>
                 </MenuItem>
               ))}
-            {reservUser.length === 0 && <MenuItem disabled value={'not'}>صفحه رزرو خالی است</MenuItem>}
+              {
+                userSelected.length===0 && 
+                <MenuItem disabled>لطفا ابتدا بیمار را ثبت کنید</MenuItem>
+              }
+            {reservUser.length === 0 && userSelected.length!==0 && <MenuItem disabled>صفحه رزرو خالی است</MenuItem>}
           </Select>
         </FormControl>
       </div>

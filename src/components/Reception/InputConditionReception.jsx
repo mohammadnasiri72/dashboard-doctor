@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputConditionReception() {
+export default function InputConditionReception({statusId , setStatusId}) {
   const [conditionList, setConditionList] = useState([]);
-  const [valCondition , setValCondition] = useState('Record')
+  // const [valCondition , setValCondition] = useState(1)
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Appointment/GetStatusList', {
@@ -15,9 +15,9 @@ export default function InputConditionReception() {
         },
       })
       .then((res) => {
+        
         let arr = [];
         for (const prop in res.data) {
-          // alert(res.data[prop]);
           arr.push(res.data[prop]);
         }
         setConditionList(arr);
@@ -32,15 +32,15 @@ export default function InputConditionReception() {
             وضعیت
           </InputLabel>
           <Select
-            onChange={(e) => setValCondition(e.target.value)}
+            onChange={(e) => setStatusId(e.target.value)}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="وضعیت"
             color="primary"
-            value={valCondition}
+            value={statusId}
           >
-            {conditionList.slice(1,3).map((e, i) => (
-              <MenuItem value={e} key={i}><span>{e}</span></MenuItem>
+            {conditionList.slice(0,2).map((e, i) => (
+              <MenuItem value={i+1} key={i}><span>{e}</span></MenuItem>
             ))}
           </Select>
         </FormControl>

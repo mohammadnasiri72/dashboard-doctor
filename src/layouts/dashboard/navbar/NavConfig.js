@@ -21,7 +21,7 @@ const sidebarConfig = [
       { title: 'ویرایش پروفایل', path: '/dashboard/updateProfile', icon: <LiaUserEditSolid /> },
       { title: 'نوبت دهی اینترنتی', path: '/dashboard/reserve', icon: <FaRegCalendarCheck /> },
       { title: 'نوبت های من', path: '/dashboard/viewReservation', icon: <FaRegCalendarAlt /> },
-      { title: 'لیست بیماری های من', path: '/dashboard/patientList', icon: <CiViewList /> },
+      { title: 'لیست بیماری های من', path: '/dashboard/sicknessList', icon: <CiViewList /> },
       { title: 'مشاوره آنلاین', path: '/dashboard/counseling', icon: <MdSupportAgent /> },
     ],
   },

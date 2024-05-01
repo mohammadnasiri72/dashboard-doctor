@@ -4,18 +4,15 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputPatientList({ pageStateReception , setUserSelected}) {
-  const [patientList, setPatientList] = useState([]);
+export default function InputPatientList({ pageStateReception , setUserSelected , patientList , setPatientList}) {
+  
   const [patientName, setPatientName] = useState('');
-  //   patientName.includes()
   useEffect(() => {
-    if (pageStateReception === 1) {
       patientList.map((e) => {
         if (patientName?.includes(e.nationalId)) {
           setUserSelected(e)
         }
       });
-    }
   }, [patientName, patientList]);
 
   useEffect(() => {
@@ -30,15 +27,18 @@ export default function InputPatientList({ pageStateReception , setUserSelected}
       })
       .catch((err) => {});
   }, []);
-  const changValPatientHandler = (e) => {
-    setPatientName(e.target.innerText);
+  const changValPatientHandler = (event , newValue) => {
+    setPatientName(newValue);
+    if (!newValue) {
+      setUserSelected([])
+    }
   };
   return (
     <>
-      <div className="w-80">
+      <div className="min-w-80">
         <Autocomplete
           value={patientName ? patientName : ''}
-          onChange={changValPatientHandler}
+          onChange={(event , newValue)=> changValPatientHandler(event , newValue)}
           freeSolo
           options={patientList.map(
             (option) => option.firstName + ' ' + option.lastName + ' ( ' + option.nationalId + ' ) '

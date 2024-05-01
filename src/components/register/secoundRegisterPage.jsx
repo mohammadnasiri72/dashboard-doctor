@@ -11,7 +11,15 @@ import InputPassword from './inputPassword';
 import { useRouter } from 'next/router';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function SecoundRegisterPage({ registerModel, setIsRegister, setIsLoading, pageState , setPageState}) {
+export default function SecoundRegisterPage({
+  registerModel,
+  setIsRegister,
+  setIsLoading,
+  pageState,
+  setPageState,
+  pageStateReception,
+  setPageStateReception,
+}) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('m');
@@ -45,20 +53,13 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
       axios
         .post(mainDomain + '/api/Patient/Register', registerModel)
         .then((response) => {
-          if (!pageState) {
+          setIsLoading(false);
+          if (!pageState && !pageStateReception) {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userId', response.data.userId);
             localStorage.setItem('refreshToken', response.data.refreshToken);
             localStorage.setItem('roles', response.data.roles);
             localStorage.setItem('expiration', response.data.expiration);
-          }
-          // response.setHeader("Set-Cookie", serialize("token", fristName , {
-          //   httpOnly:true,
-          //   path:"/",
-          //   maxAge:60*60*24
-          // }))
-          setIsLoading(false);
-          if (!pageState) {
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام شما با موفقیت انجام شد',
@@ -66,13 +67,25 @@ export default function SecoundRegisterPage({ registerModel, setIsRegister, setI
             setTimeout(() => {
               route.replace('/dashboard');
             }, 1000);
-          }else{
+          }
+          // response.setHeader("Set-Cookie", serialize("token", fristName , {
+          //   httpOnly:true,
+          //   path:"/",
+          //   maxAge:60*60*24
+          // }))
+          
+           else {
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام بیمار با موفقیت انجام شد',
             });
-            setPageState(0)
-            setIsRegister(false)
+            if (!pageState) {
+              setPageStateReception(1);
+            }
+            if (!pageStateReception) {
+              setPageState(0);
+            }
+            setIsRegister(false);
           }
         })
         .catch((err) => {

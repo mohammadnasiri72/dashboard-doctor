@@ -5,7 +5,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 export default function TableInsuranceSelected({ insuranceListSelected }) {
   return (
     <>
-      {insuranceListSelected.length === 0 && <p>بیمه ای وارد نشده است</p>}
+      {insuranceListSelected.length === 0 && <p className='border rounded-md py-5'>بیمه ای وارد نشده است</p>}
       {insuranceListSelected.length !== 0 && (
         <div>
           <TableContainer component={Paper}>

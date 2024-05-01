@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputDoctorSelect({pageStateReception}) {
+export default function InputDoctorSelect({pageStateReception , setDoctorId , doctorId}) {
     const [doctors , setDoctors] = useState([])
-    const [doctor , setDoctor] = useState('')
     useEffect(() => {
         axios
           .get(mainDomain + '/api/Doctor/GetList', {
@@ -16,7 +15,7 @@ export default function InputDoctorSelect({pageStateReception}) {
           })
           .then((res) => {
             setDoctors(res.data);
-            setDoctor(res.data[0].doctorId)
+            setDoctorId(res.data[0].doctorId)
           })
           .catch((err) => {});
       }, []);
@@ -35,12 +34,12 @@ export default function InputDoctorSelect({pageStateReception}) {
             }
           </InputLabel>
           <Select
-              onChange={(e) => setDoctor(e.target.value)}
+              onChange={(e) => setDoctorId(e.target.value)}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label= {pageStateReception===0 ? "لیست پزشکان":'انتخاب پزشک'}
             color="primary"
-              value={doctor}
+              value={doctorId}
           >
             {/* {expertise === 'همه' &&
                 doctors.map((d) => (

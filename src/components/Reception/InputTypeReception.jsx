@@ -3,9 +3,9 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputTypeReception() {
+export default function InputTypeReception({valType , setValType}) {
   const [typeReception, setTypeReception] = useState([]);
-  const [valType, setValType] = useState('');
+ 
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Appointment/GetTypeList', {
@@ -15,7 +15,7 @@ export default function InputTypeReception() {
       })
       .then((res) => {
         setTypeReception(res.data);
-        setValType(res.data[1]);
+        
       })
       .catch((err) => {});
   }, []);
@@ -35,7 +35,7 @@ export default function InputTypeReception() {
             value={valType}
           >
             {[typeReception[1], typeReception[2]].map((e, i) => (
-              <MenuItem value={e} key={i}>
+              <MenuItem value={i+1} key={i}>
                 {e === 'InPerson' ? 'حضوری' : 'غیر حضوری'}
               </MenuItem>
             ))}

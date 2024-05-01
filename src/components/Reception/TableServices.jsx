@@ -44,7 +44,7 @@ export default function TableServices({ listServices }) {
     }
     {
         listServices.length===0 && 
-        <p>لیست خدمات خالی است</p>
+        <p className='border rounded-md py-5'>لیست خدمات خالی است</p>
     }
     </>
   );

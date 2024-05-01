@@ -1,24 +1,18 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Box, Menu, Tooltip } from '@mui/material';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box, Menu, Tooltip } from '@mui/material';
-import Iconify from '../Iconify';
-import { TiGroup } from 'react-icons/ti';
+import { styled } from '@mui/material/styles';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdOutlineMoreTime } from 'react-icons/md';
+import { TiGroup } from 'react-icons/ti';
+import Iconify from '../Iconify';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,9 +25,15 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function CardReception() {
+export default function CardReception({reception , patientList}) {
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [user , setUser] = useState([])
+
+  useEffect(()=>{
+    setUser(patientList.find((e)=> e.nationalId===reception.patientNationalId))
+    
+  },[])
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -46,21 +46,7 @@ export default function CardReception() {
   };
   return (
     <Card sx={{ maxWidth: 220 }}>
-      {/* <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        
-        title="محمد نصیری"
-        subheader="۱۴۰۳/۰۲/۱۰"
-      /> */}
+      
 
       <CardContent>
         <Box className={'flex justify-center'}>
@@ -118,15 +104,12 @@ export default function CardReception() {
             </div>
           </Menu>
         </div>
-        <h3 className='text-xl font-semibold'>محمد نصیری</h3>
-        <p className='mt-2'>کد ملی : 001601882</p>
-        <p className='mt-2'>تاریخ پذیرش : ۱۴۰۳/۰۲/۱۰</p>
-
-
-        {/* <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of
-          frozen peas along with the mussels, if you like.
-        </Typography> */}
+        <h3 className='text-xl font-semibold'>{reception.patientFirstName} {reception.patientLastName}</h3>
+        <p className='mt-2'>کد ملی : {reception.patientNationalId}</p>
+        <p className='mt-2'>ساعت ورود : {reception.startTime}</p>
+        <p className='mt-2'>تاریخ ورود : {reception.appointmentDateFA}</p>
+        <p className='mt-2'>نام دکتر : {reception.doctorFirstName} {reception.doctorLastName}</p>
+        <p className='mt-2'> شماره موبایل : {user.userPhoneNumber}</p>
       </CardContent>
       <CardActions disableSpacing>
         <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
@@ -136,8 +119,9 @@ export default function CardReception() {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>توضیحات:</Typography>
+        <p className='mt-2'>نام پدر : {user.fatherName}</p>
+        <p className='mt-2'>تلفن ثابت : {user.tel}</p>
           
-          <Typography>Set aside off of the heat to let rest for 10 minutes, and then serve.</Typography>
         </CardContent>
       </Collapse>
     </Card>

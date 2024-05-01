@@ -5,8 +5,10 @@ import { mainDomain } from '../../utils/mainDomain';
 import DatePicker from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
+import Swal from 'sweetalert2';
+import SimpleBackdrop from '../backdrop';
 
-export default function AddInsurance({ userSelected , setShowAddInsurance}) {
+export default function AddInsurance({ userSelected , setShowAddInsurance , setFlag}) {
   const [userInsurance, setUserInsurance] = useState([]);
   const [valInsurance, setValInsurance] = useState('');
   const [policyNumber , setPolicyNumber] = useState('')
@@ -14,9 +16,18 @@ export default function AddInsurance({ userSelected , setShowAddInsurance}) {
   const [coverageAmount , setCoverageAmount] = useState('')
   const [startDateFa , setStartDateFa] = useState('')
   const [endDateFa , setEndDateFa] = useState('')
+  const [isLoading , setIsLoading] = useState(false)
 
   const datePicStart = useRef();
   const datePicEnd = useRef();
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: 'toast-modal',
+  });
   useEffect(() => {
     if (userSelected.nationalId) {
       axios
@@ -34,6 +45,7 @@ export default function AddInsurance({ userSelected , setShowAddInsurance}) {
     }
   }, [userSelected]);
   const setInsuranceHandler =()=>{
+    setIsLoading(true)
     const data ={
         insuranceCompanyId: valInsurance,
         patientId: userSelected.patientId,
@@ -50,10 +62,16 @@ export default function AddInsurance({ userSelected , setShowAddInsurance}) {
           },
     })
     .then((res)=>{
+      setIsLoading(false)
+      Toast.fire({
+        icon: 'success',
+        text: 'بیمه با موفقیت ثبت شد',
+      });
         setShowAddInsurance(false)
+        setFlag((e)=>!e)
     })
     .catch((err)=>{
-
+      setIsLoading(false)
     })
 
   }
@@ -147,6 +165,10 @@ export default function AddInsurance({ userSelected , setShowAddInsurance}) {
       <div className='mt-4'>
         <button onClick={setInsuranceHandler} className='bg-green-500 text-white px-5 py-2 rounded-md duration-300 hover:bg-green-600'>ثبت درخواست</button>
       </div>
+      {
+        isLoading &&
+        <SimpleBackdrop />
+      }
     </>
   );
 }
