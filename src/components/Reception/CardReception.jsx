@@ -1,5 +1,5 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Menu, Tooltip } from '@mui/material';
+import { Box, Chip, Menu, Tooltip } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -25,15 +25,14 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function CardReception({reception , patientList}) {
+export default function CardReception({ reception, patientList }) {
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [user , setUser] = useState([])
-
-  useEffect(()=>{
-    setUser(patientList.find((e)=> e.nationalId===reception.patientNationalId))
-    
-  },[])
+  const [user, setUser] = useState([]);
+  let patient = [...patientList]
+  useEffect(() => {
+    setUser(patient.find((e) => e.nationalId === reception.patientNationalId));
+  }, []);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -45,14 +44,13 @@ export default function CardReception({reception , patientList}) {
     setAnchorEl(null);
   };
   return (
-    <Card sx={{ maxWidth: 220 }}>
-      
-
+    <Card sx={{ minWidth: 320 }}>
       <CardContent>
         <Box className={'flex justify-center'}>
           <img className="w-14 h-14 rounded-full border" src={'/images/bg.jpeg'} alt="" />
         </Box>
-        <div className='absolute left-3 top-6'>
+          <Chip className='absolute top-6 right-3' label={reception.status} color='secondary' variant="filled" />
+        <div className="absolute left-3 top-6">
           <button
             id="basic-button"
             aria-controls={open ? 'basic-menu' : undefined}
@@ -81,10 +79,7 @@ export default function CardReception({reception , patientList}) {
             <div className="px-4">
               <Tooltip title="حذف" placement="right">
                 <IconButton>
-                  <Iconify
-                    className="text-red-500"
-                    icon={'eva:trash-2-outline'}
-                  />
+                  <Iconify className="text-red-500" icon={'eva:trash-2-outline'} />
                 </IconButton>
               </Tooltip>
             </div>
@@ -104,12 +99,17 @@ export default function CardReception({reception , patientList}) {
             </div>
           </Menu>
         </div>
-        <h3 className='text-xl font-semibold'>{reception.patientFirstName} {reception.patientLastName}</h3>
-        <p className='mt-2'>کد ملی : {reception.patientNationalId}</p>
-        <p className='mt-2'>ساعت ورود : {reception.startTime}</p>
-        <p className='mt-2'>تاریخ ورود : {reception.appointmentDateFA}</p>
-        <p className='mt-2'>نام دکتر : {reception.doctorFirstName} {reception.doctorLastName}</p>
-        <p className='mt-2'> شماره موبایل : {user.userPhoneNumber}</p>
+        <h3 className="text-xl font-semibold">
+          {reception.patientFirstName} {reception.patientLastName}
+        </h3>
+        <p className="mt-2">کد ملی : {reception.patientNationalId}</p>
+        <p className="mt-2">ساعت ورود : {reception.startTime}</p>
+        <p className="mt-2">تاریخ ورود : {reception.appointmentDateFA}</p>
+        <p className="mt-2">
+          نام دکتر : {reception.doctorFirstName} {reception.doctorLastName}
+        </p>
+        <p className="mt-2"> شماره موبایل : {user.userPhoneNumber}</p>
+
       </CardContent>
       <CardActions disableSpacing>
         <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
@@ -119,9 +119,8 @@ export default function CardReception({reception , patientList}) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>توضیحات:</Typography>
-        <p className='mt-2'>نام پدر : {user.fatherName}</p>
-        <p className='mt-2'>تلفن ثابت : {user.tel}</p>
-          
+          <p className="mt-2">نام پدر : {user.fatherName}</p>
+          <p className="mt-2">تلفن ثابت : {user.tel}</p>
         </CardContent>
       </Collapse>
     </Card>

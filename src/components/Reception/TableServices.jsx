@@ -1,8 +1,12 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import React from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { FaTrashCan } from "react-icons/fa6";
 
-export default function TableServices({ listServices }) {
+export default function TableServices({ listServices , setListServices}) {
+  const deletServiceHandler = (e)=>{
+    setListServices(listServices.filter((ev)=>ev!==e));
+    
+  }
   return (
     <>
     {
@@ -33,7 +37,7 @@ export default function TableServices({ listServices }) {
                 <TableCell align="center">{e.rate}</TableCell>
                 <TableCell align="center">
                   <div className="flex justify-center">
-                    <BsThreeDotsVertical className="cursor-pointer text-xl" />
+                    <FaTrashCan onClick={()=> deletServiceHandler(e)} className="cursor-pointer text-xl text-red-500" />
                   </div>
                 </TableCell>
               </TableRow>

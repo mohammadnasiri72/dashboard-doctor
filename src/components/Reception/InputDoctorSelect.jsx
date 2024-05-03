@@ -18,7 +18,7 @@ export default function InputDoctorSelect({pageStateReception , setDoctorId , do
             setDoctorId(res.data[0].doctorId)
           })
           .catch((err) => {});
-      }, []);
+      }, [pageStateReception]);
   return (
     <>
       <div className="px-4 w-56" dir="rtl">

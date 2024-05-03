@@ -7,13 +7,17 @@ import { mainDomain } from '../../utils/mainDomain';
 export default function InputPatientList({ pageStateReception , setUserSelected , patientList , setPatientList}) {
   
   const [patientName, setPatientName] = useState('');
+  useEffect(()=>{
+    setPatientName('')
+    setUserSelected([])
+  },[pageStateReception])
   useEffect(() => {
       patientList.map((e) => {
         if (patientName?.includes(e.nationalId)) {
           setUserSelected(e)
         }
       });
-  }, [patientName, patientList]);
+  }, [patientName, patientList , pageStateReception]);
 
   useEffect(() => {
     axios

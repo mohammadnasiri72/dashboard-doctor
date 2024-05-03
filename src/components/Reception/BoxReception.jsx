@@ -1,17 +1,31 @@
 import React from 'react'
 import CardReception from './CardReception'
 
-export default function BoxReception({receptions , patientList}) {
+export default function BoxReception({receptions , patientList , statusCondition}) {
   return (
     <>
-    <div className='flex flex-wrap justify-center items-start'>
+    <div className='flex flex-wrap justify-start items-start'>
+      {
+        receptions.length===0 &&
+        <p>صفحه پذیرش خالی است</p>
+      }
     {
-        receptions.map((reception)=>(
-            <div className='px-2 w-3/7 flex justify-center mt-3' key={reception}>
+      statusCondition.length>0 &&
+        receptions.filter((ev)=>ev.status=== statusCondition).map((reception , i)=>(
+            <div className='px-2 w-1/3 flex justify-center mt-3' key={i}>
                 <CardReception reception={reception} patientList={patientList}/>
             </div>
 
         ))
+    }
+    {
+      statusCondition.length===0 &&
+      receptions.map((reception , i)=>(
+          <div className='px-2 w-1/3 flex justify-center mt-3' key={i}>
+              <CardReception reception={reception} patientList={patientList}/>
+          </div>
+
+      ))
     }
     </div>
     </>

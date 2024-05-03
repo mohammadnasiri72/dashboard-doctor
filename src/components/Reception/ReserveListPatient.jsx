@@ -9,6 +9,7 @@ export default function ReserveListPatient({
   userSelected,
   setReservUser,
   reservUser,
+  pageStateReception
 }) {
   useEffect(() => {
     if (userSelected.userId) {
@@ -22,6 +23,7 @@ export default function ReserveListPatient({
           },
         })
         .then((res) => {
+          console.log(userSelected);
           setReservUser(res.data);
           setValReservPatient(res.data.length !==0 ? res.data[0].reservationTimeId : '');
         })
@@ -30,7 +32,7 @@ export default function ReserveListPatient({
       setReservUser([])
       setValReservPatient([])
     }
-  }, [userSelected]);
+  }, [userSelected , pageStateReception]);
   return (
     <>
       <div className="w-64 mt-3">

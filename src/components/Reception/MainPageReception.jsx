@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import InputTypeReception from './InputTypeReception';
-import InputDoctorSelect from './InputDoctorSelect';
-import InputPatientList from './InputPatientList';
-import InputDate from './InputDate';
-import { FaArrowRight, FaPlus } from 'react-icons/fa6';
-import InputCondition from './InputCondition';
-import BoxReception from './BoxReception';
-import ReserveListPatient from './ReserveListPatient';
-import BoxChangDate from './BoxChangDate';
-import InsuranceList from './InsuranceList';
-import AddInsurance from './AddInsurance';
-import Swal from 'sweetalert2';
-import TableInsuranceSelected from './TableInsuranceSelected';
-import ServicesList from './ServicesList';
-import CheckBoxDoctor from './CheckBoxDoctor';
-import InputConditionReception from './InputConditionReception';
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { FaArrowRight, FaPlus } from 'react-icons/fa6';
+import Swal from 'sweetalert2';
+import { mainDomain } from '../../utils/mainDomain';
+import SimpleBackdrop from '../backdrop';
 import MainRegisterPage from '../register/mainRegisterPage';
 import SecoundRegisterPage from '../register/secoundRegisterPage';
-import SimpleBackdrop from '../backdrop';
-import axios from 'axios';
-import { mainDomain } from '../../utils/mainDomain';
+import AddInsurance from './AddInsurance';
+import BoxChangDate from './BoxChangDate';
+import BoxReception from './BoxReception';
+import CheckBoxDoctor from './CheckBoxDoctor';
+import FilterCondition from './FilterCondition';
+import InputCondition from './InputCondition';
+import InputConditionReception from './InputConditionReception';
+import InputDate from './InputDate';
+import InputDoctorSelect from './InputDoctorSelect';
+import InputPatientList from './InputPatientList';
+import InputTypeReception from './InputTypeReception';
+import InsuranceList from './InsuranceList';
+import ReserveListPatient from './ReserveListPatient';
+import ServicesList from './ServicesList';
+import TableInsuranceSelected from './TableInsuranceSelected';
 
 export default function MainPageReception() {
   const [pageStateReception, setPageStateReception] = useState(0);
@@ -34,60 +35,54 @@ export default function MainPageReception() {
   const [flag, setFlag] = useState(false);
   const [paid, setPaid] = useState(false);
   const [doctorId, setDoctorId] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [valTimeStart, setValTimeStart] = useState('');
   const [valTimeEnd, setValTimeEnd] = useState('');
   const [insuranceListSelected, setInsuranceListSelected] = useState([]);
   const [insuranceList, setInsuranceList] = useState([]);
-  const [serviceList , setServiceList] = useState([])
+  const [serviceList, setServiceList] = useState([]);
   const [valCondition, setValCondition] = useState('');
   const [patientList, setPatientList] = useState([]);
-  const [turn , setTurn] = useState(1)
-  const [notes , setNotes] = useState('')
-  const [statusId , setStatusId] = useState(1)
+  const [turn, setTurn] = useState(1);
+  const [notes, setNotes] = useState('');
+  const [statusId, setStatusId] = useState(1);
   const [valType, setValType] = useState(1);
-  const [conditionVal , setConditionVal] = useState(-1);
-  const [receptions , setReceptions] = useState([])
-  const [fromPersianDate , setFromPersianDate] = useState('')
-  const [toPersianDate , setToPersianDate] = useState('')
-
-  console.log(fromPersianDate);
-  console.log(toPersianDate);
-  useEffect(()=>{
+  const [conditionVal, setConditionVal] = useState(-1);
+  const [receptions, setReceptions] = useState([]);
+  const [fromPersianDate, setFromPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
+  const [toPersianDate, setToPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
+  const [statusCondition, setStatusCondition] = useState('');
+  useEffect(() => {
     axios
-    .get(mainDomain+'/api/Appointment/GetList' , {
-      params:{
-        typeId: valType,
-        patientNationalId: userSelected.nationalId,
-        doctorMedicalSystemId: -1,
-        fromPersianDate: '۱۴۰۱/۰۲/۱۲',
-        toPersianDate: '۱۴۰۴/۰۲/۱۲',
-        statusId: -1
-      },
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      },
-    })
-    .then((res)=>{
-      setReceptions(res.data);
-    })
-    .catch((err)=>{
+      .get(mainDomain + '/api/Appointment/GetList', {
+        params: {
+          typeId: valType,
+          patientNationalId: userSelected.nationalId,
+          doctorMedicalSystemId: -1,
+          fromPersianDate,
+          toPersianDate,
+          statusId: -1,
+        },
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setReceptions(res.data);
+      })
+      .catch((err) => {});
+  }, [toPersianDate, fromPersianDate, userSelected, valType]);
 
-    })
-  },[])
-
-  useEffect(()=>{
-    let arr =[]
-    insuranceListSelected.map((e)=>{
-
+  useEffect(() => {
+    let arr = [];
+    insuranceListSelected.map((e) => {
       arr.push({
         appointmentId: 0,
-        insuranceId: e.insuranceId
-      }) 
-       
-    })
-    setInsuranceList(arr)
-  },[insuranceListSelected])
+        insuranceId: e.insuranceId,
+      });
+    });
+    setInsuranceList(arr);
+  }, [insuranceListSelected]);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -107,8 +102,17 @@ export default function MainPageReception() {
       setShowAddInsurance(true);
     }
   };
+  useEffect(()=>{
+    setNotes('');
+    setTurn(1);
+    setPaid(false);
+    setValReservPatient('');
+    setStatusId(1);
+    setReservUser([]);
+    setUserSelected([]);
+  },[pageStateReception])
   const submitFormHandler = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const dataForm = {
       patientId: userSelected.patientId,
       paid,
@@ -121,46 +125,46 @@ export default function MainPageReception() {
       statusAdmissionIdList: valCondition,
       turn,
       notes,
-      statusId
+      statusId,
     };
-    axios.post(mainDomain+'/api/Appointment/Add' , dataForm , {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      },
-    })
-    .then((res)=>{
-      setIsLoading(false)
-      Toast.fire({
-        icon: 'success',
-        text: 'پذیرش با موفقیت انجام شد',
+    axios
+      .post(mainDomain + '/api/Appointment/Add', dataForm, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setIsLoading(false);
+        Toast.fire({
+          icon: 'success',
+          text: 'پذیرش با موفقیت انجام شد',
+        });
+        setPageStateReception(0);
+        
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        Toast.fire({
+          icon: 'error',
+          text: err.response ? err.response.data : 'خطای شبکه',
+        });
       });
-      setPageStateReception(0)
-      setNotes('')
-      setTurn(1)
-      setPaid(false)
-      setValReservPatient('')
-      setStatusId(1)
-      setReservUser([])
-      setUserSelected([])
-    })
-    .catch((err)=>{
-      setIsLoading(false)
-      Toast.fire({
-        icon: 'error',
-        text: err.response ? err.response.data : 'خطای شبکه',
-      });
-    })
   };
   return (
     <>
       {pageStateReception === 0 && (
         <div>
           <div className="flex justify-start">
-            <InputTypeReception valType={valType} setValType={setValType}/>
-            <InputCondition conditionVal={conditionVal} setConditionVal={setConditionVal}/>
-            <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId}/>
-            <InputPatientList pageStateReception={pageStateReception} setUserSelected={setUserSelected} patientList={patientList} setPatientList={setPatientList}/>
-            <InputDate setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate}/>
+            <InputTypeReception valType={valType} setValType={setValType} />
+            <InputCondition conditionVal={conditionVal} setConditionVal={setConditionVal} />
+            <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId} />
+            <InputPatientList
+              pageStateReception={pageStateReception}
+              setUserSelected={setUserSelected}
+              patientList={patientList}
+              setPatientList={setPatientList}
+            />
+            <InputDate setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
             <div className="px-5 py-2 rounded-md text-white bg-green-500 duration-300 hover:bg-green-600 flex items-center">
               <button onClick={() => setPageStateReception(1)} className=" flex items-center">
                 <span className="px-2 whitespace-nowrap">پذیرش جدید</span>
@@ -168,8 +172,17 @@ export default function MainPageReception() {
               </button>
             </div>
           </div>
+
+          <FilterCondition
+          pageStateReception={pageStateReception}
+            receptions={receptions}
+            setStatusCondition={setStatusCondition}
+            userSelected={userSelected}
+            fromPersianDate={fromPersianDate}
+            toPersianDate={toPersianDate}
+          />
           <div className="mt-5">
-            <BoxReception receptions={receptions} patientList={patientList}/>
+            <BoxReception receptions={receptions} patientList={patientList} statusCondition={statusCondition} />
           </div>
         </div>
       )}
@@ -186,7 +199,12 @@ export default function MainPageReception() {
           <div className="flex justify-start">
             <InputTypeReception />
             <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId} />
-            <InputPatientList pageStateReception={pageStateReception} setUserSelected={setUserSelected} />
+            <InputPatientList
+              pageStateReception={pageStateReception}
+              setUserSelected={setUserSelected}
+              patientList={patientList}
+              setPatientList={setPatientList}
+            />
             <button
               onClick={() => setPageStateReception(2)}
               className="px-5 py-2 rounded-md text-white bg-green-500 duration-300 hover:bg-green-600"
@@ -201,6 +219,7 @@ export default function MainPageReception() {
               userSelected={userSelected}
               reservUser={reservUser}
               setReservUser={setReservUser}
+              pageStateReception={pageStateReception}
             />
             <BoxChangDate
               valReservPatient={valReservPatient}
@@ -230,23 +249,18 @@ export default function MainPageReception() {
                 افزودن بیمه
               </button>
             </div>
-            {/* <div className="px-4">
-              <button className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600 mt-4">
-                افزودن به لیست
-              </button>
-            </div> */}
           </div>
           <div className="mt-4">
             <TableInsuranceSelected insuranceListSelected={insuranceListSelected} />
           </div>
           <div>
-            <ServicesList userSelected={userSelected} setServiceList={setServiceList}/>
+            <ServicesList userSelected={userSelected} setServiceList={setServiceList} />
           </div>
           <div className="mt-10">
-            <CheckBoxDoctor valCondition={valCondition} setValCondition={setValCondition}/>
+            <CheckBoxDoctor valCondition={valCondition} setValCondition={setValCondition} />
           </div>
           <div className="mt-5 flex items-center">
-            <InputConditionReception setStatusId={setStatusId} statusId={statusId}/>
+            <InputConditionReception setStatusId={setStatusId} statusId={statusId} />
             <FormControlLabel
               onChange={() => setPaid(!paid)}
               className="px-10"
@@ -319,10 +333,7 @@ export default function MainPageReception() {
           {isLoading && <SimpleBackdrop />}
         </div>
       )}
-      {
-        isLoading &&
-        <SimpleBackdrop />
-      }
+      {isLoading && <SimpleBackdrop />}
     </>
   );
 }

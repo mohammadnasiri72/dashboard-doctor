@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import DatePicker from 'react-multi-date-picker';
+import DatePicker, { DateObject } from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import { useState, useRef } from 'react';
 import { TextField } from '@mui/material';
+import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 export default function BoxChangDate({
   valReservPatient,
@@ -18,7 +19,6 @@ export default function BoxChangDate({
   setTurn,
   turn,
 }) {
-  const datePic = useRef();
   useEffect(() => {
     reservUser
       .filter((ev) => ev.reservationTimeId === valReservPatient)
@@ -31,27 +31,26 @@ export default function BoxChangDate({
       userSelected.length === 0 ||
       reservUser.filter((ev) => ev.reservationTimeId === valReservPatient).length === 0
     ) {
-      setDate(new Date());
+      setDate(new Date().toLocaleDateString('fa-IR'));
+
       setValTimeStart('');
       setValTimeEnd('');
     }
   }, [userSelected, valReservPatient]);
 
-  const setDateHandler = () => {
-    setDate(datePic.current?.children[0]?.value);
-  };
   return (
     <>
       <div className="flex flex-col justify-center items-center">
         <div className="pr-4 mt-3 flex">
-          <div className="">
+          <div>
             <DatePicker
-              ref={datePic}
               inputClass="outline-none border rounded-lg w-full h-14 px-3"
               locale={persian_fa}
               calendar={persian}
               value={date}
-              onChange={setDateHandler}
+              onChange={(event) => {
+                setDate(event.format());
+              }}
               placeholder="تاریخ رزرو"
             />
           </div>
@@ -65,6 +64,22 @@ export default function BoxChangDate({
               value={valTimeStart}
             />
           </div>
+          {/* <div className="pr-2">
+            <DatePicker
+              className=""
+              inputClass="border w-32 rounded-lg h-14 px-3"
+              disableDayPicker
+              format="HH:mm:ss"
+              plugins={[<TimePicker key={userSelected} />]}
+              calendar={persian}
+              locale={persian_fa}
+              calendarPosition="bottom-right"
+              onChange={(e, { validatedValue }) => {
+                setValTimeStart(validatedValue);
+              }}
+              value={valTimeStart}
+            />
+          </div> */}
           <div className="w-32 px-2">
             <TextField
               onChange={(e) => setValTimeEnd(e.target.value)}

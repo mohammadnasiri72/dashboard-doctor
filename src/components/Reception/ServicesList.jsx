@@ -67,7 +67,7 @@ export default function ServicesList({ userSelected , setServiceList}) {
             disablePortal
             id="combo-box-demo"
             options={services}
-            getOptionLabel={(option) => option.title}
+            getOptionLabel={(option) => option.title? option.title : ''}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="لیست خدمات" />}
           />
@@ -92,7 +92,7 @@ export default function ServicesList({ userSelected , setServiceList}) {
         </button>
       </div>
       <div className="mt-4">
-        <TableServices listServices={listServices} />
+        <TableServices listServices={listServices} setListServices={setListServices}/>
       </div>
     </>
   );
