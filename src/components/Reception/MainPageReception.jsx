@@ -52,6 +52,66 @@ export default function MainPageReception() {
   const [fromPersianDate, setFromPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [toPersianDate, setToPersianDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [statusCondition, setStatusCondition] = useState('');
+  const [changStatusCondition, setChangStatusCondition] = useState(false);
+  const [editeUser, setEditeUser] = useState({});
+  const [insuranceUser, setInsuranceUser] = useState([]);
+  const [valInsurance, setValInsurance] = useState([]);
+  const [servicesUser, setServicesUser] = useState([]);
+  const [listServices, setListServices] = useState([]);
+  const [medicalRecord, setMedicalRecord] = useState([]);
+ 
+
+
+  useEffect(() => {
+    if (editeUser.paid) {
+      setPaid(editeUser.paid);
+    }
+    if (editeUser.appointmentId) {
+      axios
+        .get(mainDomain + '/api/Appointment/Insurance/GetList', {
+          params: {
+            appointmentId: editeUser.appointmentId,
+          },
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+        })
+        .then((res) => {
+          setInsuranceUser(res.data);
+        })
+        .catch((err) => {});
+
+      axios
+        .get(mainDomain + '/api/Appointment/Service/GetList', {
+          params: {
+            appointmentId: editeUser.appointmentId,
+          },
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+        })
+        .then((res) => {
+          setServicesUser(res.data);
+        })
+        .catch((err) => {});
+
+      axios
+        .get(mainDomain + '/api/MedicalRecord/GetList', {
+          params: {
+            appointmentId: editeUser.appointmentId,
+            typeId: 1,
+          },
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+        })
+        .then((res) => {
+          setMedicalRecord(res.data);
+        })
+        .catch((err) => {});
+    }
+  }, [editeUser]);
+
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Appointment/GetList', {
@@ -71,7 +131,7 @@ export default function MainPageReception() {
         setReceptions(res.data);
       })
       .catch((err) => {});
-  }, [toPersianDate, fromPersianDate, userSelected, valType]);
+  }, [toPersianDate, fromPersianDate, userSelected, valType, changStatusCondition, pageStateReception]);
 
   useEffect(() => {
     let arr = [];
@@ -102,15 +162,14 @@ export default function MainPageReception() {
       setShowAddInsurance(true);
     }
   };
-  useEffect(()=>{
-    setNotes('');
-    setTurn(1);
-    setPaid(false);
-    setValReservPatient('');
-    setStatusId(1);
-    setReservUser([]);
-    setUserSelected([]);
-  },[pageStateReception])
+  useEffect(() => {
+    setNotes(editeUser?.notes ? editeUser.notes : '');
+    // setTurn(1);
+    // setPaid(false);
+    // setValReservPatient('');
+    // setReservUser([]);
+    // setValType(1)
+  }, [pageStateReception]);
   const submitFormHandler = () => {
     setIsLoading(true);
     const dataForm = {
@@ -118,8 +177,8 @@ export default function MainPageReception() {
       paid,
       doctorId,
       dateFa: date,
-      startTime: valTimeStart,
-      endTime: valTimeEnd,
+      startTime: valTimeStart.format(),
+      endTime: valTimeEnd.format(),
       insuranceList,
       serviceList,
       statusAdmissionIdList: valCondition,
@@ -140,7 +199,6 @@ export default function MainPageReception() {
           text: 'پذیرش با موفقیت انجام شد',
         });
         setPageStateReception(0);
-        
       })
       .catch((err) => {
         setIsLoading(false);
@@ -150,12 +208,15 @@ export default function MainPageReception() {
         });
       });
   };
+  const editeFormHandler = ()=>{
+    alert('asas')
+  }
   return (
     <>
       {pageStateReception === 0 && (
         <div>
           <div className="flex justify-start">
-            <InputTypeReception valType={valType} setValType={setValType} />
+            <InputTypeReception valType={valType} setValType={setValType} editeUser={editeUser}/>
             <InputCondition conditionVal={conditionVal} setConditionVal={setConditionVal} />
             <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId} />
             <InputPatientList
@@ -163,10 +224,25 @@ export default function MainPageReception() {
               setUserSelected={setUserSelected}
               patientList={patientList}
               setPatientList={setPatientList}
+              userSelected={userSelected}
             />
             <InputDate setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
             <div className="px-5 py-2 rounded-md text-white bg-green-500 duration-300 hover:bg-green-600 flex items-center">
-              <button onClick={() => setPageStateReception(1)} className=" flex items-center">
+              <button
+                onClick={() => {
+                  setPageStateReception(1);
+                  setEditeUser([]);
+                  setValInsurance([]);
+                  setInsuranceListSelected([]);
+                  setInsuranceUser([]);
+                  setListServices([]);
+                  setPaid(false);
+                  setStatusId(1);
+                  setValType(1);
+                  setServicesUser([])
+                }}
+                className=" flex items-center"
+              >
                 <span className="px-2 whitespace-nowrap">پذیرش جدید</span>
                 <FaPlus />
               </button>
@@ -174,7 +250,7 @@ export default function MainPageReception() {
           </div>
 
           <FilterCondition
-          pageStateReception={pageStateReception}
+            pageStateReception={pageStateReception}
             receptions={receptions}
             setStatusCondition={setStatusCondition}
             userSelected={userSelected}
@@ -182,7 +258,15 @@ export default function MainPageReception() {
             toPersianDate={toPersianDate}
           />
           <div className="mt-5">
-            <BoxReception receptions={receptions} patientList={patientList} statusCondition={statusCondition} />
+            <BoxReception
+              receptions={receptions}
+              patientList={patientList}
+              statusCondition={statusCondition}
+              setChangStatusCondition={setChangStatusCondition}
+              setPageStateReception={setPageStateReception}
+              setUserSelected={setUserSelected}
+              setEditeUser={setEditeUser}
+            />
           </div>
         </div>
       )}
@@ -190,20 +274,26 @@ export default function MainPageReception() {
         <div>
           <div className="text-start mb-5">
             <button
-              onClick={() => setPageStateReception(0)}
+              onClick={() => {
+                setPageStateReception(0)
+                setValType(1)
+                setEditeUser([])
+              }}
               className="bg-blue-500 text-white px-5 py-2 rounded-md duration-300 hover:bg-blue-600"
             >
               برگشت به صفحه قبل
             </button>
           </div>
           <div className="flex justify-start">
-            <InputTypeReception />
+            <InputTypeReception valType={valType} setValType={setValType} editeUser={editeUser} />
             <InputDoctorSelect pageStateReception={pageStateReception} setDoctorId={setDoctorId} doctorId={doctorId} />
             <InputPatientList
               pageStateReception={pageStateReception}
               setUserSelected={setUserSelected}
               patientList={patientList}
               setPatientList={setPatientList}
+              userSelected={userSelected}
+              editeUser={editeUser}
             />
             <button
               onClick={() => setPageStateReception(2)}
@@ -233,13 +323,17 @@ export default function MainPageReception() {
               valTimeEnd={valTimeEnd}
               setTurn={setTurn}
               turn={turn}
+              editeUser={editeUser}
             />
           </div>
           <div className="flex items-center">
             <InsuranceList
+              insuranceUser={insuranceUser}
               flag={flag}
               userSelected={userSelected}
               setInsuranceListSelected={setInsuranceListSelected}
+              valInsurance={valInsurance}
+              setValInsurance={setValInsurance}
             />
             <div className="px-4">
               <button
@@ -254,17 +348,27 @@ export default function MainPageReception() {
             <TableInsuranceSelected insuranceListSelected={insuranceListSelected} />
           </div>
           <div>
-            <ServicesList userSelected={userSelected} setServiceList={setServiceList} />
+            <ServicesList
+              userSelected={userSelected}
+              setServiceList={setServiceList}
+              servicesUser={servicesUser}
+              listServices={listServices}
+              setListServices={setListServices}
+            />
           </div>
           <div className="mt-10">
-            <CheckBoxDoctor valCondition={valCondition} setValCondition={setValCondition} />
+            <CheckBoxDoctor
+              valCondition={valCondition}
+              setValCondition={setValCondition}
+              medicalRecord={medicalRecord}
+            />
           </div>
           <div className="mt-5 flex items-center">
-            <InputConditionReception setStatusId={setStatusId} statusId={statusId} />
+            <InputConditionReception setStatusId={setStatusId} statusId={statusId} editeUser={editeUser}/>
             <FormControlLabel
               onChange={() => setPaid(!paid)}
               className="px-10"
-              control={<Checkbox />}
+              control={<Checkbox checked={paid} />}
               label={'پرداخت شده'}
             />
           </div>
@@ -281,12 +385,24 @@ export default function MainPageReception() {
             />
           </div>
           <div className="text-start mt-5">
+            {
+              editeUser.appointmentId &&
+              <button
+              onClick={editeFormHandler}
+              className="px-5 py-2 bg-green-500 text-white rounded-md duration-300 hover:bg-green-600"
+            >
+              ویرایش
+            </button>
+            }
+            {
+              !editeUser.appointmentId &&
             <button
               onClick={submitFormHandler}
               className="px-5 py-2 bg-green-500 text-white rounded-md duration-300 hover:bg-green-600"
             >
               ثبت پذیرش
             </button>
+            }
           </div>
           <div
             style={{ zIndex: '1300', transform: showAddInsurance ? 'translateX(0)' : 'translateX(-100%)' }}

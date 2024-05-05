@@ -19,7 +19,6 @@ export default function TableServices({ listServices , setListServices}) {
               <TableCell align="center">نوع خدمات</TableCell>
               <TableCell align="center">نام خدمات</TableCell>
               <TableCell align="center">تعداد</TableCell>
-              <TableCell align="center">توضیحات</TableCell>
               <TableCell align="center">قیمت</TableCell>
               <TableCell align="center">عملیات</TableCell>
             </TableRow>
@@ -33,7 +32,6 @@ export default function TableServices({ listServices , setListServices}) {
                 <TableCell align="center">{e.medicalCategoryTitle}</TableCell>
                 <TableCell align="center">{e.title}</TableCell>
                 <TableCell align="center">{e.number}</TableCell>
-                <TableCell align="center">{e.description}</TableCell>
                 <TableCell align="center">{e.rate}</TableCell>
                 <TableCell align="center">
                   <div className="flex justify-center">

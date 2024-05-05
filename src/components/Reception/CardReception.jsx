@@ -13,6 +13,11 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdOutlineMoreTime } from 'react-icons/md';
 import { TiGroup } from 'react-icons/ti';
 import Iconify from '../Iconify';
+import { TbDoorEnter } from 'react-icons/tb';
+import axios from 'axios';
+import { mainDomain } from '../../utils/mainDomain';
+import { GiCancel } from 'react-icons/gi';
+import { FaMobile } from 'react-icons/fa';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -25,11 +30,27 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function CardReception({ reception, patientList }) {
+export default function CardReception({
+  reception,
+  patientList,
+  setChangStatusCondition,
+  setPageStateReception,
+  setUserSelected,
+  setEditeUser,
+}) {
+  console.log(patientList.find((e)=> e.nationalId === reception.patientNationalId).avatar);
+  
+//  (patientList.filter((e)=>{
+//      reception.patientNationalId === e.nationalId
+//     console.log(e.nationalId);
+//     console.log(reception.patientNationalId);
+//   }));
+  // console.log(reception.patientNationalId);
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [user, setUser] = useState([]);
-  let patient = [...patientList]
+
+  let patient = [...patientList];
   useEffect(() => {
     setUser(patient.find((e) => e.nationalId === reception.patientNationalId));
   }, []);
@@ -43,13 +64,52 @@ export default function CardReception({ reception, patientList }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const nextToRoomDoctor = (e) => {
+    const data = new FormData();
+    data.append('appointmentId', e.appointmentId);
+    axios
+      .post(mainDomain + '/api/Appointment/NextStatus', data, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setChangStatusCondition((e) => !e);
+      })
+      .catch((err) => {});
+  };
+  const cancelHandler = (e) => {
+    const data = new FormData();
+    data.append('appointmentId', e.appointmentId);
+    axios
+      .post(mainDomain + '/api/Appointment/Cancel', data, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setChangStatusCondition((e) => !e);
+      })
+      .catch((err) => {});
+  };
+  const editHandler = (e) => {
+    setPageStateReception(1);
+    setEditeUser(e);
+    setUserSelected(patientList.find((ev) => ev.nationalId === e.patientNationalId));
+    handleClose()
+  };
   return (
-    <Card sx={{ minWidth: 320 }}>
+    <Card className='relative' sx={{ minWidth: 320 }}>
       <CardContent>
         <Box className={'flex justify-center'}>
-          <img className="w-14 h-14 rounded-full border" src={'/images/bg.jpeg'} alt="" />
+          <img className="w-14 h-14 rounded-full border" src={mainDomain + patientList.find((e)=> e.nationalId === reception.patientNationalId).avatar} alt="" />
         </Box>
-          <Chip className='absolute top-6 right-3' label={reception.status} color='secondary' variant="filled" />
+        <Chip
+          className="absolute top-6 right-3"
+          label={reception.status}
+          color={reception.statusId === 5 ? 'error' : 'secondary'}
+          variant="filled"
+        />
         <div className="absolute left-3 top-6">
           <button
             id="basic-button"
@@ -70,30 +130,41 @@ export default function CardReception({ reception, patientList }) {
             }}
           >
             <div className="px-4">
+              <Tooltip title="مرحله بعد" placement="right">
+                <IconButton
+                  disabled={reception.statusId > 3}
+                  onClick={() => {
+                    handleClose();
+                    nextToRoomDoctor(reception);
+                  }}
+                >
+                  <TbDoorEnter style={{ color: reception.statusId > 3 ? 'rgb(51 51 51 51)' : 'rgb(34 197 94)' }} />
+                </IconButton>
+              </Tooltip>
+            </div>
+            <div className="px-4">
               <Tooltip title="ویرایش" placement="right">
-                <IconButton>
+                <IconButton
+                  onClick={() => {
+                    editHandler(reception);
+                    handleClose();
+                  }}
+                  disabled={reception.statusId > 2}
+                >
                   <Iconify icon={'eva:edit-fill'} />
                 </IconButton>
               </Tooltip>
             </div>
             <div className="px-4">
-              <Tooltip title="حذف" placement="right">
-                <IconButton>
-                  <Iconify className="text-red-500" icon={'eva:trash-2-outline'} />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <div className="px-4">
-              <Tooltip title="همراه" placement="right">
-                <IconButton>
-                  <TiGroup />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <div className="px-4">
-              <Tooltip title="نوبت دهی اینترنتی" placement="right">
-                <IconButton>
-                  <MdOutlineMoreTime />
+              <Tooltip title="کنسل" placement="right">
+                <IconButton
+                  onClick={() => {
+                    cancelHandler(reception);
+                    handleClose();
+                  }}
+                  disabled={reception.statusId > 2}
+                >
+                  <GiCancel style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(239 68 68)' }} />
                 </IconButton>
               </Tooltip>
             </div>
@@ -103,15 +174,9 @@ export default function CardReception({ reception, patientList }) {
           {reception.patientFirstName} {reception.patientLastName}
         </h3>
         <p className="mt-2">کد ملی : {reception.patientNationalId}</p>
-        <p className="mt-2">ساعت ورود : {reception.startTime}</p>
-        <p className="mt-2">تاریخ ورود : {reception.appointmentDateFA}</p>
-        <p className="mt-2">
-          نام دکتر : {reception.doctorFirstName} {reception.doctorLastName}
-        </p>
-        <p className="mt-2"> شماره موبایل : {user.userPhoneNumber}</p>
-
+        
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions className='absolute bottom-0 left-0' disableSpacing>
         <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
           <ExpandMoreIcon />
         </ExpandMore>
@@ -119,6 +184,19 @@ export default function CardReception({ reception, patientList }) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>توضیحات:</Typography>
+          <p className="mt-2">ساعت ورود : {reception.startTime}</p>
+        <p className="mt-2">تاریخ ورود : {reception.appointmentDateFA}</p>
+        <p className="mt-2">
+          نام دکتر : {reception.doctorFirstName} {reception.doctorLastName}
+        </p>
+        <p className="mt-2 flex items-center justify-center">
+          <Tooltip title="پیامک" placement="right">
+            <IconButton>
+              <FaMobile className="cursor-pointer" />
+            </IconButton>
+          </Tooltip>
+          {user.userPhoneNumber}
+        </p>
           <p className="mt-2">نام پدر : {user.fatherName}</p>
           <p className="mt-2">تلفن ثابت : {user.tel}</p>
         </CardContent>

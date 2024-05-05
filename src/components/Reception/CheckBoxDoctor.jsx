@@ -3,8 +3,22 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function CheckBoxDoctor({ valCondition, setValCondition }) {
+export default function CheckBoxDoctor({ valCondition, setValCondition ,medicalRecord}) {
   const [conditionPatient, setConditionPatient] = useState([]);
+  
+  // let arr = new Array(conditionPatient.length).fill(false)
+
+  // useEffect(()=>{
+  //   conditionPatient.map((e,i)=>{
+  //     medicalRecord.map((ev)=>{
+  //       if (e.itemId === ev.medicalItemId) {
+  //         e.checked = true
+  //       }else{
+  //         e.checked = false
+  //       }
+  //     })
+  //   })
+  // },[conditionPatient , medicalRecord])
 
   useEffect(() => {
     axios
@@ -29,7 +43,7 @@ export default function CheckBoxDoctor({ valCondition, setValCondition }) {
     <>
       <div className="mt-4 flex justify-start items-center">
         <h3 className="px-4">وضعیت هنگام پذیرش:</h3>
-        {conditionPatient.map((e) => (
+        {conditionPatient.filter((e)=> e.isActive).map((e , i) => (
           <FormControlLabel
             onChange={changConditionHandler}
             className="px-10"

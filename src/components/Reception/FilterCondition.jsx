@@ -34,7 +34,7 @@ export default function FilterCondition({
   }, [pageStateReception]);
   const filterHandler = (e) => {
     setFocus(false);
-    setStatusCondition(e.target.innerText);
+    setStatusCondition(e);
     // setReceptions(receptions.filter((ev)=>ev.status=== e.target.innerText))
   };
   return (
@@ -58,7 +58,7 @@ export default function FilterCondition({
         </div>
         {conditionList.map((e, i) => (
           <div key={e} className="px-5 ">
-            <Button color="info" onClick={filterHandler} className="focus:bg-slate-200" value={e}>
+            <Button color="info" onClick={()=> filterHandler(e)} className="focus:bg-slate-200" value={e}>
               <div className="px-2">
                 <span>{e}</span>
               </div>

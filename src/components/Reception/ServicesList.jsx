@@ -5,22 +5,36 @@ import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 import TableServices from './TableServices';
 
-export default function ServicesList({ userSelected , setServiceList}) {
+export default function ServicesList({ userSelected , setServiceList , servicesUser , listServices , setListServices}) {
   const [services, setServices] = useState([]);
   const [service, setService] = useState('');
   const [numberService, setNumberService] = useState(1);
-  const [listServices, setListServices] = useState([]);
+  useEffect(()=>{
+    let arr = []
+    services.filter((e)=>{
+      servicesUser.map((ev)=>{
+        if (e.medicalServiceId === ev.medicalServiceId) {
+          e.number= ev.number
+          arr.push(e)
+          setListServices(arr);
+        }
+      })
+    });
+  },[services , servicesUser])
+  
 
   useEffect(() => {
-    let arr = [];
-    listServices.map((e) => {
-      arr.push({
-        appointmentId: 0,
-        medicalServiceId: e.medicalServiceId,
-        number: Number(e.number),
+    if (listServices.length>0) {
+      let arr = [];
+      listServices.map((e) => {
+        arr.push({
+          appointmentId: 0,
+          medicalServiceId: e.medicalServiceId,
+          number: Number(e.number),
+        });
       });
-    });
-    setServiceList(arr);
+      setServiceList(arr);
+    }
   }, [listServices]);
   const Toast = Swal.mixin({
     toast: true,
@@ -92,7 +106,7 @@ export default function ServicesList({ userSelected , setServiceList}) {
         </button>
       </div>
       <div className="mt-4">
-        <TableServices listServices={listServices} setListServices={setListServices}/>
+        <TableServices listServices={listServices} setListServices={setListServices} servicesUser={servicesUser}/>
       </div>
     </>
   );

@@ -140,24 +140,28 @@ export default function AddInsurance({ userSelected , setShowAddInsurance , setF
           maxRows={4}
         />
       </div>
-      <div className="px-4 mt-4">
+      <div className="mt-4 w-full">
         <DatePicker
           ref={datePicStart}
           inputClass="outline-none border rounded-lg w-full h-14 px-3"
           locale={persian_fa}
           calendar={persian}
           value={startDateFa}
-          onChange={()=> setStartDateFa(datePicStart.current?.children[0]?.value)}
+          onChange={(event) => {
+            setStartDateFa(event.format());
+          }}
           placeholder="تاریخ شروع بیمه"
         />
       </div>
-      <div className="px-4 mt-4">
+      <div className="mt-4">
         <DatePicker
           ref={datePicEnd}
           inputClass="outline-none border rounded-lg w-full h-14 px-3"
           locale={persian_fa}
           calendar={persian}
-          onChange={()=> setEndDateFa(datePicEnd.current?.children[0]?.value)}
+          onChange={(event) => {
+            setEndDateFa(event.format());
+          }}
           value={endDateFa}
           placeholder="تاریخ اتمام بیمه"
         />

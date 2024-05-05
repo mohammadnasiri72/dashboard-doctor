@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputConditionReception({statusId , setStatusId}) {
+export default function InputConditionReception({statusId , setStatusId , editeUser}) {
+  useEffect(()=>{
+    setStatusId(editeUser.statusId)
+  },[editeUser])
   const [conditionList, setConditionList] = useState([]);
   // const [valCondition , setValCondition] = useState(1)
   useEffect(() => {

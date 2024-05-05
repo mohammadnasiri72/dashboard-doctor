@@ -23,7 +23,6 @@ export default function ReserveListPatient({
           },
         })
         .then((res) => {
-          console.log(userSelected);
           setReservUser(res.data);
           setValReservPatient(res.data.length !==0 ? res.data[0].reservationTimeId : '');
         })

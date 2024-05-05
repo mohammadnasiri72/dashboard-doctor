@@ -7,16 +7,29 @@ import { mainDomain } from '../../utils/mainDomain';
 export default function InsuranceList({
   userSelected,
   setInsuranceListSelected,
-  flag
+  flag,
+  insuranceUser,
+  valInsurance,
+  setValInsurance
 }) {
   const [insuranceList, setInsuranceList] = useState([]);
-  const [valInsurance , setValInsurance] = useState([])
-
   
   useEffect(()=>{
-    setValInsurance([])
-    setInsuranceListSelected([])
-  },[flag])
+    let arr = []
+    insuranceUser.map((e)=>{
+      
+      arr.push(e.insurance);
+      setInsuranceListSelected(arr);
+      setValInsurance(arr)
+    })
+  },[insuranceUser])
+  
+
+  
+  // useEffect(()=>{
+  //   setValInsurance([])
+  //   setInsuranceListSelected([])
+  // },[flag])
   useEffect(() => {
     if (userSelected.nationalId) {
       axios
