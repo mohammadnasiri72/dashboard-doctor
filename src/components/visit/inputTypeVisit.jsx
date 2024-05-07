@@ -3,13 +3,9 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputTypeReception({valType , setValType , editeUser}) {
-  useEffect(()=>{
-    if (editeUser?.type) {
-      setValType(editeUser.type==='InPerson' ? 1:2)
-    }
-  },[editeUser])
+export default function InputTypeVisit({valType , setValType}) {
   const [typeReception, setTypeReception] = useState([]);
+  
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Appointment/GetTypeList', {

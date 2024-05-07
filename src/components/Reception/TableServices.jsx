@@ -1,9 +1,25 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import axios from 'axios';
 import React from 'react';
 import { FaTrashCan } from "react-icons/fa6";
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function TableServices({ listServices , setListServices}) {
   const deletServiceHandler = (e)=>{
+    // const data = new FormData();
+    // data.append('medicalServiceId', e.medicalServiceId);
+    // axios
+    // .post(mainDomain+'/api/MedicalService/Delete' , data , {
+    //   headers: {
+    //     Authorization: 'Bearer ' + localStorage.getItem('token'),
+    //   },
+    // })
+    // .then((res)=>{
+    //   // console.log(res);
+    // })
+    // .catch((err)=>{
+
+    // })
     setListServices(listServices.filter((ev)=>ev!==e));
     
   }

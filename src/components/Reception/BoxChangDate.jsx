@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DatePicker from 'react-multi-date-picker';
@@ -19,7 +19,6 @@ export default function BoxChangDate({
   turn,
   editeUser,
 }) {
-  const timeEnd = useRef()
   useEffect(() => {
     if (reservUser.length !== 0) {
       reservUser
@@ -42,6 +41,7 @@ export default function BoxChangDate({
     //   setValTimeEnd('');
     // }
   }, [userSelected, valReservPatient]);
+ 
   return (
     <>
       <div className="flex flex-col justify-center items-center">
@@ -58,7 +58,7 @@ export default function BoxChangDate({
               placeholder="تاریخ رزرو"
             />
           </div>
-          {/* <div className="w-32 pr-4">
+          {/* <div style={{display: showTimeStart? 'none' : 'block'}} onClick={()=> setShowTimeStart(true)} className="w-32 pr-4">
             <TextField
               onChange={(e) => setValTimeStart(e.target.value)}
               className="w-full"
@@ -68,16 +68,19 @@ export default function BoxChangDate({
               value={valTimeStart}
             />
           </div> */}
-          <div className="pr-2">
+
+          <div className="w-32 pr-4">
             <DatePicker
-              className=""
-              inputClass="border w-32 rounded-lg h-14 px-3"
+              children
+              inputClass="border w-full rounded-lg h-14 px-3"
               disableDayPicker
               format="HH:mm:ss"
-              plugins={[<TimePicker key={userSelected} />]}
+              plugins={[<TimePicker key={userSelected}/>]}
               calendarPosition="bottom-right"
               onChange={(event) => {
                 setValTimeStart(event);
+                // alert("sdf")
+                console.log(event.format("HH:mm:ss"));
               }}
               value={valTimeStart}
               placeholder="ساعت شروع"
@@ -93,10 +96,9 @@ export default function BoxChangDate({
               value={valTimeEnd}
             />
           </div> */}
-          <div className="pr-2">
+          <div className="w-32 pr-4">
             <DatePicker
-            ref={timeEnd}
-              inputClass="border w-32 rounded-lg h-14 px-3"
+              inputClass="border w-full rounded-lg h-14 px-3"
               disableDayPicker
               format="HH:mm:ss"
               plugins={[<TimePicker key={valTimeEnd} />]}

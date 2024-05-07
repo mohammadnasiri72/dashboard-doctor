@@ -36,12 +36,12 @@ export default function MainPageReception() {
   const [paid, setPaid] = useState(false);
   const [doctorId, setDoctorId] = useState('');
   const [date, setDate] = useState(new Date().toLocaleDateString('fa-IR'));
-  const [valTimeStart, setValTimeStart] = useState('');
-  const [valTimeEnd, setValTimeEnd] = useState('');
+  const [valTimeStart, setValTimeStart] = useState(new Date());
+  const [valTimeEnd, setValTimeEnd] = useState(new Date());
   const [insuranceListSelected, setInsuranceListSelected] = useState([]);
   const [insuranceList, setInsuranceList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
-  const [valCondition, setValCondition] = useState('');
+  const [valCondition, setValCondition] = useState([]);
   const [patientList, setPatientList] = useState([]);
   const [turn, setTurn] = useState(1);
   const [notes, setNotes] = useState('');
@@ -59,7 +59,6 @@ export default function MainPageReception() {
   const [servicesUser, setServicesUser] = useState([]);
   const [listServices, setListServices] = useState([]);
   const [medicalRecord, setMedicalRecord] = useState([]);
- 
 
 
   useEffect(() => {
@@ -107,11 +106,12 @@ export default function MainPageReception() {
         })
         .then((res) => {
           setMedicalRecord(res.data);
+          // console.log(editeUser.appointmentId);
+          console.log(res.data);
         })
         .catch((err) => {});
     }
   }, [editeUser]);
-
   useEffect(() => {
     axios
       .get(mainDomain + '/api/Appointment/GetList', {
@@ -181,7 +181,7 @@ export default function MainPageReception() {
       endTime: valTimeEnd.format(),
       insuranceList,
       serviceList,
-      statusAdmissionIdList: valCondition,
+      statusAdmissionIdList: [...new Set(valCondition)],
       turn,
       notes,
       statusId,
@@ -209,7 +209,43 @@ export default function MainPageReception() {
       });
   };
   const editeFormHandler = ()=>{
-    alert('asas')
+    setIsLoading(true);
+    const dataForm = {
+      appointmentId:editeUser.appointmentId,
+      patientId: userSelected.patientId,
+      paid,
+      doctorId,
+      dateFa: date,
+      startTime: valTimeStart.format(),
+      endTime: valTimeEnd.format(),
+      insuranceList,
+      serviceList,
+      statusAdmissionIdList: [...new Set(valCondition)],
+      turn,
+      notes,
+      statusId,
+    }
+    axios
+      .post(mainDomain + '/api/Appointment/Edit', dataForm, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setIsLoading(false);
+        Toast.fire({
+          icon: 'success',
+          text: 'پذیرش با موفقیت ویرایش شد',
+        });
+        setPageStateReception(0);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        Toast.fire({
+          icon: 'error',
+          text: err.response ? err.response.data : 'خطای شبکه',
+        });
+      });
   }
   return (
     <>
@@ -240,6 +276,9 @@ export default function MainPageReception() {
                   setStatusId(1);
                   setValType(1);
                   setServicesUser([])
+                  setMedicalRecord([])
+                  setServiceList([])
+                  setValCondition([])
                 }}
                 className=" flex items-center"
               >
@@ -278,6 +317,11 @@ export default function MainPageReception() {
                 setPageStateReception(0)
                 setValType(1)
                 setEditeUser([])
+                setMedicalRecord([])
+                setListServices([]);
+                setServiceList([])
+                setServicesUser([])
+                setValCondition([])
               }}
               className="bg-blue-500 text-white px-5 py-2 rounded-md duration-300 hover:bg-blue-600"
             >

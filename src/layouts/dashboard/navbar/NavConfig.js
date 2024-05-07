@@ -45,6 +45,12 @@ const sidebarConfig = [
       },
     ],
   },
+  {
+    subheader: 'doctor',
+    items: [
+      { title: 'ویزیت', path: '/dashboard/visit', icon: <CgProfile /> }
+    ]
+  }
 ];
 
 export default sidebarConfig;

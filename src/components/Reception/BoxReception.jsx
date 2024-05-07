@@ -10,7 +10,6 @@ export default function BoxReception({
   setUserSelected,
   setEditeUser
 }) {
-  // console.log(patientList);
   return (
     <>
       <div className="flex flex-wrap justify-start items-start">
@@ -19,7 +18,7 @@ export default function BoxReception({
           receptions
             .filter((ev) => ev.status === statusCondition)
             .map((reception, i) => (
-              <div className="px-2 w-1/3 flex justify-center mt-3" key={i}>
+              <div className="px-2 w-1/4 flex justify-center mt-3" key={i}>
                 <CardReception
                   reception={reception}
                   patientList={patientList}
@@ -32,7 +31,7 @@ export default function BoxReception({
             ))}
         {statusCondition.length === 0 &&
           receptions.map((reception, i) => (
-            <div className="px-2 w-1/3 flex justify-center mt-3" key={i}>
+            <div className="px-2 w-1/4 flex justify-center mt-3" key={i}>
               <CardReception
                 reception={reception}
                 patientList={patientList}

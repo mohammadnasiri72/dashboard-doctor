@@ -42,3 +42,24 @@ body{
 .font-nastaligh{
     font-family: 'IranNastaliq' !important;
 }
+.text-cancel{
+    color: #b71d18 !important;
+}
+.text-waiting{
+    color: #ba740a !important;
+}
+.text-record{
+   color: #798793 !important;
+}
+.text-doing{
+   color: #7635dc !important;
+}
+.text-done{
+    color: #1b925d !important;
+}
+.bg-done{
+    background-color: #1b925d !important;
+}
+.text-white{
+    color: white !important;
+}

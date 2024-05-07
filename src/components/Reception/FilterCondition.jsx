@@ -15,6 +15,7 @@ export default function FilterCondition({
   const [focus, setFocus] = useState(true);
   useEffect(() => {
     setFocus(true);
+    setStatusCondition('')
   }, [userSelected, fromPersianDate, toPersianDate]);
   useEffect(() => {
     axios

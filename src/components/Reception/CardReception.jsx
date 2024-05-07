@@ -38,13 +38,11 @@ export default function CardReception({
   setUserSelected,
   setEditeUser,
 }) {
-  console.log(patientList.find((e)=> e.nationalId === reception.patientNationalId).avatar);
-  
-//  (patientList.filter((e)=>{
-//      reception.patientNationalId === e.nationalId
-//     console.log(e.nationalId);
-//     console.log(reception.patientNationalId);
-//   }));
+  //  (patientList.filter((e)=>{
+  //      reception.patientNationalId === e.nationalId
+  //     console.log(e.nationalId);
+  //     console.log(reception.patientNationalId);
+  //   }));
   // console.log(reception.patientNationalId);
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -96,18 +94,32 @@ export default function CardReception({
     setPageStateReception(1);
     setEditeUser(e);
     setUserSelected(patientList.find((ev) => ev.nationalId === e.patientNationalId));
-    handleClose()
+    handleClose();
   };
   return (
-    <Card className='relative' sx={{ minWidth: 320 }}>
+    <Card className="relative w-full">
       <CardContent>
         <Box className={'flex justify-center'}>
-          <img className="w-14 h-14 rounded-full border" src={mainDomain + patientList.find((e)=> e.nationalId === reception.patientNationalId).avatar} alt="" />
+          <img
+            className="w-14 h-14 rounded-full border"
+            src={patientList.length>0 ? mainDomain + patientList.find((e) => e.nationalId === reception.patientNationalId).avatar:''}
+            alt=""
+          />
         </Box>
         <Chip
           className="absolute top-6 right-3"
           label={reception.status}
-          color={reception.statusId === 5 ? 'error' : 'secondary'}
+          color={
+            reception.statusId === 5
+              ? 'error'
+              : reception.statusId === 4
+              ? 'success'
+              : reception.statusId === 3
+              ? 'primary'
+              : reception.statusId === 2
+              ? 'warning'
+              : 'info'
+          }
           variant="filled"
         />
         <div className="absolute left-3 top-6">
@@ -174,9 +186,8 @@ export default function CardReception({
           {reception.patientFirstName} {reception.patientLastName}
         </h3>
         <p className="mt-2">کد ملی : {reception.patientNationalId}</p>
-        
       </CardContent>
-      <CardActions className='absolute bottom-0 left-0' disableSpacing>
+      <CardActions className="h-10" disableSpacing>
         <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
           <ExpandMoreIcon />
         </ExpandMore>
@@ -184,21 +195,21 @@ export default function CardReception({
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>توضیحات:</Typography>
-          <p className="mt-2">ساعت ورود : {reception.startTime}</p>
-        <p className="mt-2">تاریخ ورود : {reception.appointmentDateFA}</p>
-        <p className="mt-2">
-          نام دکتر : {reception.doctorFirstName} {reception.doctorLastName}
-        </p>
-        <p className="mt-2 flex items-center justify-center">
-          <Tooltip title="پیامک" placement="right">
-            <IconButton>
-              <FaMobile className="cursor-pointer" />
-            </IconButton>
-          </Tooltip>
-          {user.userPhoneNumber}
-        </p>
-          <p className="mt-2">نام پدر : {user.fatherName}</p>
-          <p className="mt-2">تلفن ثابت : {user.tel}</p>
+          <p className="mt-2">ساعت ورود : {reception?.startTime}</p>
+          <p className="mt-2">تاریخ ورود : {reception?.appointmentDateFA}</p>
+          <p className="mt-2">
+            نام دکتر : {reception?.doctorFirstName} {reception?.doctorLastName}
+          </p>
+          <p className="mt-2 flex items-center justify-center">
+            <Tooltip title="پیامک" placement="right">
+              <IconButton>
+                <FaMobile className="cursor-pointer" />
+              </IconButton>
+            </Tooltip>
+            {user.userPhoneNumber ? user.userPhoneNumber : '____'}
+          </p>
+          <p className="mt-2">نام پدر : {user.fatherName ? user.fatherName : '____'}</p>
+          <p className="mt-2">تلفن ثابت : {user.tel ? user.tel : '____'}</p>
         </CardContent>
       </Collapse>
     </Card>

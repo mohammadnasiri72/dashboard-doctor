@@ -22,7 +22,6 @@ export default function ServicesList({ userSelected , setServiceList , servicesU
     });
   },[services , servicesUser])
   
-
   useEffect(() => {
     if (listServices.length>0) {
       let arr = [];
