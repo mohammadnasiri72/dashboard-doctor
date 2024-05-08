@@ -30,6 +30,7 @@ import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import SimpleBackdrop from '../components/backdrop';
+import { mainDomain } from '../utils/mainDomain';
 export const Account = createContext(null);
 export const Change = createContext(null);
 
@@ -60,7 +61,7 @@ export default function MyApp(props) {
       }
     } else {
       axios
-        .get(`https://cis.aitest.ir/api/${role}/Get`, {
+        .get(mainDomain + `/api/${role}/Get`, {
           headers: {
             Authorization: 'Bearer ' + token,
           },

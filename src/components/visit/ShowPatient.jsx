@@ -1,19 +1,14 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
+import { Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Zoom from '@mui/material/Zoom';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import UpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
-import { Button, Chip } from '@mui/material';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Typography from '@mui/material/Typography';
+import { green } from '@mui/material/colors';
+import { useTheme } from '@mui/material/styles';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import SwipeableViews from 'react-swipeable-views';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,10 +54,15 @@ const fabGreenStyle = {
   },
 };
 
-export default function ShowPatient({ patList, setRefreshPatList , setPatSelected}) {
+export default function ShowPatient({ patList, setRefreshPatList, setPatSelected, patSelected, pageStateVisit }) {
+  // console.log(patSelected.appointmentId);
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
-
+  const [valDoing, setValDoing] = React.useState('');
+  // console.log(valDoing);
+  React.useEffect(() => {
+    setValDoing(patSelected.appointmentId);
+  }, [pageStateVisit, patSelected]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -101,13 +101,25 @@ export default function ShowPatient({ patList, setRefreshPatList , setPatSelecte
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel className="max-h-[70vh] overflow-auto" value={value} index={0} dir={theme.direction}>
-          {patList
-            .filter((e) => e.status === 'Doing')
-            .map((e) => (
-              <div key={e.appointmentId}>
-                <Button onClick={()=> setPatSelected(e)}>{e.patientFirstName + ' ' + e.patientLastName + ' ' + e.patientNationalId}</Button>
-              </div>
-            ))}
+          <ToggleButtonGroup
+            orientation="vertical"
+            value={valDoing}
+            exclusive
+            onChange={(event, newEvent) => setValDoing(newEvent)}
+          >
+            {patList
+              .filter((e) => e.status === 'Doing')
+              .map((e) => (
+                <ToggleButton
+                  onClick={() => setPatSelected(e)}
+                  key={e.appointmentId}
+                  value={e.appointmentId}
+                  aria-label="list"
+                >
+                  <span>{e.patientFirstName + ' ' + e.patientLastName + ' ' + e.patientNationalId}</span>
+                </ToggleButton>
+              ))}
+          </ToggleButtonGroup>
         </TabPanel>
         <TabPanel className="max-h-[70vh] overflow-auto" value={value} index={1} dir={theme.direction}>
           {patList
@@ -119,21 +131,6 @@ export default function ShowPatient({ patList, setRefreshPatList , setPatSelecte
             ))}
         </TabPanel>
       </SwipeableViews>
-      {/* {fabs.map((fab, index) => (
-        <Zoom
-          key={fab.color}
-          in={value === index}
-          timeout={transitionDuration}
-          style={{
-            transitionDelay: `${value === index ? transitionDuration.exit : 0}ms`,
-          }}
-          unmountOnExit
-        >
-          <Fab sx={fab.sx} aria-label={fab.label} color={fab.color}>
-            {fab.icon}
-          </Fab>
-        </Zoom>
-      ))} */}
     </Box>
   );
 }

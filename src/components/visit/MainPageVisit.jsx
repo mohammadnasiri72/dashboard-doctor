@@ -8,6 +8,9 @@ import axios from 'axios';
 import { mainDomain } from '../../utils/mainDomain';
 import SecoundPageVisit from './SecoundPageVisit';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import SimpleBackdrop from '../backdrop';
+import ShowNotPopUp from './ShowNotPopUp';
+import { HiPencil } from "react-icons/hi2";
 
 export default function MainPageVisit() {
   const [pageStateVisit, setPageStateVisit] = useState(0);
@@ -18,7 +21,11 @@ export default function MainPageVisit() {
   const [patSelected, setPatSelected] = useState([]);
   const [refreshPatList, setRefreshPatList] = useState(false);
   const [alignment, setAlignment] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showNote , setShowNote] = useState(false)
+
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(mainDomain + '/api/Appointment/GetList', {
         params: {
@@ -34,9 +41,12 @@ export default function MainPageVisit() {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setPatList(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, [toPersianDate, fromPersianDate, valType, refreshPatList]);
 
   return (
@@ -44,16 +54,27 @@ export default function MainPageVisit() {
       {pageStateVisit === 0 && (
         <div>
           <div className="flex">
-            <InputTypeVisit valType={valType} setValType={setValType} />
+            <InputTypeVisit valType={valType} setValType={setValType} setIsLoading={setIsLoading}/>
             <InputDateVisit setFromPersianDate={setFromPersianDate} setToPersianDate={setToPersianDate} />
           </div>
           <div className="flex flex-wrap mt-5">
             <div className="lg:w-1/4 w-full">
-              <ShowPatient patList={patList} setRefreshPatList={setRefreshPatList} setPatSelected={setPatSelected} />
+              <ShowPatient
+                patList={patList}
+                setRefreshPatList={setRefreshPatList}
+                setPatSelected={setPatSelected}
+                patSelected={patSelected}
+                pageStateVisit={pageStateVisit}
+              />
             </div>
             <div className="lg:w-3/4 w-full">
               <div className="  ">
-                <TablePatientDoing patSelected={patSelected} valType={valType} setPageStateVisit={setPageStateVisit} />
+                <TablePatientDoing
+                  patSelected={patSelected}
+                  valType={valType}
+                  setPageStateVisit={setPageStateVisit}
+                  setIsLoading={setIsLoading}
+                />
               </div>
             </div>
           </div>
@@ -68,14 +89,21 @@ export default function MainPageVisit() {
             >
               برگشت به صفحه قبل
             </button>
-            <div>
+            <div className='flex'>
+              <button onClick={()=> setShowNote(true)} className='px-3 py-2 rounded-md bg-slate-500 text-white duration-300 hover:bg-slate-600 flex justify-center items-center'>
+                <HiPencil />
+                <span className='px-2'>note</span>
+                </button>
               <ToggleButtonGroup
                 color="primary"
                 value={alignment}
                 exclusive
                 onChange={(event, newEvent) => setAlignment(newEvent)}
-                  aria-label="Platform"
+                aria-label="Platform"
               >
+                {/* <ToggleButton onClick={()=> setShowNote(true)} value="note">
+                  <span className="text-slate-500">note</span>
+                </ToggleButton> */}
                 <ToggleButton value="back">
                   <span className="text-red-500">back</span>
                 </ToggleButton>
@@ -85,9 +113,12 @@ export default function MainPageVisit() {
               </ToggleButtonGroup>
             </div>
           </div>
-          <SecoundPageVisit patSelected={patSelected}/>
+          <SecoundPageVisit patSelected={patSelected} setIsLoading={setIsLoading}/>
         </div>
       )}
+      {isLoading && <SimpleBackdrop />}
+      <ShowNotPopUp showNote={showNote} setShowNote={setShowNote}/>
+      
     </>
   );
 }

@@ -3,10 +3,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function InputTypeVisit({valType , setValType}) {
+export default function InputTypeVisit({ valType, setValType , setIsLoading}) {
   const [typeReception, setTypeReception] = useState([]);
-  
+
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(mainDomain + '/api/Appointment/GetTypeList', {
         headers: {
@@ -14,10 +15,12 @@ export default function InputTypeVisit({valType , setValType}) {
         },
       })
       .then((res) => {
+        setIsLoading(false)
         setTypeReception(res.data);
-        
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setIsLoading(false)
+      });
   }, []);
   return (
     <>
@@ -35,7 +38,7 @@ export default function InputTypeVisit({valType , setValType}) {
             value={valType}
           >
             {[typeReception[1], typeReception[2]].map((e, i) => (
-              <MenuItem value={i+1} key={i+1}>
+              <MenuItem value={i + 1} key={i + 1}>
                 {e === 'Counseling' ? 'غیر حضوری' : 'حضوری'}
               </MenuItem>
             ))}

@@ -7,16 +7,13 @@ import CheckBoxHandler from './CheckBoxHandler';
 export default function CheckBoxDoctor({ valCondition, setValCondition, medicalRecord }) {
   const [conditionPatient, setConditionPatient] = useState([]);
   useEffect(()=>{
-    conditionPatient.map((e,i)=>{
-      medicalRecord.map((ev)=>{
-        if (e.itemId === ev.medicalItemId) {
-          e.checked = true
-        }else{
-          e.checked = false
-        }
-      })
+    let arr = []
+    medicalRecord.map((e)=>{
+      arr.push(e.medicalItemId)
     })
-  },[conditionPatient , medicalRecord])
+    setValCondition(arr);
+  },[medicalRecord])
+  
   useEffect(() => {
     axios
       .get(mainDomain + '/api/BasicInfo/PatientStatusAdmission/GetList', {
@@ -42,10 +39,9 @@ export default function CheckBoxDoctor({ valCondition, setValCondition, medicalR
       <div className="mt-4 flex justify-start items-center">
         <h3 className="px-4">وضعیت هنگام پذیرش:</h3>
         {conditionPatient
-          // .filter((e)=> e.isActive)
+          .filter((e)=> e.isActive)
           .map((e, i) => (
             <CheckBoxHandler key={e.itemId} e={e} changConditionHandler={changConditionHandler} medicalRecord={medicalRecord} setValCondition={setValCondition} valCondition={valCondition}/>
-            
           ))}
       </div>
     </>

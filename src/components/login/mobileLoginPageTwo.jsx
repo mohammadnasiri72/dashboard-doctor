@@ -26,6 +26,7 @@ export default function MobileLoginPageTwo({ setIsValiedMobile, mobileNumber, se
       axios
         .post(mainDomain + '/api/Authenticate/LoginOtp', data)
         .then((res) => {
+          console.log(res.data);
           setIsLoading(false);
           localStorage.setItem('token', res.data.token);
           localStorage.setItem('userId', res.data.userId);

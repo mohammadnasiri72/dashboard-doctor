@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 
-export default function TablePatientDoing({ patSelected, valType , setPageStateVisit}) {
+export default function TablePatientDoing({ patSelected, valType, setPageStateVisit, setIsLoading }) {
   const [listReception, setListReception] = useState([]);
   useEffect(() => {
     if (patSelected.patientNationalId) {
+      setIsLoading(true);
       axios
         .get(mainDomain + '/api/Appointment/GetList', {
           params: {
@@ -23,9 +24,12 @@ export default function TablePatientDoing({ patSelected, valType , setPageStateV
           },
         })
         .then((res) => {
+          setIsLoading(false);
           setListReception(res.data);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setIsLoading(false);
+        });
     }
   }, [patSelected, valType]);
   return (
@@ -50,7 +54,12 @@ export default function TablePatientDoing({ patSelected, valType , setPageStateV
                   <TableCell align="center">{patSelected.patientNationalId}</TableCell>
                   <TableCell align="center">امروز</TableCell>
                   <TableCell align="center">
-                    <Button onClick={()=> setPageStateVisit(1)} variant="contained" color="success" className="text-white px-0">
+                    <Button
+                      onClick={() => setPageStateVisit(1)}
+                      variant="contained"
+                      color="success"
+                      className="text-white px-0"
+                    >
                       ویزیت
                     </Button>
                   </TableCell>
@@ -58,10 +67,12 @@ export default function TablePatientDoing({ patSelected, valType , setPageStateV
               )}
               {listReception
                 .filter((e) => e.statusId === 4)
-                .sort((a , b)=>Number(b.appointmentDateFA.slice(8,10)) - Number(a.appointmentDateFA.slice(8,10)))
+                .sort((a, b) => Number(b.appointmentDateFA.slice(8, 10)) - Number(a.appointmentDateFA.slice(8, 10)))
                 .map((e) => (
                   <TableRow key={e.appointmentId}>
-                    <TableCell align="center">{e.patientFirstName} {e.patientLastName}</TableCell>
+                    <TableCell align="center">
+                      {e.patientFirstName} {e.patientLastName}
+                    </TableCell>
                     <TableCell align="center">{e.patientNationalId}</TableCell>
                     <TableCell align="center">{e.appointmentDateFA}</TableCell>
                     <TableCell align="center">

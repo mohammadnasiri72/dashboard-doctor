@@ -36,7 +36,7 @@ export default function MainPageReception() {
   const [paid, setPaid] = useState(false);
   const [doctorId, setDoctorId] = useState('');
   const [date, setDate] = useState(new Date().toLocaleDateString('fa-IR'));
-  const [valTimeStart, setValTimeStart] = useState(new Date());
+  const [valTimeStart, setValTimeStart] = useState(new Date().toLocaleDateString('fa-IR'));
   const [valTimeEnd, setValTimeEnd] = useState(new Date());
   const [insuranceListSelected, setInsuranceListSelected] = useState([]);
   const [insuranceList, setInsuranceList] = useState([]);
@@ -107,7 +107,6 @@ export default function MainPageReception() {
         .then((res) => {
           setMedicalRecord(res.data);
           // console.log(editeUser.appointmentId);
-          console.log(res.data);
         })
         .catch((err) => {});
     }

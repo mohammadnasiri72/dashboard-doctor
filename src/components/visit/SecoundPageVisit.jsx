@@ -1,22 +1,19 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Zoom from '@mui/material/Zoom';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import UpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { useEffect } from 'react';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { useEffect } from 'react';
+import SwipeableViews from 'react-swipeable-views';
 import { mainDomain } from '../../utils/mainDomain';
+import InformationPatient from './InformationPatient';
+import DiagnosisPatient from './DiagnosisPatient';
+import DrugPatient from './DrugPatient';
+import TemplateVisit from './TemplateVisit';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,25 +45,10 @@ function a11yProps(index) {
   };
 }
 
-const fabStyle = {
-  position: 'absolute',
-  bottom: 16,
-  right: 16,
-};
-
-const fabGreenStyle = {
-  color: 'common.white',
-  bgcolor: green[500],
-  '&:hover': {
-    bgcolor: green[600],
-  },
-};
-
-export default function SecoundPageVisit({patSelected}) {
-    const theme = useTheme();
-    const [value, setValue] = React.useState(0);
-    const [infoPat, setInfoPat] = React.useState({});
-    console.log(infoPat);
+export default function SecoundPageVisit({ patSelected , setIsLoading}) {
+  const theme = useTheme();
+  const [value, setValue] = React.useState(0);
+  const [infoPat, setInfoPat] = React.useState({});
 
   useEffect(() => {
     axios
@@ -76,11 +58,10 @@ export default function SecoundPageVisit({patSelected}) {
         },
       })
       .then((res) => {
-        setInfoPat(res.data.find((e)=>e.nationalId === patSelected.patientNationalId));
+        setInfoPat(res.data.find((e) => e.nationalId === patSelected.patientNationalId));
       })
       .catch((err) => {});
   }, []);
-  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -91,56 +72,53 @@ export default function SecoundPageVisit({patSelected}) {
   };
 
   return (
-    <div className='flex'>
-        
-        <Box
-      sx={{
-        bgcolor: 'background.paper',
-        position: 'relative',
-        minHeight: 200,
-        width: '100%'
-      }}
-    >
-      <AppBar position="static" color="default">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          aria-label="action tabs example"
-        >
-          <Tab label="اطلاعات بیمار" {...a11yProps(0)} />
-          <Tab label="تشخیص و توصیه ها و شکایت های بیمار" {...a11yProps(1)} />
-          <Tab label="دارو ها" {...a11yProps(2)} />
-          <Tab label="اردها" {...a11yProps(2)} />
-          <Tab label="فایل های ضمیمه" {...a11yProps(2)} />
-        </Tabs>
-      </AppBar>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        onChangeIndex={handleChangeIndex}
+    <div className="flex">
+      <Box
+        sx={{
+          bgcolor: 'background.paper',
+          position: 'relative',
+          minHeight: 200,
+          width: '100%',
+        }}
       >
-        <TabPanel value={value} index={0} dir={theme.direction}>
-          {infoPat.firstName? infoPat.firstName : ""}
-        </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
-          Item Two
-        </TabPanel>
-        <TabPanel value={value} index={2} dir={theme.direction}>
-          Item Three
-        </TabPanel>
-        <TabPanel value={value} index={3} dir={theme.direction}>
-          Item four
-        </TabPanel>
-        <TabPanel value={value} index={4} dir={theme.direction}>
-          Item five
-        </TabPanel>
-      </SwipeableViews>
-     
-    </Box>
-   
+        <AppBar position="static" color="default">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="action tabs example"
+          >
+            <Tab label="اطلاعات بیمار" {...a11yProps(0)} />
+            <Tab label="تشخیص و توصیه ها و شکایت های بیمار" {...a11yProps(1)} />
+            <Tab label="دارو ها" {...a11yProps(2)} />
+            <Tab label="اردها" {...a11yProps(2)} />
+            <Tab label="فایل های ضمیمه" {...a11yProps(2)} />
+          </Tabs>
+        </AppBar>
+        <SwipeableViews
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={value}
+          onChangeIndex={handleChangeIndex}
+        >
+          <TabPanel value={value} index={0} dir={theme.direction}>
+            <InformationPatient infoPat={infoPat} />
+          </TabPanel>
+          <TabPanel value={value} index={1} dir={theme.direction}>
+            <DiagnosisPatient patSelected={patSelected} setIsLoading={setIsLoading}/>
+          </TabPanel>
+          <TabPanel value={value} index={2} dir={theme.direction}>
+            <DrugPatient patSelected={patSelected} setIsLoading={setIsLoading}/>
+          </TabPanel>
+          <TabPanel value={value} index={3} dir={theme.direction}>
+            <TemplateVisit />
+          </TabPanel>
+          <TabPanel value={value} index={4} dir={theme.direction}>
+            Item five
+          </TabPanel>
+        </SwipeableViews>
+      </Box>
     </div>
   );
 }
