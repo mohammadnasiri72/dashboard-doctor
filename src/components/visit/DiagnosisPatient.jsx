@@ -4,11 +4,9 @@ import React, { useState } from 'react';
 import { FaPlus } from 'react-icons/fa6';
 import { useEffect } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
-import TableDiagnosis from './TableDiagnosis';
-import TableAdvice from './TableAdvice';
-import TableProblemPatient from './TableProblemPatient';
 import Swal from 'sweetalert2';
 import AddNewItem from './AddNewItem';
+import TableDiagnosisPatient from './TableDiagnosisPatient';
 
 export default function DiagnosisPatient({ patSelected, setIsLoading }) {
   const [alignment, setAlignment] = useState('Problem');
@@ -23,7 +21,6 @@ export default function DiagnosisPatient({ patSelected, setIsLoading }) {
   const [valAdvice, setValAdvice] = useState([]);
   const [medicalRecord, setMedicalRecord] = useState([]);
   const [flag, setFlag] = useState(false);
-  // console.log(medicalRecord);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -177,137 +174,6 @@ setIsLoading(true);
   }
   return (
     <>
-      {/* <div className="flex">
-        <div className="w-80 pr-4" dir="rtl">
-          <Stack spacing={3}>
-            <Autocomplete
-              value={valProblem}
-              onChange={(event, newValue) => {
-                changProblem(event, newValue);
-              }}
-              // multiple
-              id="tags-outlined"
-              options={problemList}
-              getOptionLabel={(option) => (option.name ? option.name : '')}
-              filterSelectedOptions
-              renderInput={(params) => <TextField {...params} label="مشکلات بیمار" placeholder="انتخاب عارضه" />}
-            />
-          </Stack>
-        </div>
-        <div className="w-80 text-start pr-4" dir="rtl">
-          <TextField
-            onChange={(e) => setDescProblem(e.target.value)}
-            className="w-80 text-end"
-            id="outlined-multiline-flexible"
-            label="توضیحات"
-            multiline
-            dir="rtl"
-            value={descProblem}
-          />
-        </div>
-        <div className="pr-8 flex items-center">
-          <button
-            onClick={setProblemHandler}
-            className="px-5 py-4 rounded-lg bg-green-500 duration-300 hover:bg-green-600 text-white flex items-center"
-          >
-            <span className="px-2">ثبت</span>
-            <FaPlus />
-          </button>
-        </div>
-      </div>
-      <TableProblemPatient
-        medicalRecord={medicalRecord.filter((e) => e.typeId === 2)}
-        setIsLoading={setIsLoading}
-        setFlag={setFlag}
-      />
-      <div className="flex mt-5">
-        <div className="pr-4">
-          <AddNewItem />
-        </div>
-        <div className="w-80 pr-4">
-          <FormControl color="primary" className="w-full">
-            <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-              تشخیص ها
-            </InputLabel>
-            <Select
-              onChange={(e) => setValDiagnosis(e.target.value)}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="تشخیص ها"
-              color="primary"
-              value={valDiagnosis}
-            >
-              {diagnosisList.map((e) => (
-                <MenuItem key={e.itemId} value={e.itemId}>
-                  {e.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-
-        <div className="w-80 text-start pr-4" dir="rtl">
-          <TextField
-            onChange={(e) => setDescDiagnosis(e.target.value)}
-            className="w-80 text-end"
-            id="outlined-multiline-flexible"
-            label="توضیحات"
-            multiline
-            dir="rtl"
-            value={descDiagnosis}
-          />
-        </div>
-        <div className="pr-8 flex items-center">
-          <button onClick={setDiagnosisHandler} className="px-5 py-4 rounded-lg bg-green-500 duration-300 hover:bg-green-600 text-white flex items-center">
-            <span className="px-2">ثبت</span>
-            <FaPlus />
-          </button>
-        </div>
-      </div>
-      <TableDiagnosis  medicalRecord={medicalRecord.filter((e) => e.typeId === 3)} setIsLoading={setIsLoading} setFlag={setFlag}/>
-      <div className="flex mt-5">
-      <div className="pr-4">
-          <AddNewItem />
-        </div>
-        <div className="w-80 pr-4">
-          <FormControl color="primary" className="w-full">
-            <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-              توصیه ها
-            </InputLabel>
-            <Select
-              // onChange={(e) => setConditionVal(e.target.value)}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="توصیه ها"
-              color="primary"
-              // value={conditionVal}
-            >
-              <MenuItem value={-1}>
-                <span>همه</span>
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        <div className="w-80 text-start pr-4" dir="rtl">
-          <TextField
-            onChange={(e) => setDescAdvice(e.target.value)}
-            className="w-80 text-end"
-            id="outlined-multiline-flexible"
-            label="توضیحات"
-            multiline
-            dir="rtl"
-            value={descAdvice}
-            //   minRows={2}
-          />
-        </div>
-        <div className="pr-8 flex items-center">
-          <button className="px-5 py-4 rounded-lg bg-green-500 duration-300 hover:bg-green-600 text-white flex items-center">
-            <span className="px-2">ثبت</span>
-            <FaPlus />
-          </button>
-        </div>
-      </div>
-      <TableAdvice /> */}
      <div className='text-start -mt-5'>
      <ToggleButtonGroup
       color="primary"
@@ -381,7 +247,7 @@ setIsLoading(true);
           </button>
         </div>
       </div>
-      <TableProblemPatient
+      <TableDiagnosisPatient
         medicalRecord={medicalRecord}
         setIsLoading={setIsLoading}
         setFlag={setFlag}
@@ -389,104 +255,6 @@ setIsLoading(true);
       />
       </div>
      }
-     {/* {
-      alignment=== 'Diagnosis' &&
-      <div>
-        <div className="flex mt-5">
-        <div className="pr-4">
-          <AddNewItem />
-        </div>
-        <div className="w-80 pr-4">
-          <FormControl color="primary" className="w-full">
-            <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-              تشخیص ها
-            </InputLabel>
-            <Select
-              onChange={(e) => setValDiagnosis(e.target.value)}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="تشخیص ها"
-              color="primary"
-              value={valDiagnosis}
-            >
-              {diagnosisList.map((e) => (
-                <MenuItem key={e.itemId} value={e.itemId}>
-                  {e.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-
-        <div className="w-80 text-start pr-4" dir="rtl">
-          <TextField
-            onChange={(e) => setDescDiagnosis(e.target.value)}
-            className="w-80 text-end"
-            id="outlined-multiline-flexible"
-            label="توضیحات"
-            multiline
-            dir="rtl"
-            value={descDiagnosis}
-          />
-        </div>
-        <div className="pr-8 flex items-center">
-          <button onClick={setDiagnosisHandler} className="px-5 py-4 rounded-lg bg-green-500 duration-300 hover:bg-green-600 text-white flex items-center">
-            <span className="px-2">ثبت</span>
-            <FaPlus />
-          </button>
-        </div>
-      </div>
-      <TableDiagnosis  medicalRecord={medicalRecord.filter((e) => e.typeId === 3)} setIsLoading={setIsLoading} setFlag={setFlag}/>
-      </div>
-     }
-     {
-      alignment=== 'Advice' &&
-      <div>
-        <div className="flex mt-5">
-      <div className="pr-4">
-          <AddNewItem />
-        </div>
-        <div className="w-80 pr-4">
-          <FormControl color="primary" className="w-full">
-            <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-              توصیه ها
-            </InputLabel>
-            <Select
-              // onChange={(e) => setConditionVal(e.target.value)}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="توصیه ها"
-              color="primary"
-              // value={conditionVal}
-            >
-              <MenuItem value={-1}>
-                <span>همه</span>
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        <div className="w-80 text-start pr-4" dir="rtl">
-          <TextField
-            onChange={(e) => setDescAdvice(e.target.value)}
-            className="w-80 text-end"
-            id="outlined-multiline-flexible"
-            label="توضیحات"
-            multiline
-            dir="rtl"
-            value={descAdvice}
-            //   minRows={2}
-          />
-        </div>
-        <div className="pr-8 flex items-center">
-          <button className="px-5 py-4 rounded-lg bg-green-500 duration-300 hover:bg-green-600 text-white flex items-center">
-            <span className="px-2">ثبت</span>
-            <FaPlus />
-          </button>
-        </div>
-      </div>
-      <TableAdvice />
-      </div>
-     } */}
     </>
   );
 }

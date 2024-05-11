@@ -16,11 +16,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
 
-export default function TableProblemPatient({ medicalRecord, setIsLoading, setFlag , alignment}) {
-    console.log(alignment);
-  const medicalRecordProblem = medicalRecord.filter((e) => e.typeId === 2)
-  const medicalRecordDiagnosis = medicalRecord.filter((e) => e.typeId === 3)
-  const medicalRecordAdvice = medicalRecord.filter((e) => e.typeId === 4)
+export default function TableDiagnosisPatient({ medicalRecord, setIsLoading, setFlag, alignment }) {
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -83,30 +79,26 @@ export default function TableProblemPatient({ medicalRecord, setIsLoading, setFl
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-            //    alignment === 'Problem'? medicalRecordProblem :
-            //    alignment === 'Diagnosis'? medicalRecordDiagnosis:
-            //    medicalRecordAdvice
-            medicalRecord
-            .filter((e)=> e.typeId === (alignment === 'Problem'? 2 : alignment === 'Diagnosis'? 3 : 4))
-              .map((e, i) => (
-                <TableRow key={i}>
-                  <TableCell>
-                    <span className="pr-3 font-semibold">{i + 1}</span>
-                  </TableCell>
-                  <TableCell align="center">{e.medicalItemName}</TableCell>
-                  <TableCell align="center">{e.description}</TableCell>
-                  <TableCell align="center">
-                    <div className="flex justify-center">
-                      <Tooltip title="حذف" placement="left">
-                        <IconButton onClick={() => deleteProblemHandler(e)}>
-                          <FaTrashAlt className="cursor-pointer text-red-500" />
-                        </IconButton>
-                      </Tooltip>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {medicalRecord
+                .filter((e) => e.typeId === (alignment === 'Problem' ? 2 : alignment === 'Diagnosis' ? 3 : 4))
+                .map((e, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <span className="pr-3 font-semibold">{i + 1}</span>
+                    </TableCell>
+                    <TableCell align="center">{e.medicalItemName}</TableCell>
+                    <TableCell align="center">{e.description}</TableCell>
+                    <TableCell align="center">
+                      <div className="flex justify-center">
+                        <Tooltip title="حذف" placement="left">
+                          <IconButton onClick={() => deleteProblemHandler(e)}>
+                            <FaTrashAlt className="cursor-pointer text-red-500" />
+                          </IconButton>
+                        </Tooltip>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

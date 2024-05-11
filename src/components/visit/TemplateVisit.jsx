@@ -1,39 +1,75 @@
-import { FormControl, InputLabel, Select } from '@mui/material'
-import React from 'react'
-import { FaPlus } from 'react-icons/fa6'
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { mainDomain } from '../../utils/mainDomain';
+import Swal from 'sweetalert2';
 
-export default function TemplateVisit() {
+export default function TemplateVisit({patSelected , setFlag , setIsLoading , setTemplateId}) {
+  const [templateList, setTemplateList] = useState([]);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: 'toast-modal',
+  }); 
+  useEffect(() => {
+    setIsLoading(true)
+    axios
+      .get(mainDomain + '/api/PrescriptionTemplate/GetList', {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setIsLoading(false)
+        setTemplateList(res.data);
+      })
+      .catch((err) => {
+        setIsLoading(false)
+      });
+      
+  }, []);
+  const setTemplateHandler = (e)=>{
+    setIsLoading(true)
+    const data = {
+      appointmentId: patSelected.appointmentId,
+      templateId: e.templateId
+    }
+    axios
+    .post(mainDomain+'/api/Prescription/AddFromTemplate' , data , {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+    .then((res)=>{
+      setFlag((ev)=>!ev)
+      setIsLoading(false)
+      setTemplateId(e.templateId)
+      Toast.fire({
+        icon: 'success',
+        text: 'تمپلیت با موفقیت افزوده شد',
+      });
+    })
+    .catch((err)=>{
+      setIsLoading(false)
+      Toast.fire({
+        icon: 'error',
+        text: err.response ? err.response.data : 'خطای شبکه',
+      });
+    })
+  }
   return (
     <>
-    <div className='flex items-center'>
-    <div className="w-80 pr-4 mt-5">
-            <FormControl color="primary" className="w-full">
-              <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-                  لیست تمپلیت ها
-              </InputLabel>
-              <Select
-                // onChange={(e) => setValDrugForm(e.target.value)}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="لیست تمپلیت ها"
-                color="primary"
-                // value={valDrugForm}
-              >
-                {/* {drugForm.map((e) => (
-                <MenuItem key={e.medicationCategoryId} value={e.medicationCategoryId}>
-                  {e.title}
-                </MenuItem>
-              ))} */}
-              </Select>
-            </FormControl>
-          </div>
-          <div className="pr-8 flex items-center mt-5">
-        <button className="px-5 py-4 rounded-lg bg-green-500 duration-300 hover:bg-green-600 text-white flex items-center">
-          <span className="px-2">ثبت</span>
-          <FaPlus />
-        </button>
-      </div>
-    </div>
+      {templateList.map((e) => (
+        <div key={e.templateId} className="w-full border rounded-md shadow-md p-3 text-start mt-2 flex justify-between items-center">
+          <div><h5 className="font-semibold">{e.name}</h5>
+          <p className="text-sm mt-1">{e.description}</p></div>
+          <button onClick={()=> setTemplateHandler(e)} className="text-white bg-green-500 rounded-md hover:bg-green-600 px-5 py-2 duration-300">
+             تجویز
+          </button>
+        </div>
+      ))}
     </>
-  )
+  );
 }

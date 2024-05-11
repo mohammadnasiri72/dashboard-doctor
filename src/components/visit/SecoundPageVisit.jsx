@@ -112,7 +112,7 @@ export default function SecoundPageVisit({ patSelected , setIsLoading}) {
             <DrugPatient patSelected={patSelected} setIsLoading={setIsLoading}/>
           </TabPanel>
           <TabPanel value={value} index={3} dir={theme.direction}>
-            <TemplateVisit />
+           test
           </TabPanel>
           <TabPanel value={value} index={4} dir={theme.direction}>
             Item five

@@ -55,11 +55,9 @@ const fabGreenStyle = {
 };
 
 export default function ShowPatient({ patList, setRefreshPatList, setPatSelected, patSelected, pageStateVisit }) {
-  // console.log(patSelected.appointmentId);
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [valDoing, setValDoing] = React.useState('');
-  // console.log(valDoing);
   React.useEffect(() => {
     setValDoing(patSelected.appointmentId);
   }, [pageStateVisit, patSelected]);

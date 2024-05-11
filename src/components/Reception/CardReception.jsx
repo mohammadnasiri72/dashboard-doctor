@@ -144,13 +144,13 @@ export default function CardReception({
             <div className="px-4">
               <Tooltip title="مرحله بعد" placement="right">
                 <IconButton
-                  disabled={reception.statusId > 3}
+                  disabled={reception.statusId > 2}
                   onClick={() => {
                     handleClose();
                     nextToRoomDoctor(reception);
                   }}
                 >
-                  <TbDoorEnter style={{ color: reception.statusId > 3 ? 'rgb(51 51 51 51)' : 'rgb(34 197 94)' }} />
+                  <TbDoorEnter style={{ color: reception.statusId > 2 ? 'rgb(51 51 51 51)' : 'rgb(34 197 94)' }} />
                 </IconButton>
               </Tooltip>
             </div>

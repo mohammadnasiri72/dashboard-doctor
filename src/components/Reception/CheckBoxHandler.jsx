@@ -1,7 +1,7 @@
 import { Checkbox, FormControlLabel } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-export default function CheckBoxHandler({ e, changConditionHandler, medicalRecord ,setValCondition , valCondition}) {
+export default function CheckBoxHandler({ e, changConditionHandler, medicalRecord , disabledChechBox}) {
     const [value, setValue] = useState(false);
     useEffect(() => {
     medicalRecord.map((ev) => {
@@ -19,7 +19,7 @@ export default function CheckBoxHandler({ e, changConditionHandler, medicalRecor
             changConditionHandler(e)
             setValue(!value)
           }}
-          control={<Checkbox checked={value} />}
+          control={<Checkbox checked={value} disabled={disabledChechBox}/>}
           label={e.name}
           value={e.itemId}
         />

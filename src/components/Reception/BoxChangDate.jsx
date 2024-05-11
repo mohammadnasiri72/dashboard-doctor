@@ -1,9 +1,12 @@
 import { TextField } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { TimePicker } from '@mui/x-date-pickers';
+import { useEffect } from 'react';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DatePicker from 'react-multi-date-picker';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
+// import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 export default function BoxChangDate({
   valReservPatient,
@@ -80,11 +83,13 @@ export default function BoxChangDate({
               onChange={(event) => {
                 setValTimeStart(event);
                 // alert("sdf")
-                console.log(event.format("HH:mm:ss"));
               }}
               value={valTimeStart}
               placeholder="ساعت شروع"
             />
+           
+        
+        
           </div>
           {/* <div className="w-32 px-2">
             <TextField

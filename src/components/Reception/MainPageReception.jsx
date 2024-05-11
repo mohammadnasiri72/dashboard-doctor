@@ -106,7 +106,6 @@ export default function MainPageReception() {
         })
         .then((res) => {
           setMedicalRecord(res.data);
-          // console.log(editeUser.appointmentId);
         })
         .catch((err) => {});
     }

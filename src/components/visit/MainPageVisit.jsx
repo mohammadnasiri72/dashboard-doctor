@@ -11,6 +11,7 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import SimpleBackdrop from '../backdrop';
 import ShowNotPopUp from './ShowNotPopUp';
 import { HiPencil } from "react-icons/hi2";
+import CheckBoxDoctor from '../Reception/CheckBoxDoctor';
 
 export default function MainPageVisit() {
   const [pageStateVisit, setPageStateVisit] = useState(0);
@@ -23,6 +24,9 @@ export default function MainPageVisit() {
   const [alignment, setAlignment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showNote , setShowNote] = useState(false)
+  const [medicalRecord , setMedicalRecord] = useState([])
+  const [valCondition , setValCondition] = useState([])
+  const disabledChechBox = true
 
   useEffect(() => {
     setIsLoading(true)
@@ -49,6 +53,26 @@ export default function MainPageVisit() {
       });
   }, [toPersianDate, fromPersianDate, valType, refreshPatList]);
 
+// get medicalRecord
+  useEffect(()=>{
+    if (patSelected.appointmentId) {
+      axios
+      .get(mainDomain + '/api/MedicalRecord/GetList', {
+        params: {
+          appointmentId: patSelected.appointmentId,
+          typeId: 1,
+        },
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setMedicalRecord(res.data);
+      })
+      .catch((err) => {});
+      
+    }
+  },[patSelected])
   return (
     <>
       {pageStateVisit === 0 && (
@@ -68,7 +92,7 @@ export default function MainPageVisit() {
               />
             </div>
             <div className="lg:w-3/4 w-full">
-              <div className="  ">
+              <div className="">
                 <TablePatientDoing
                   patSelected={patSelected}
                   valType={valType}
@@ -89,6 +113,12 @@ export default function MainPageVisit() {
             >
               برگشت به صفحه قبل
             </button>
+            <CheckBoxDoctor
+            disabledChechBox={disabledChechBox}
+              valCondition={valCondition}
+              setValCondition={setValCondition}
+              medicalRecord={medicalRecord}
+            />
             <div className='flex'>
               <button onClick={()=> setShowNote(true)} className='px-3 py-2 rounded-md bg-slate-500 text-white duration-300 hover:bg-slate-600 flex justify-center items-center'>
                 <HiPencil />
