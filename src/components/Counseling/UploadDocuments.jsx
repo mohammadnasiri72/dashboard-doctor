@@ -1,24 +1,19 @@
 import {
-  CircularProgress,
-  Fab,
   FormControl,
-  IconButton,
   InputLabel,
-  LinearProgress,
   MenuItem,
   Select,
-  TextField,
-  Tooltip,
+  TextField
 } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
-import { mainDomain } from '../../utils/mainDomain';
+import { useEffect, useRef, useState } from 'react';
 import { MdDriveFolderUpload } from 'react-icons/md';
 import Swal from 'sweetalert2';
-import MyDocumentSend from './MyDocument';
+import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
+import MyDocumentSend from './MyDocument';
 import ProgressBarUpload from './ProgressBarUpload';
-export default function UploadDocuments({ setPageNumber, apointmentId, flagUpload, setFlagUpload }) {
+export default function UploadDocuments({ setPageNumber, apointmentId, flagUpload, setFlagUpload , patSelected}) {
   const [fileType, setFileType] = useState([]);
   const [fileVal, setFileVal] = useState('');
 
@@ -138,12 +133,17 @@ export default function UploadDocuments({ setPageNumber, apointmentId, flagUploa
       }
     });
   };
+
+
+
   return (
     <>
-      <div>
-        <div>
+      <div className='relative'>
+        {!patSelected &&
+          <div>
           <h2 className="text-2xl font-semibold pb-4">در صورت داشتن مدارک پزشکی آن را برای دکتر ارسال کنید</h2>
         </div>
+        }
         <div className="px-4 w-full flex justify-start items-center" dir="rtl">
           <FormControl color="primary" className="w-36">
             <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
@@ -165,7 +165,7 @@ export default function UploadDocuments({ setPageNumber, apointmentId, flagUploa
             </Select>
           </FormControl>
           <div>
-            <div className=" text-start px-2" dir="rtl">
+            <div className=" text-start px-2 w-96" dir="rtl">
               <TextField
                 onChange={(e) => setDesc(e.target.value)}
                 className="w-full text-end"
@@ -200,20 +200,16 @@ export default function UploadDocuments({ setPageNumber, apointmentId, flagUploa
           <MyDocumentSend apointmentId={apointmentId} flagUpload={flagUpload} setFlagUpload={setFlagUpload} />
         </div>
 
-        <div className="flex justify-center mt-5 px-4">
-          <button
-            onClick={() => setPageNumber(0)}
-            className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600"
-          >
-            برگشت به صفحه لیست درخواست ها
-          </button>
-          {/* <button
-            // onClick={goToNext}
-            className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600"
-          >
-            مرحله بعد
-          </button> */}
-        </div>
+       {!patSelected &&
+         <div className="flex justify-center mt-5 px-4">
+         <button
+           onClick={() => setPageNumber(0)}
+           className="px-5 py-2 rounded-md bg-green-500 text-white duration-300 hover:bg-green-600"
+         >
+           برگشت به صفحه لیست درخواست ها
+         </button>
+       </div>
+       }
       </div>
       {isLoading && <SimpleBackdrop />}
     </>

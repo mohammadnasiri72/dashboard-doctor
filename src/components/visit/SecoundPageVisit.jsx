@@ -14,6 +14,8 @@ import InformationPatient from './InformationPatient';
 import DiagnosisPatient from './DiagnosisPatient';
 import DrugPatient from './DrugPatient';
 import TemplateVisit from './TemplateVisit';
+import UploadDocuments from '../Counseling/UploadDocuments';
+import UploadDocumentsDoctor from './UploadDocumentsDoctor';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -115,7 +117,7 @@ export default function SecoundPageVisit({ patSelected , setIsLoading}) {
            test
           </TabPanel>
           <TabPanel value={value} index={4} dir={theme.direction}>
-            Item five
+            <UploadDocumentsDoctor patSelected={patSelected} setIsLoading={setIsLoading}/>
           </TabPanel>
         </SwipeableViews>
       </Box>

@@ -11,7 +11,7 @@ export default function DrugPatient({ patSelected, setIsLoading }) {
       <div className="flex flex-wrap">
         <div className="lg:w-5/12 w-full pl-5">
           
-          <SelectPrescription setIsLoading={setIsLoading} patSelected={patSelected} setFlag={setFlag} setTemplateId={setTemplateId}/>
+          <SelectPrescription setIsLoading={setIsLoading} patSelected={patSelected} setFlag={setFlag} setTemplateId={setTemplateId} flag={flag}/>
         </div>
         <div className="lg:w-7/12 w-full border p-4 flex flex-col items-end justify-between">
           <Prescription patSelected={patSelected} flag={flag} setIsLoading={setIsLoading} setFlag={setFlag} templateId={templateId}/>

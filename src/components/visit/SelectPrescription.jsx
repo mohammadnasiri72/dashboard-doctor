@@ -40,7 +40,7 @@ function a11yProps(index) {
   };
 }
 
-export default function SelectPrescription({setIsLoading , patSelected , setFlag , setTemplateId}) {
+export default function SelectPrescription({setIsLoading , patSelected , setFlag , setTemplateId , flag}) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -84,7 +84,7 @@ export default function SelectPrescription({setIsLoading , patSelected , setFlag
           <NewPrescription setIsLoading={setIsLoading} patSelected={patSelected} setFlag={setFlag} />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <TemplateVisit patSelected={patSelected} setFlag={setFlag} setIsLoading={setIsLoading} setTemplateId={setTemplateId}/>
+          <TemplateVisit patSelected={patSelected} setFlag={setFlag} setIsLoading={setIsLoading} setTemplateId={setTemplateId} flag={flag}/>
         </TabPanel>
         {/* <TabPanel value={value} index={2} dir={theme.direction}>
           Item Three

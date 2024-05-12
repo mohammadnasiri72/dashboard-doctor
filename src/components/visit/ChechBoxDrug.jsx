@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
+import { TiDelete } from "react-icons/ti";
 
 export default function ChechBoxDrug({
-  valAllChechBox,
   e,
+  listDrugSelected,
   setFlag,
   setIsLoading,
   listDrugCheched,
@@ -26,9 +27,7 @@ export default function ChechBoxDrug({
     timerProgressBar: true,
     customClass: 'toast-modal',
   });
-  useEffect(() => {
-    setValChechBox(valAllChechBox);
-  }, [valAllChechBox]);
+  
 
 
 
@@ -36,9 +35,6 @@ export default function ChechBoxDrug({
     setIsLoading(true);
     const data = new FormData();
     data.append('prescriptionIdList', e.prescriptionId)
-    // listId.map((e)=>{
-    //   data.append('prescriptionIdList', e);
-    // })
     axios
       .post(mainDomain + '/api/Prescription/Delete', data, {
         headers: {
@@ -62,6 +58,14 @@ export default function ChechBoxDrug({
         });
       });
   };
+  useEffect(()=>{
+    if (listDrugCheched.length === listDrugSelected.length && listDrugCheched.length !==0) {
+      setValChechBox(true)
+    }
+    if (listDrugCheched.length ===0) {
+      setValChechBox(false)
+    }
+  },[listDrugCheched , listDrugSelected])
   return (
     <>
       <div dir="ltr" className="flex justify-between rounded-lg bg-slate-50 mt-3 border text-xs">
@@ -69,16 +73,17 @@ export default function ChechBoxDrug({
           <FormControlLabel
             onChange={() => {
               
-              setValChechBox(!valChechBox);
+              
               if (listDrugCheched.includes(e)) {
                 setListDrugCheched(listDrugCheched.filter((ev) => ev.prescriptionId !== e.prescriptionId));
+                setValChechBox(false);
               } else {
                 setListDrugCheched([...listDrugCheched, e]);
+                setValChechBox(true)
               }
             }}
             control={<Checkbox checked={valChechBox} />}
             label={''}
-            // value={e.itemId}
           />
 
           <div className="px-4">
@@ -92,7 +97,7 @@ export default function ChechBoxDrug({
           </div>
         </div>
         <button onClick={deleteDrugHandler} className="flex justify-center items-center pr-5">
-          <FaTrashAlt className="text-lg duration-300 text-red-500" />
+          <TiDelete className="text-2xl duration-300 text-red-400" />
         </button>
       </div>
     </>

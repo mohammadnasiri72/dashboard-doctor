@@ -2,8 +2,10 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
+import { FaTrashCan } from 'react-icons/fa6';
+import { IconButton, Tooltip } from '@mui/material';
 
-export default function TemplateVisit({patSelected , setFlag , setIsLoading , setTemplateId}) {
+export default function TemplateVisit({ patSelected, setFlag, setIsLoading, setTemplateId , flag}) {
   const [templateList, setTemplateList] = useState([]);
   const Toast = Swal.mixin({
     toast: true,
@@ -12,9 +14,9 @@ export default function TemplateVisit({patSelected , setFlag , setIsLoading , se
     timer: 3000,
     timerProgressBar: true,
     customClass: 'toast-modal',
-  }); 
+  });
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     axios
       .get(mainDomain + '/api/PrescriptionTemplate/GetList', {
         headers: {
@@ -22,52 +24,107 @@ export default function TemplateVisit({patSelected , setFlag , setIsLoading , se
         },
       })
       .then((res) => {
-        setIsLoading(false)
+        setIsLoading(false);
         setTemplateList(res.data);
       })
       .catch((err) => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
-      
-  }, []);
-  const setTemplateHandler = (e)=>{
-    setIsLoading(true)
+  }, [flag]);
+  const setTemplateHandler = (e) => {
+    setIsLoading(true);
     const data = {
       appointmentId: patSelected.appointmentId,
-      templateId: e.templateId
-    }
+      templateId: e.templateId,
+    };
     axios
-    .post(mainDomain+'/api/Prescription/AddFromTemplate' , data , {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      },
-    })
-    .then((res)=>{
-      setFlag((ev)=>!ev)
-      setIsLoading(false)
-      setTemplateId(e.templateId)
-      Toast.fire({
-        icon: 'success',
-        text: 'تمپلیت با موفقیت افزوده شد',
+      .post(mainDomain + '/api/Prescription/AddFromTemplate', data, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setFlag((ev) => !ev);
+        setIsLoading(false);
+        setTemplateId(e.templateId);
+        Toast.fire({
+          icon: 'success',
+          text: 'تمپلیت با موفقیت افزوده شد',
+        });
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        Toast.fire({
+          icon: 'error',
+          text: err.response ? err.response.data : 'خطای شبکه',
+        });
       });
-    })
-    .catch((err)=>{
-      setIsLoading(false)
-      Toast.fire({
-        icon: 'error',
-        text: err.response ? err.response.data : 'خطای شبکه',
-      });
-    })
+  };
+  const deleteTemplateHandler = (e)=>{
+    Swal.fire({
+      title: "",
+      text: 'آیا از ثبت درخواست خود مطمئن هستید؟',
+      
+      showCancelButton: true,
+      confirmButtonColor: 'green',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'انصراف',
+      confirmButtonText: 'حذف تمپلیت',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true)
+        const dataDelete = new FormData();
+    dataDelete.append('templateId', e.templateId);
+        axios
+        .post(mainDomain+'/api/PrescriptionTemplate/Delete' , dataDelete , {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('token'),
+          },
+        })
+        .then((res)=>{
+          setIsLoading(false)
+          setFlag((e)=>!e)
+          Toast.fire({
+            icon: 'success',
+            text: 'تمپلیت با موفقیت حذف شد',
+          });
+        })
+        .catch((err)=>{
+          setIsLoading(false)
+          Toast.fire({
+            icon: 'error',
+            text: err.response ? err.response.data : 'خطای شبکه',
+          });
+        })
+      }
+    });
   }
   return (
     <>
       {templateList.map((e) => (
-        <div key={e.templateId} className="w-full border rounded-md shadow-md p-3 text-start mt-2 flex justify-between items-center">
-          <div><h5 className="font-semibold">{e.name}</h5>
-          <p className="text-sm mt-1">{e.description}</p></div>
-          <button onClick={()=> setTemplateHandler(e)} className="text-white bg-green-500 rounded-md hover:bg-green-600 px-5 py-2 duration-300">
-             تجویز
-          </button>
+        <div
+          key={e.templateId}
+          className="w-full border rounded-md shadow-md p-3 text-start mt-2 flex justify-between items-center"
+        >
+          <div>
+            <h5 className="font-semibold">{e.name}</h5>
+            <p className="text-sm mt-1">{e.description}</p>
+          </div>
+          <div className="flex items-center">
+            <div className="px-2">
+              <button
+                onClick={() => setTemplateHandler(e)}
+                className="text-white bg-green-500 rounded-md hover:bg-green-600 px-5 py-2 duration-300"
+              >
+                تجویز
+              </button>
+            </div>
+            <Tooltip title="حذف تمپلیت">
+              <IconButton onClick={()=> deleteTemplateHandler(e)}>
+                <FaTrashCan className="cursor-pointer text-red-500" />
+              </IconButton>
+            </Tooltip>
+          </div>
         </div>
       ))}
     </>

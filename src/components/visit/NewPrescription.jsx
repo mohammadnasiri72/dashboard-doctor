@@ -25,23 +25,33 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
     timer: 3000,
     timerProgressBar: true,
     customClass: 'toast-modal',
-  }); 
-  
+  });
+
   // Initialization description drug
   useEffect(() => {
     if (drugForm.length > 0 && valDrugList.defaultForm) {
-      setValDrugForm(drugForm.find((e) => e.name === valDrugList.defaultForm)? drugForm.find((e) => e.name === valDrugList.defaultForm) : {});
+      setValDrugForm(
+        drugForm.find((e) => e.name === valDrugList.defaultForm)
+          ? drugForm.find((e) => e.name === valDrugList.defaultForm)
+          : {}
+      );
     }
     if (drugDose.length > 0 && valDrugList.defaultDosage) {
-      setValDrugDose(drugDose.find((e) => e.name === valDrugList.defaultDosage)? drugDose.find((e) => e.name === valDrugList.defaultDosage) : {});
+      setValDrugDose(
+        drugDose.find((e) => e.name === valDrugList.defaultDosage)
+          ? drugDose.find((e) => e.name === valDrugList.defaultDosage)
+          : {}
+      );
     }
     if (drugUseCycle.length > 0 && valDrugList.defaultFrequency) {
-      setValDrugUseCycle(drugUseCycle.find((e) => e.name === valDrugList.defaultFrequency)? drugUseCycle.find((e) => e.name === valDrugList.defaultFrequency) : {});
+      setValDrugUseCycle(
+        drugUseCycle.find((e) => e.name === valDrugList.defaultFrequency)
+          ? drugUseCycle.find((e) => e.name === valDrugList.defaultFrequency)
+          : {}
+      );
     }
     setDescDrug(valDrugList.description);
   }, [valDrugList, drugForm, drugDose, drugUseCycle]);
-
-  
 
   // get description drug
   useEffect(() => {
@@ -103,12 +113,7 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
 
   // set drug in prescription
   const setDrugHandler = () => {
-    if (
-      valDrugList.medicationId &&
-      valDrugForm.name &&
-      valDrugDose.name &&
-      valDrugUseCycle.name
-    ) {
+    if (valDrugList.medicationId && valDrugForm.name && valDrugDose.name && valDrugUseCycle.name) {
       setIsLoading(true);
       const data = {
         appointmentId: patSelected.appointmentId,
@@ -130,6 +135,9 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
           setValDrugList({});
           setValCategoryDrug([]);
           setDescDrug('');
+          setValDrugForm({});
+          setValDrugDose({});
+          setValDrugUseCycle({});
           Toast.fire({
             icon: 'success',
             text: 'دارو با موفقیت به نسخه اضافه شد',
@@ -184,7 +192,7 @@ export default function NewPrescription({ patSelected, setIsLoading, setFlag }) 
           }}
           freeSolo
           autoHighlight
-          options={drugList.length>0 ?  drugList.filter((e) => e.medicalCategoryId === valCategoryDrug) : []}
+          options={drugList.length > 0 ? drugList.filter((e) => e.medicalCategoryId === valCategoryDrug) : []}
           getOptionLabel={(option) => (option.name ? option.name : '')}
           renderInput={(params) => <TextField {...params} label={'لیست دارو ها'} placeholder="انتخاب دارو" />}
         />
