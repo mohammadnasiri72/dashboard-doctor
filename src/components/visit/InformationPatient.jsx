@@ -1,6 +1,7 @@
 import { TextField } from '@mui/material';
 import React from 'react';
 import { mainDomain } from '../../utils/mainDomain';
+import TablePatient from '../patientList/TablePatient';
 
 export default function InformationPatient({ infoPat }) {
   return (
@@ -98,6 +99,9 @@ export default function InformationPatient({ infoPat }) {
           </div>
         </div>
         
+      </div>
+      <div className='w-5/6 mx-auto'>
+      <TablePatient infoPat={infoPat}/>
       </div>
     </>
   );

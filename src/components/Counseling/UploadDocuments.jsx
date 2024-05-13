@@ -16,13 +16,15 @@ import ProgressBarUpload from './ProgressBarUpload';
 export default function UploadDocuments({ setPageNumber, apointmentId, flagUpload, setFlagUpload , patSelected}) {
   const [fileType, setFileType] = useState([]);
   const [fileVal, setFileVal] = useState('');
-
   const [valProgres, setValProgres] = useState(0);
   const [addressType, setAddressType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [desc, setDesc] = useState('');
   const [dataAttachment, setDataAttachment] = useState('');
+  
   const inpRef = useRef();
+
+
   // useEffect(() => {
   //   if (valProgres === 100) {
   //     setValProgres(0);

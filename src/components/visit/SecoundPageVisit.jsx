@@ -10,12 +10,12 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { mainDomain } from '../../utils/mainDomain';
-import InformationPatient from './InformationPatient';
 import DiagnosisPatient from './DiagnosisPatient';
 import DrugPatient from './DrugPatient';
-import TemplateVisit from './TemplateVisit';
-import UploadDocuments from '../Counseling/UploadDocuments';
+import InformationPatient from './InformationPatient';
+import Order from './Order';
 import UploadDocumentsDoctor from './UploadDocumentsDoctor';
+import ViewOrderPopup from './ViewOrderPopup';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,6 +51,9 @@ export default function SecoundPageVisit({ patSelected , setIsLoading}) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [infoPat, setInfoPat] = React.useState({});
+  const [isOpenOrder , setIsOpenOrder] = React.useState(false)
+  const [orderEdit , setOrderEdit] = React.useState([])
+  const [flag, setFlag] = React.useState(false);
 
   useEffect(() => {
     axios
@@ -95,7 +98,7 @@ export default function SecoundPageVisit({ patSelected , setIsLoading}) {
             <Tab label="اطلاعات بیمار" {...a11yProps(0)} />
             <Tab label="تشخیص و توصیه ها و شکایت های بیمار" {...a11yProps(1)} />
             <Tab label="دارو ها" {...a11yProps(2)} />
-            <Tab label="اردها" {...a11yProps(2)} />
+            <Tab label="اردرها" {...a11yProps(2)} />
             <Tab label="فایل های ضمیمه" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
@@ -114,13 +117,15 @@ export default function SecoundPageVisit({ patSelected , setIsLoading}) {
             <DrugPatient patSelected={patSelected} setIsLoading={setIsLoading}/>
           </TabPanel>
           <TabPanel value={value} index={3} dir={theme.direction}>
-           test
+           <Order patSelected={patSelected} setIsLoading={setIsLoading} setIsOpenOrder={setIsOpenOrder} setOrderEdit={setOrderEdit} setFlag={setFlag} flag={flag}/>
           </TabPanel>
           <TabPanel value={value} index={4} dir={theme.direction}>
             <UploadDocumentsDoctor patSelected={patSelected} setIsLoading={setIsLoading}/>
           </TabPanel>
         </SwipeableViews>
       </Box>
+      
+      <ViewOrderPopup isOpenOrder={isOpenOrder} setIsOpenOrder={setIsOpenOrder} setIsLoading={setIsLoading} orderEdit={orderEdit} setFlag={setFlag}/>
     </div>
   );
 }
