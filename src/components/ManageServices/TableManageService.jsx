@@ -18,7 +18,6 @@ import { mainDomain } from '../../utils/mainDomain';
 import Iconify from '../Iconify';
 
 export default function TableManageService({
-  valCategoryServices,
   flag,
   categoryServices,
   setFlag,
@@ -34,7 +33,8 @@ export default function TableManageService({
   setEditId,
 }) {
   const [serviceList, setServiceList] = useState([]);
-
+// console.log(serviceList);
+//   console.log(categoryServices);
   // import sweet alert-2
   const Toast = Swal.mixin({
     toast: true,
@@ -47,11 +47,10 @@ export default function TableManageService({
 
   // get list services
   useEffect(() => {
-    if (valCategoryServices) {
       axios
         .get(mainDomain + '/api/MedicalService/GetList', {
           params: {
-            categoryId: valCategoryServices,
+            categoryId: -1,
           },
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -61,8 +60,8 @@ export default function TableManageService({
           setServiceList(res.data);
         })
         .catch((err) => {});
-    }
-  }, [flag, valCategoryServices]);
+    
+  }, [flag]);
 
   //   delete service
   const deleteDrugHandler = (e) => {
@@ -122,7 +121,7 @@ export default function TableManageService({
             {serviceList.map((service) => (
               <TableRow key={service.medicalServiceId}>
                 <TableCell align="center">
-                  {categoryServices.find((ev) => ev.medicalServiceCategoryId === valCategoryServices).title} /{' '}
+                  {categoryServices.find((ev) => ev.medicalServiceCategoryId === service.medicalCategoryId)?.title} /{' '}
                   {service.title}
                 </TableCell>
                 <TableCell align="center">{service.description}</TableCell>

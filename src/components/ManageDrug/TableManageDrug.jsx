@@ -1,30 +1,22 @@
 import {
-  Button,
   Chip,
-  FormControlLabel,
   IconButton,
-  Menu,
-  MenuItem,
   Paper,
-  Switch,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
-  Tooltip,
+  Tooltip
 } from '@mui/material';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { FaRegWindowClose } from "react-icons/fa";
 import { GoCheckbox } from 'react-icons/go';
-import { MdEdit } from 'react-icons/md';
-import React, { useEffect, useState } from 'react';
-import { mainDomain } from '../../utils/mainDomain';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import Iconify from '../Iconify';
 import Swal from 'sweetalert2';
+import { mainDomain } from '../../utils/mainDomain';
+import Iconify from '../Iconify';
 
 export default function TableManageDrug({
   valCategoryDrug,
@@ -48,7 +40,6 @@ export default function TableManageDrug({
   setEditId,
 }) {
   const [drugList, setDrugList] = useState([]);
-  // console.log(drugDose);
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -127,11 +118,11 @@ export default function TableManageDrug({
           </TableHead>
           <TableBody>
             {drugList
-              .filter((ev) => ev.medicalCategoryId === valCategoryDrug)
+              // .filter((ev) => ev.medicalCategoryId === valCategoryDrug)
               .map((drug) => (
                 <TableRow key={drug.medicationId}>
                   <TableCell align="center">
-                    {categoryDrug.find((ev) => ev.medicationCategoryId === valCategoryDrug).title} / {drug.name}
+                    {drug.medicalCategoryTitle} / {drug.name}
                   </TableCell>
                   <TableCell align="center">{drug.description}</TableCell>
                   <TableCell align="center">

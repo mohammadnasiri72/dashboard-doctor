@@ -49,8 +49,15 @@ const sidebarConfig = [
     subheader: 'doctor',
     items: [
       { title: 'ویزیت', path: '/dashboard/visit', icon: <CgProfile /> },
+    ]
+  },
+  {
+    subheader: 'admin',
+    items: [
       { title: 'مدیریت دارو', path: '/dashboard/manageDrug', icon: <CgProfile /> },
       { title: 'مدیریت خدمات', path: '/dashboard/manageServices', icon: <CgProfile /> },
+      { title: 'مدیریت پرسنل', path: '/dashboard/managStaff', icon: <CgProfile /> },
+      { title: 'مدیریت پزشک', path: '/dashboard/managDoctor', icon: <CgProfile /> },
     ]
   }
 ];

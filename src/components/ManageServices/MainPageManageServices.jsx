@@ -84,6 +84,14 @@ export default function MainPageManageServices() {
             });
             setIsLoading(false);
             setFlag((e) => !e);
+            setIsEdit(false);
+            setNameServices('');
+            setDescService('');
+            setPrice('');
+            setisActive(true);
+            setPriority(0);
+            setShowManageServices(false);
+            setValCategoryServices('');
           })
           .catch((err) => {
             setIsLoading(false);
@@ -168,7 +176,13 @@ export default function MainPageManageServices() {
         setIsLoading(false);
         setFlag((e) => !e);
         setIsEdit(false);
+        setNameServices('');
+        setDescService('');
+        setPrice('');
+        setisActive(true);
+        setPriority(0);
         setShowManageServices(false);
+        setValCategoryServices('');
         Toast.fire({
           icon: 'success',
           text: 'خدمت با موفقیت ویرایش شد',
@@ -384,6 +398,7 @@ export default function MainPageManageServices() {
                     setisActive(true);
                     setPriority(0);
                     setShowManageServices(false);
+                    setValCategoryServices('');
                   }}
                   className="bg-red-500 hover:bg-red-600 duration-300 px-5 py-2 rounded-md text-white"
                 >
@@ -393,9 +408,9 @@ export default function MainPageManageServices() {
             </div>
           )}
         </div>
+
         <div className="mt-5">
           <TableManageService
-            valCategoryServices={valCategoryServices}
             flag={flag}
             categoryServices={categoryServices}
             setFlag={setFlag}

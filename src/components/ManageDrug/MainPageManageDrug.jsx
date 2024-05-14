@@ -5,21 +5,18 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Stack,
   Switch,
   TextField,
-  Typography,
 } from '@mui/material';
-import { IoIosArrowUp } from 'react-icons/io';
-import { FaMinus } from 'react-icons/fa6';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa6';
-import { mainDomain } from '../../utils/mainDomain';
+import { useEffect, useState } from 'react';
+import { FaMinus, FaPlus } from 'react-icons/fa6';
+import { IoIosArrowUp } from 'react-icons/io';
 import { MdOutlineMinimize } from 'react-icons/md';
-import TableManageDrug from './TableManageDrug';
 import Swal from 'sweetalert2';
+import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
+import TableManageDrug from './TableManageDrug';
 
 export default function MainPageManageDrug() {
   const [showManageDrug, setShowManageDrug] = useState(false);
@@ -134,6 +131,16 @@ export default function MainPageManageDrug() {
               icon: 'success',
               text: 'دارو با موفقیت ثبت شد',
             });
+            setIsEdit(false);
+            setNameDrug('');
+            setDescDrug('');
+            setValDrugForm({});
+            setValDrugDose({});
+            setValDrugUseCycle({});
+            setisActive(true);
+            setPriority(0);
+            setShowManageDrug(false);
+            setValCategoryDrug('');
             setIsLoading(false);
             setFlag((e) => !e);
           })
@@ -197,7 +204,7 @@ export default function MainPageManageDrug() {
   };
 
   // edit drug
-  const editDrugHandler = ()=>{
+  const editDrugHandler = () => {
     setIsLoading(true);
     const data = {
       medicationId: editId,
@@ -211,31 +218,39 @@ export default function MainPageManageDrug() {
       priority,
     };
     axios
-    .post(mainDomain+'/api/Medication/Update' , data , {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
-      },
-    })
-    .then((res)=>{
-      setIsLoading(false);
-      setFlag((e)=>!e)
-      setIsEdit(false)
-      setShowManageDrug(false)
-      Toast.fire({
-        icon: 'success',
-        text: 'دارو با موفقیت ویرایش شد',
+      .post(mainDomain + '/api/Medication/Update', data, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        setIsLoading(false);
+        setFlag((e) => !e);
+        setIsEdit(false);
+        setShowManageDrug(false);
+        setNameDrug('');
+        setDescDrug('');
+        setValDrugForm({});
+        setValDrugDose({});
+        setValDrugUseCycle({});
+        setisActive(true);
+        setPriority(0);
+        setValCategoryDrug('');
+        Toast.fire({
+          icon: 'success',
+          text: 'دارو با موفقیت ویرایش شد',
+        });
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setIsEdit(false);
+        setShowManageDrug(false);
+        Toast.fire({
+          icon: 'error',
+          text: err.response ? err.response.data : 'خطای شبکه',
+        });
       });
-    })
-    .catch((err)=>{
-      setIsLoading(false);
-      setIsEdit(false)
-      setShowManageDrug(false)
-      Toast.fire({
-        icon: 'error',
-        text: err.response ? err.response.data : 'خطای شبکه',
-      });
-    })
-  }
+  };
 
   return (
     <>
@@ -443,7 +458,10 @@ export default function MainPageManageDrug() {
           {isEdit && (
             <div className="flex mt-3">
               <div className="px-2">
-                <button onClick={editDrugHandler} className="bg-green-500 hover:bg-green-600 duration-300 px-5 py-2 rounded-md text-white">
+                <button
+                  onClick={editDrugHandler}
+                  className="bg-green-500 hover:bg-green-600 duration-300 px-5 py-2 rounded-md text-white"
+                >
                   ویرایش
                 </button>
               </div>
@@ -458,7 +476,8 @@ export default function MainPageManageDrug() {
                     setValDrugUseCycle({});
                     setisActive(true);
                     setPriority(0);
-                    setShowManageDrug(false)
+                    setShowManageDrug(false);
+                    setValCategoryDrug('');
                   }}
                   className="bg-red-500 hover:bg-red-600 duration-300 px-5 py-2 rounded-md text-white"
                 >
