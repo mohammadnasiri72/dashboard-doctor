@@ -50,6 +50,7 @@ const sidebarConfig = [
     items: [
       { title: 'ویزیت', path: '/dashboard/visit', icon: <CgProfile /> },
       { title: 'مدیریت دارو', path: '/dashboard/manageDrug', icon: <CgProfile /> },
+      { title: 'مدیریت خدمات', path: '/dashboard/manageServices', icon: <CgProfile /> },
     ]
   }
 ];
