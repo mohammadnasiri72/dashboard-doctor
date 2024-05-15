@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from '../../layouts';
-import MainPageManageDrug from '../../components/ManageDrug/MainPageManageDrug';
-import MainPageManageServices from '../../components/ManageServices/MainPageManageServices';
+import MainPageManageDoctor from '../../components/ManageDoctor/MainPageManageDoctor';
 
 
 
@@ -12,7 +11,7 @@ managDoctor.getLayout = function getLayout(page) {
 export default function managDoctor() {
   return (
     <>
-   sdhkjf
+      <MainPageManageDoctor />
     </>
   )
 }

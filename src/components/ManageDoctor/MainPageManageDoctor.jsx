@@ -7,41 +7,39 @@ import { MdOutlineMinimize } from 'react-icons/md';
 import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
 import SimpleBackdrop from '../backdrop';
-import TableManageStaff from './TableManageStaff';
+import TableManageDoctor from './TableManageDoctor';
 // import TableManageService from './TableManageService';
 
-export default function MainPageManageStaff() {
-  const [showManageStaff, setShowManageStaff] = useState(false);
+export default function MainPageManageDoctor() {
+  const [showManageDoctor, setShowManageDoctor] = useState(false);
+  const [flag, setFlag] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [nationalIdStaff, setNationalIdStaff] = useState('');
-  const [firstNameStaff, setFirstNameStaff] = useState('');
-  const [lastNameStaff, setLastNameStaff] = useState('');
-  const [genderStaff, setGenderStaff] = useState('m');
-  const [mobileStaff, setMobileStaff] = useState('');
-  const [jobList, setJobList] = useState([]);
-  const [jobStaff, setJobStaff] = useState('');
-  const [flag, setFlag] = useState(false);
-  const [staffId, setStaffId] = useState('');
-  // console.log(jobList);
+  const [medicalSystemId, setMedicalSystemId] = useState('');
+  const [firstNameDoctor, setFirstNameDoctor] = useState('');
+  const [lastNameDoctor, setLastNameDoctor] = useState('');
+  const [mobileDoctor, setMobileDoctor] = useState('');
+  const [emailDoctor, setEmailDoctor] = useState('');
+  const [expertise, setExpertise] = useState([]);
+  const [expertiseDoctor, setExpertiseDoctor] = useState('');
 
-  const paternNationalId = /^[0-9]{10}$/;
   const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
-  let colorNationId = '';
+  const paternEmail = /[a-zA-Z0-9.-]+@[a-z-]+\.[a-z]{2,3}/;
   let colorMobile = '';
-  if (nationalIdStaff.match(paternNationalId)) {
-    colorNationId = 'success';
-  } else if (nationalIdStaff.length === 0) {
-    colorNationId = 'primary';
-  } else {
-    colorNationId = 'error';
-  }
-  if (mobileStaff.match(paternMobile)) {
+  let colorEmail = '';
+  if (mobileDoctor.match(paternMobile)) {
     colorMobile = 'success';
-  } else if (mobileStaff.length === 0) {
+  } else if (mobileDoctor.length === 0) {
     colorMobile = 'primary';
   } else {
     colorMobile = 'error';
+  }
+  if (emailDoctor.match(paternEmail)) {
+    colorEmail = 'success';
+  } else if (emailDoctor.length === 0) {
+    colorEmail = 'primary';
+  } else {
+    colorEmail = 'error';
   }
 
   // import sweet alert-2
@@ -54,41 +52,46 @@ export default function MainPageManageStaff() {
     customClass: 'toast-modal',
   });
 
-  // get list job
+  // get list expertises
   useEffect(() => {
     axios
-      .get(mainDomain + '/api/BasicInfo/JobTitle/GetList', {
+      .get(mainDomain + '/api/BasicInfo/Specialization/GetList', {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       })
       .then((res) => {
-        setJobList(res.data);
+        setExpertise(res.data);
       })
       .catch((err) => {});
   }, [flag]);
 
-  // set new staff
-  const newStaffHandler = () => {
-    if (!nationalIdStaff.match(paternNationalId)) {
+  // set new doctor
+  const newDoctorHandler = () => {
+    if (medicalSystemId.length === 0) {
       Toast.fire({
         icon: 'error',
-        text: 'لطفا کد ملی را به درستی وارد کنید',
+        text: 'لطفا کد نظام پزشکی را به درستی وارد کنید',
       });
-    } else if (!mobileStaff.match(paternMobile)) {
+    } else if (!mobileDoctor.match(paternMobile)) {
       Toast.fire({
         icon: 'error',
         text: 'لطفا شماره موبایل را به درستی وارد کنید',
       });
-    } else if (firstNameStaff.length < 2 || lastNameStaff.length < 2 || jobStaff.length === 0) {
+    } else if (!emailDoctor.match(paternEmail)) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا ایمیل را به درستی وارد کنید',
+      });
+    } else if (firstNameDoctor.length < 2 || lastNameDoctor.length < 2 || expertiseDoctor.length === 0) {
       Toast.fire({
         icon: 'error',
         text: 'لطفا موارد خواسته شده را به درستی وارد کنید',
       });
     } else {
       Swal.fire({
-        title: 'ثبت پرسنل جدید',
-        text: 'آیا از ثبت پرسنل مطمئن هستید؟',
+        title: 'ثبت پزشک جدید',
+        text: 'آیا از ثبت پزشک مطمئن هستید؟',
         showCancelButton: true,
         confirmButtonColor: 'green',
         cancelButtonColor: '#d33',
@@ -98,15 +101,15 @@ export default function MainPageManageStaff() {
         if (result.isConfirmed) {
           setIsLoading(true);
           const data = {
-            nationalId: nationalIdStaff,
-            firstName: firstNameStaff,
-            lastName: lastNameStaff,
-            gender: genderStaff,
-            jobTitle: jobStaff,
-            mobile: mobileStaff,
+            medicalSystemId,
+            specializationId: expertiseDoctor,
+            firstName: firstNameDoctor,
+            lastName: lastNameDoctor,
+            mobile: mobileDoctor,
+            email: emailDoctor,
           };
           axios
-            .post(mainDomain + '/api/Staff/Add', data, {
+            .post(mainDomain + '/api/Doctor/Add', data, {
               headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
               },
@@ -114,14 +117,14 @@ export default function MainPageManageStaff() {
             .then((res) => {
               Toast.fire({
                 icon: 'success',
-                text: 'پرسنل با موفقیت ثبت شد',
+                text: 'پزشک با موفقیت ثبت شد',
               });
-              setNationalIdStaff('');
-              setFirstNameStaff('');
-              setLastNameStaff('');
-              setGenderStaff('m');
-              setMobileStaff('');
-              setJobStaff('');
+              setMedicalSystemId('');
+              setFirstNameDoctor('');
+              setLastNameDoctor('');
+              setMobileDoctor('');
+              setExpertiseDoctor('');
+              setEmailDoctor('');
               setFlag((e) => !e);
               setIsLoading(false);
             })
@@ -137,43 +140,41 @@ export default function MainPageManageStaff() {
     }
   };
 
-  // edit staff
-  const editStaffHandler = () => {
+  // edit doctor
+  const editDoctorHandler = () => {
     setIsLoading(true);
     const data = {
-      staffId,
-      nationalId: nationalIdStaff,
-      firstName: firstNameStaff,
-      lastName: lastNameStaff,
-      gender: genderStaff,
-      jobTitle: jobStaff,
+      medicalSystemId,
+      specializationId: expertiseDoctor,
+      firstName: firstNameDoctor,
+      lastName: lastNameDoctor,
     };
     axios
-      .post(mainDomain + '/api/Staff/Update', data, {
+      .post(mainDomain + '/api/Doctor/Update', data, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       })
       .then((res) => {
-        setShowManageStaff(false)
+        setShowManageDoctor(false);
         setIsLoading(false);
         setFlag((e) => !e);
         setIsEdit(false);
-        setNationalIdStaff('');
-        setFirstNameStaff('');
-        setLastNameStaff('');
-        setGenderStaff('m');
-        setMobileStaff('');
-        setJobStaff('');
+        setMedicalSystemId('');
+        setFirstNameDoctor('');
+        setLastNameDoctor('');
+        setMobileDoctor('');
+        setExpertiseDoctor('');
+        setEmailDoctor('');
         Toast.fire({
           icon: 'success',
-          text: 'پرسنل با موفقیت ویرایش شد',
+          text: 'پزشک با موفقیت ویرایش شد',
         });
       })
       .catch((err) => {
         setIsLoading(false);
         setIsEdit(false);
-        setShowManageStaff(false);
+        setShowManageDoctor(false);
         Toast.fire({
           icon: 'error',
           text: err.response ? err.response.data : 'خطای شبکه',
@@ -186,66 +187,66 @@ export default function MainPageManageStaff() {
       <div className="text-start relative">
         {!isEdit && (
           <button
-            onClick={() => setShowManageStaff(!showManageStaff)}
+            onClick={() => setShowManageDoctor(!showManageDoctor)}
             className="sticky top-5 flex items-center text-white px-5 py-2 rounded-md bg-green-500 duration-300 hover:bg-green-600"
           >
-            <span className="px-2">{showManageStaff ? 'بستن' : 'افزودن پرسنل'}</span>
-            {!showManageStaff && <FaPlus />}
-            {showManageStaff && <MdOutlineMinimize />}
+            <span className="px-2">{showManageDoctor ? 'بستن' : 'افزودن پزشک'}</span>
+            {!showManageDoctor && <FaPlus />}
+            {showManageDoctor && <MdOutlineMinimize />}
           </button>
         )}
         <div
           style={{
-            opacity: showManageStaff ? '1' : '0',
-            visibility: showManageStaff ? 'visible' : 'hidden',
-            maxHeight: showManageStaff ? '22rem' : '0',
+            opacity: showManageDoctor ? '1' : '0',
+            visibility: showManageDoctor ? 'visible' : 'hidden',
+            maxHeight: showManageDoctor ? '22rem' : '0',
             zIndex: '12',
           }}
           className="border overflow-hidden sticky top-12 left-0 right-0 bottom-0 duration-500 px-3 bg-white shadow-lg pb-3"
         >
           {!isEdit && (
-            <button onClick={() => setShowManageStaff(false)} className="absolute bottom-0 left-1/2">
+            <button onClick={() => setShowManageDoctor(false)} className="absolute bottom-0 left-1/2">
               <IoIosArrowUp className="text-3xl rounded-t-full bg-slate-200 translate-y-2 w-14 hover:bg-slate-300 duration-300" />
             </button>
           )}
           <div className="mt-5 flex items-center">
-            {/* national id */}
+            {/* medicalSystemId */}
             <div className="text-start mt-3" dir="rtl">
               <TextField
-                onChange={(e) => setNationalIdStaff(e.target.value)}
+                disabled={isEdit}
+                onChange={(e) => setMedicalSystemId(e.target.value)}
                 className=" text-end"
                 id="outlined-multiline-flexible"
-                label="کد ملی پرسنل"
+                label="کد نظام پزشکی"
                 multiline
                 dir="rtl"
-                value={nationalIdStaff}
+                value={medicalSystemId}
                 maxRows={4}
-                color={colorNationId}
               />
             </div>
             {/* first name */}
             <div className="text-start mt-3 pr-2" dir="rtl">
               <TextField
-                onChange={(e) => setFirstNameStaff(e.target.value)}
+                onChange={(e) => setFirstNameDoctor(e.target.value)}
                 className=" text-end"
                 id="outlined-multiline-flexible"
-                label="نام پرسنل"
+                label="نام پزشک"
                 multiline
                 dir="rtl"
-                value={firstNameStaff}
+                value={firstNameDoctor}
                 maxRows={4}
               />
             </div>
             {/* last name */}
             <div className="text-start mt-3 pr-2" dir="rtl">
               <TextField
-                onChange={(e) => setLastNameStaff(e.target.value)}
+                onChange={(e) => setLastNameDoctor(e.target.value)}
                 className=" text-end"
                 id="outlined-multiline-flexible"
-                label="نام خانوادگی پرسنل"
+                label="نام خانوادگی پزشک"
                 multiline
                 dir="rtl"
-                value={lastNameStaff}
+                value={lastNameDoctor}
                 maxRows={4}
               />
             </div>
@@ -254,64 +255,60 @@ export default function MainPageManageStaff() {
             {/* mobile */}
             <div className="text-start mt-3" dir="rtl">
               <TextField
-                onChange={(e) => setMobileStaff(e.target.value)}
+                disabled={isEdit}
+                onChange={(e) => setMobileDoctor(e.target.value)}
                 className=" text-end"
                 id="outlined-multiline-flexible"
-                label="شماره موبایل پرسنل"
+                label="شماره موبایل پزشک"
                 multiline
                 dir="rtl"
-                value={mobileStaff}
+                value={mobileDoctor}
                 maxRows={4}
                 color={colorMobile}
               />
             </div>
-            {/* job title */}
+            {/* expertise title */}
             <div className="text-start mt-3 pr-2">
               <FormControl color="primary" className="w-56">
                 <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-                  عنوان شغلی
+                  تخصص
                 </InputLabel>
                 <Select
-                  onChange={(e) => setJobStaff(e.target.value)}
+                  onChange={(e) => setExpertiseDoctor(e.target.value)}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  label="عنوان شغلی"
+                  label="تخصص"
                   color="primary"
-                  value={jobStaff}
+                  value={expertiseDoctor}
                 >
-                  {jobList.map((e) => (
-                    <MenuItem key={e.itemId} value={e.name}>
+                  {expertise.map((e) => (
+                    <MenuItem key={e.itemId} value={e.itemId}>
                       {e.name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </div>
-            {/* gender */}
-            <div className="mt-3 pr-2" dir="rtl">
-              <FormControl color="primary">
-                <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-                  جنسیت
-                </InputLabel>
-                <Select
-                  className="w-20"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={genderStaff}
-                  label="جنسیت"
-                  color="primary"
-                  onChange={(e) => setGenderStaff(e.target.value)}
-                >
-                  <MenuItem value="m">مرد</MenuItem>
-                  <MenuItem value="f">زن</MenuItem>
-                </Select>
-              </FormControl>
+            {/* email */}
+            <div className="text-start mt-3 pr-2" dir="rtl">
+              <TextField
+                disabled={isEdit}
+                onChange={(e) => setEmailDoctor(e.target.value)}
+                className=" text-end"
+                id="outlined-multiline-flexible"
+                label="ایمیل"
+                multiline
+                dir="rtl"
+                value={emailDoctor}
+                maxRows={4}
+                color={colorEmail}
+              />
             </div>
           </div>
           {!isEdit && (
             <div className="mt-3">
               <button
-                onClick={newStaffHandler}
+                onClick={newDoctorHandler}
                 className="px-5 py-2 rounded-md bg-green-500 duration-300 hover:bg-green-600 text-white font-semibold"
               >
                 ثبت
@@ -322,7 +319,7 @@ export default function MainPageManageStaff() {
             <div className="flex mt-3">
               <div className="px-2">
                 <button
-                  onClick={editStaffHandler}
+                  onClick={editDoctorHandler}
                   className="bg-green-500 hover:bg-green-600 duration-300 px-5 py-2 rounded-md text-white"
                 >
                   ویرایش
@@ -331,14 +328,14 @@ export default function MainPageManageStaff() {
               <div className="px-2">
                 <button
                   onClick={() => {
-                    setShowManageStaff(false);
+                    setShowManageDoctor(false);
                     setIsEdit(false);
-                    setNationalIdStaff('');
-                    setFirstNameStaff('');
-                    setLastNameStaff('');
-                    setGenderStaff('m');
-                    setMobileStaff('');
-                    setJobStaff('');
+                    setMedicalSystemId('');
+                    setFirstNameDoctor('');
+                    setLastNameDoctor('');
+                    setMobileDoctor('');
+                    setExpertiseDoctor('');
+                    setEmailDoctor('');
                   }}
                   className="bg-red-500 hover:bg-red-600 duration-300 px-5 py-2 rounded-md text-white"
                 >
@@ -350,19 +347,18 @@ export default function MainPageManageStaff() {
         </div>
 
         <div className="mt-5">
-          <TableManageStaff
+          <TableManageDoctor
+            flag={flag}
             setIsLoading={setIsLoading}
             setFlag={setFlag}
-            flag={flag}
-            setShowManageStaff={setShowManageStaff}
+            setShowManageDoctor={setShowManageDoctor}
             setIsEdit={setIsEdit}
-            setNationalIdStaff={setNationalIdStaff}
-            setFirstNameStaff={setFirstNameStaff}
-            setLastNameStaff={setLastNameStaff}
-            setGenderStaff={setGenderStaff}
-            setMobileStaff={setMobileStaff}
-            setJobStaff={setJobStaff}
-            setStaffId={setStaffId}
+            setMedicalSystemId={setMedicalSystemId}
+            setFirstNameDoctor={setFirstNameDoctor}
+            setLastNameDoctor={setLastNameDoctor}
+            setMobileDoctor={setMobileDoctor}
+            setEmailDoctor={setEmailDoctor}
+            setExpertiseDoctor={setExpertiseDoctor}
           />
         </div>
       </div>

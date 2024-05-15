@@ -58,6 +58,7 @@ const sidebarConfig = [
       { title: 'مدیریت خدمات', path: '/dashboard/manageServices', icon: <CgProfile /> },
       { title: 'مدیریت پرسنل', path: '/dashboard/managStaff', icon: <CgProfile /> },
       { title: 'مدیریت پزشک', path: '/dashboard/managDoctor', icon: <CgProfile /> },
+      { title: 'مدیریت رزرو', path: '/dashboard/managReserve', icon: <CgProfile /> },
     ]
   }
 ];
