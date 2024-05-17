@@ -13,24 +13,46 @@ import DatePicker from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
+import { useState } from 'react';
 
-export default function ModalSelectTime({setIsLoading}) {
+export default function ModalSelectTime({ setIsLoading }) {
   const [doctors, setDoctors] = React.useState([]);
-  const [valDoctor, setValDoctor] = React.useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [year, setYear] = React.useState('');
-  const [mount, setMount] = React.useState(new Date());
-  const [day, setDay] = React.useState('');
-  const [valTimeStart, setValTimeStart] = React.useState('');
-  const [valTimeEnd, setValTimeEnd] = React.useState('');
-  const [interval, setInterval] = React.useState('');
-  const [capacity, setCapacity] = React.useState('');
-//   console.log(year.toLocaleDateString('fa-IR'));
-//   console.log(Number(year.toLocaleDateString('fa-IR').slice(0,4)));
-  
 
-   // import sweet alert-2
-   const Toast = Swal.mixin({
+  const [open, setOpen] = useState(false);
+  const [year, setYear] = useState('');
+  const [moon, setMoon] = useState('');
+  const [valDoctor, setValDoctor] = useState('');
+  const [valYear, setValYear] = useState(new Date());
+  const [mount, setMount] = useState(new Date());
+
+  const [day, setDay] = React.useState('');
+  const [valTimeStart, setValTimeStart] = useState('');
+  const [valTimeEnd, setValTimeEnd] = useState('');
+  const [interval, setInterval] = useState('');
+  const [capacity, setCapacity] = useState('');
+
+  // console.log(year);
+
+  const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
+  React.useEffect(() => {
+    setMoon(
+      converter(
+        new Date()
+          .toLocaleDateString('fa-IR')
+          .slice(
+            new Date().toLocaleDateString('fa-IR').indexOf('/') + 1,
+            new Date().toLocaleDateString('fa-IR').lastIndexOf('/')
+          )
+      ) * 1
+    );
+    setYear(
+      converter(new Date().toLocaleDateString('fa-IR').slice(0, new Date().toLocaleDateString('fa-IR').indexOf('/'))) *
+        1
+    );
+  }, []);
+
+  // import sweet alert-2
+  const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
     showConfirmButton: false,
@@ -62,52 +84,53 @@ export default function ModalSelectTime({setIsLoading}) {
     setOpen(false);
   };
 
-  const saveTimeHandler = ()=>{
+  const saveTimeHandler = () => {
     Swal.fire({
-        title: 'ثبت زمان پذیرش',
-        text: 'آیا از ثبت زمان پذیرش مطمئن هستید؟',
-        showCancelButton: true,
-        confirmButtonColor: 'green',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'انصراف',
-        confirmButtonText: 'تایید ',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          setIsLoading(true);
-          const data = {
-            doctorId: valDoctor,
-            year: 1403,
-            moon: 4,
-            dayOfWeek: day,
-            fromTime: valTimeStart.format(),
-            toTime: valTimeEnd.format(),
-            interval,
-            capacity,
-            statusId: 1 
-          };
-          axios
-            .post(mainDomain + '/api/ReservationTime/AddRange', data, {
-              headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
-              },
-            })
-            .then((res) => {
-              Toast.fire({
-                icon: 'success',
-                text: 'زمان پذیرش با موفقیت ثبت شد',
-              });
-              setIsLoading(false);
-            })
-            .catch((err) => {
-              setIsLoading(false);
-              Toast.fire({
-                icon: 'error',
-                text: err.response ? err.response.data : 'خطای شبکه',
-              });
+      title: 'ثبت زمان پذیرش',
+      text: 'آیا از ثبت زمان پذیرش مطمئن هستید؟',
+      showCancelButton: true,
+      confirmButtonColor: 'green',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'انصراف',
+      confirmButtonText: 'تایید ',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const data = {
+          doctorId: valDoctor,
+          year,
+          moon,
+          dayOfWeek: day,
+          fromTime: valTimeStart.format() + ':00',
+          toTime: valTimeEnd.format() + ':00',
+          interval,
+          capacity,
+          statusId: 1,
+        };
+        axios
+          .post(mainDomain + '/api/ReservationTime/AddRange', data, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+          })
+          .then((res) => {
+            handleClose();
+            Toast.fire({
+              icon: 'success',
+              text: 'زمان پذیرش با موفقیت ثبت شد',
             });
-        }
-      });
-  }
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            Toast.fire({
+              icon: 'error',
+              text: err.response ? err.response.data : 'خطای شبکه',
+            });
+          });
+      }
+    });
+  };
   return (
     <React.Fragment>
       <button
@@ -137,44 +160,6 @@ export default function ModalSelectTime({setIsLoading}) {
           <GridCloseIcon />
         </IconButton>
         <DialogContent>
-          {/* <Box
-            noValidate
-            component="form"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              m: 'auto',
-              width: 'fit-content',
-            }}
-          >
-            <FormControl sx={{ mt: 2, minWidth: 120 }}>
-              <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-              <Select
-                autoFocus
-                value={maxWidth}
-                onChange={handleMaxWidthChange}
-                label="maxWidth"
-                inputProps={{
-                  name: 'max-width',
-                  id: 'max-width',
-                }}
-              >
-                <MenuItem value={false}>false</MenuItem>
-                <MenuItem value="xs">xs</MenuItem>
-                <MenuItem value="sm">sm</MenuItem>
-                <MenuItem value="md">md</MenuItem>
-                <MenuItem value="lg">lg</MenuItem>
-                <MenuItem value="xl">xl</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControlLabel
-              sx={{ mt: 1 }}
-              control={
-                <Switch checked={fullWidth} onChange={handleFullWidthChange} />
-              }
-              label="Full width"
-            />
-          </Box> */}
           <div className="flex">
             {/* select doctors */}
             <div className="flex items-center w-48">
@@ -209,10 +194,10 @@ export default function ModalSelectTime({setIsLoading}) {
                 locale={persian_fa}
                 calendarPosition="bottom-right"
                 placeholder="سال"
-                value={year}
-                onChange={(e , {validatedValue}) => {
-                    setYear(e)
-                    // console.log(validatedValue[0]*1);
+                value={valYear}
+                onChange={(e) => {
+                  setValYear(e);
+                  setYear(converter(e.format()) * 1);
                 }}
               />
             </div>
@@ -228,7 +213,10 @@ export default function ModalSelectTime({setIsLoading}) {
                 placeholder="ماه"
                 hideYear
                 value={mount}
-                onChange={(e) => setMount(e)}
+                onChange={(e) => {
+                  setMount(e);
+                  setMoon(converter(e.format('MM')) * 1);
+                }}
               />
             </div>
             {/* select day */}
@@ -282,8 +270,8 @@ export default function ModalSelectTime({setIsLoading}) {
                 children
                 inputClass="border w-full rounded-lg h-14 px-3"
                 disableDayPicker
-                format="HH:mm:ss"
-                plugins={[<TimePicker key={valTimeStart} />]}
+                format="HH:mm"
+                plugins={[<TimePicker hideSeconds key={valTimeStart} />]}
                 calendarPosition="bottom-right"
                 onChange={(event) => {
                   setValTimeEnd(event);
@@ -293,9 +281,9 @@ export default function ModalSelectTime({setIsLoading}) {
               />
             </div>
           </div>
-          <div className='flex'>
-             {/* select interval */}
-             <div className="w-60 mt-5 flex items-center" dir="rtl">
+          <div className="flex">
+            {/* select interval */}
+            <div className="w-60 mt-5 flex items-center" dir="rtl">
               <p className="px-2 whitespace-nowrap">فاصله:</p>
               <TextField
                 InputProps={{

@@ -7,16 +7,13 @@ import DatePicker from 'react-multi-date-picker';
 import { mainDomain } from '../../utils/mainDomain';
 import ModalSelectTime from './ModalSelectTime';
 
-
-
-export default function SelectTimeReserve({setIsLoading}) {
+export default function SelectTimeReserve({ setIsLoading, valDoctor, setValDoctor, setYear, setMount }) {
   const [doctors, setDoctors] = useState([]);
-  const [valDoctor, setValDoctor] = useState([]);
-  const [year, setYear] = useState(new Date());
-  const [mount, setMount] = useState(new Date());
+  const [valMoon, setValMoon] = useState(new Date());
+  const [valYear, setValYear] = useState(new Date());
+
   const [day, setDay] = useState('همه');
- 
-  
+  const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
 
   // get list doctors
   useEffect(() => {
@@ -70,8 +67,11 @@ export default function SelectTimeReserve({setIsLoading}) {
               locale={persian_fa}
               calendarPosition="bottom-right"
               placeholder="سال"
-              value={year}
-              onChange={(e) => setYear(e)}
+              value={valYear}
+              onChange={(e) => {
+                setValYear(e)
+                setYear(converter(e.format('MM')) * 1)
+              }}
             />
           </div>
           {/* select mount */}
@@ -85,8 +85,11 @@ export default function SelectTimeReserve({setIsLoading}) {
               calendarPosition="bottom-right"
               placeholder="ماه"
               hideYear
-              value={mount}
-              onChange={(e) => setMount(e)}
+              value={valMoon}
+              onChange={(e) => {
+                setValMoon(e)
+                setMount(converter(e.format('MM')) * 1);
+              }}
             />
           </div>
           {/* select day */}
@@ -165,7 +168,7 @@ export default function SelectTimeReserve({setIsLoading}) {
             </Box>
           </Modal>
         </div> */}
-        <ModalSelectTime setIsLoading={setIsLoading}/>
+        <ModalSelectTime setIsLoading={setIsLoading} />
       </div>
     </>
   );
