@@ -61,7 +61,7 @@ export default function TableReqPatient({ setPageState, setAccountUpdate , searc
                 <TableCell align="center">{pat.abroad ? pat.userEmail : pat.userPhoneNumber}</TableCell>
                 <TableCell align="center">
                   <div className="flex justify-center">
-                    <BsThreeDotsVertical className="cursor-pointer" />
+                    < className="cursor-pointer" />
                   </div>
                 </TableCell>
                 <TableCell align="center">

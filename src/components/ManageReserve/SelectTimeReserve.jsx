@@ -6,29 +6,25 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import DatePicker from 'react-multi-date-picker';
 import { mainDomain } from '../../utils/mainDomain';
 import ModalSelectTime from './ModalSelectTime';
+import ModalSelectOneTime from './ModalSelectOneTime';
 
-export default function SelectTimeReserve({ setIsLoading, valDoctor, setValDoctor, setYear, setMount }) {
-  const [doctors, setDoctors] = useState([]);
+export default function SelectTimeReserve({
+  setIsLoading,
+  valDoctor,
+  setValDoctor,
+  setYear,
+  setMount,
+  setNumberMoon,
+  setFlag,
+  doctors
+}) {
   const [valMoon, setValMoon] = useState(new Date());
   const [valYear, setValYear] = useState(new Date());
 
   const [day, setDay] = useState('همه');
   const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
 
-  // get list doctors
-  useEffect(() => {
-    axios
-      .get(mainDomain + '/api/Doctor/GetList', {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
-        },
-      })
-      .then((res) => {
-        setDoctors(res.data);
-        setValDoctor(res.data[0].doctorId);
-      })
-      .catch((err) => {});
-  }, []);
+  
 
   return (
     <>
@@ -69,8 +65,8 @@ export default function SelectTimeReserve({ setIsLoading, valDoctor, setValDocto
               placeholder="سال"
               value={valYear}
               onChange={(e) => {
-                setValYear(e)
-                setYear(converter(e.format('MM')) * 1)
+                setValYear(e);
+                setYear(converter(e.format('YYYY')) * 1);
               }}
             />
           </div>
@@ -87,13 +83,14 @@ export default function SelectTimeReserve({ setIsLoading, valDoctor, setValDocto
               hideYear
               value={valMoon}
               onChange={(e) => {
-                setValMoon(e)
+                setValMoon(e);
                 setMount(converter(e.format('MM')) * 1);
+                setNumberMoon(converter(e.format('MM')) * 1);
               }}
             />
           </div>
           {/* select day */}
-          <div className="pr-2" dir="rtl">
+          {/* <div className="pr-2" dir="rtl">
             <FormControl color="primary">
               <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
                 روز
@@ -115,7 +112,7 @@ export default function SelectTimeReserve({ setIsLoading, valDoctor, setValDocto
                 ))}
               </Select>
             </FormControl>
-          </div>
+          </div> */}
         </div>
         {/* <div className="flex">
           <button
@@ -168,7 +165,14 @@ export default function SelectTimeReserve({ setIsLoading, valDoctor, setValDocto
             </Box>
           </Modal>
         </div> */}
-        <ModalSelectTime setIsLoading={setIsLoading} />
+        <div className='flex'>
+       <div>
+       <ModalSelectTime setIsLoading={setIsLoading} setFlag={setFlag} doctors={doctors} valDoctor={valDoctor} setValDoctor={setValDoctor}/>
+       </div>
+        <div className='px-2'>
+        <ModalSelectOneTime setIsLoading={setIsLoading} setFlag={setFlag} doctors={doctors} valDoctor={valDoctor} setValDoctor={setValDoctor}/>
+        </div>
+        </div>
       </div>
     </>
   );
