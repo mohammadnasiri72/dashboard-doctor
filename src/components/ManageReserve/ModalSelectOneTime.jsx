@@ -1,4 +1,14 @@
-import { FormControl, FormControlLabel, IconButton, InputAdornment, InputLabel, MenuItem, Select, Switch, TextField } from '@mui/material';
+import {
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+} from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -7,44 +17,22 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import axios from 'axios';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DatePicker from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
-import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { mainDomain } from '../../utils/mainDomain';
 
-export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , valDoctor , setValDoctor}) {
-
+export default function ModalSelectOneTime({ setIsLoading, setFlag, doctors, valDoctor, setValDoctor, date }) {
   const [open, setOpen] = useState(false);
-  
 
   const [valTimeStart, setValTimeStart] = useState('');
   const [valTimeEnd, setValTimeEnd] = useState('');
   const [capacity, setCapacity] = useState(1);
   const [valDate, setValDate] = useState(new Date().toLocaleDateString('fa-IR'));
   const [isActive, setIsActive] = useState(true);
-
-
-//   const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
-//   React.useEffect(() => {
-//     setMoon(
-//       converter(
-//         new Date()
-//           .toLocaleDateString('fa-IR')
-//           .slice(
-//             new Date().toLocaleDateString('fa-IR').indexOf('/') + 1,
-//             new Date().toLocaleDateString('fa-IR').lastIndexOf('/')
-//           )
-//       ) * 1
-//     );
-//     setYear(
-//       converter(new Date().toLocaleDateString('fa-IR').slice(0, new Date().toLocaleDateString('fa-IR').indexOf('/'))) *
-//         1
-//     );
-//   }, []);
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -56,7 +44,12 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
     customClass: 'toast-modal',
   });
 
-  
+  useEffect(() => {
+    if (date) {
+      setValDate(date);
+    }
+  }, [date]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -65,6 +58,7 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
     setOpen(false);
   };
 
+  // set one time
   const saveTimeHandler = () => {
     setIsLoading(true);
     const data = {
@@ -73,7 +67,7 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
       fromTime: valTimeStart.format() + ':00',
       toTime: valTimeEnd.format() + ':00',
       capacity,
-      statusId: isActive? 1 : 0,
+      statusId: isActive ? 1 : 0,
     };
     axios
       .post(mainDomain + '/api/ReservationTime/Add', data, {
@@ -83,7 +77,7 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
       })
       .then((res) => {
         handleClose();
-        setFlag((e)=>!e)
+        setFlag((e) => !e);
         Toast.fire({
           icon: 'success',
           text: 'زمان پذیرش با موفقیت ثبت شد',
@@ -98,13 +92,14 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
         });
       });
   };
+
   return (
     <React.Fragment>
       <button
         onClick={handleClickOpen}
         className="bg-green-500 px-5 py-2 rounded-md text-white hover:text-green-600 duration-300 font-semibold"
       >
-        افزودن تکی
+        {date ? 'افزودن نوبت در این تاریخ' : 'افزودن روزانه'}
       </button>
       <Dialog
         sx={{ '& .MuiDialog-paper': { minHeight: 455 } }}
@@ -162,20 +157,21 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
                 locale={persian_fa}
                 calendarPosition="bottom-right"
                 onChange={(event) => {
-                    setValDate(event.format());
+                  setValDate(event.format());
                 }}
                 value={valDate}
                 placeholder="تاریخ"
               />
             </div>
-            <div className='pr-5 mt-2'>
-                <FormControlLabel
-                  value={isActive}
-                  onChange={() => setIsActive(!isActive)}
-                  control={<Switch checked={isActive} />}
-                  label={isActive ? 'فعال' : 'غیر فعال'}
-                />
-              </div>
+            {/* select active */}
+            <div className="pr-5 mt-2">
+              <FormControlLabel
+                value={isActive}
+                onChange={() => setIsActive(!isActive)}
+                control={<Switch checked={isActive} />}
+                label={isActive ? 'فعال' : 'غیر فعال'}
+              />
+            </div>
           </div>
           <div className="flex">
             {/* select from time */}
@@ -214,7 +210,6 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
             </div>
           </div>
           <div className="flex">
-           
             {/* select capacity */}
             <div className="w-60 mt-5 flex items-center" dir="rtl">
               <p className="px-2 whitespace-nowrap">ظرفیت:</p>
@@ -233,14 +228,9 @@ export default function ModalSelectOneTime({ setIsLoading , setFlag , doctors , 
               />
             </div>
           </div>
-          {/* <div className='mt-6 text-start pr-10'>
-            <button className='px-6 py-4 text-white font-semibold bg-green-500 duration-300 hover:bg-green-600 rounded-md'>ثبت</button>
-          </div> */}
         </DialogContent>
         <DialogActions>
-          <Button
-           onClick={saveTimeHandler}
-           >ذخیره تغیرات</Button>
+          <Button onClick={saveTimeHandler}>ذخیره تغیرات</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

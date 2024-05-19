@@ -7,32 +7,54 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import axios from 'axios';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import DatePicker from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
-import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { mainDomain } from '../../utils/mainDomain';
 
-export default function ModalSelectTime({ setIsLoading , setFlag , doctors , valDoctor , setValDoctor}) {
-
+export default function ModalSelectTime({
+  setIsLoading,
+  setFlag,
+  doctors,
+  valDoctor,
+  setValDoctor,
+  valMoon,
+  valYearSelect,
+}) {
   const [open, setOpen] = useState(false);
   const [year, setYear] = useState('');
   const [moon, setMoon] = useState('');
   const [valYear, setValYear] = useState(new Date());
   const [mount, setMount] = useState(new Date());
-
   const [day, setDay] = React.useState('');
   const [valTimeStart, setValTimeStart] = useState('');
   const [valTimeEnd, setValTimeEnd] = useState('');
   const [interval, setInterval] = useState('');
   const [capacity, setCapacity] = useState(1);
 
+   // import sweet alert-2
+   const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: 'toast-modal',
+  });
 
   const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
-  React.useEffect(() => {
+
+  // set mounth & years
+  useEffect(() => {
+    setMount(valMoon);
+    setValYear(valYearSelect);
+  }, [valMoon, valYearSelect]);
+
+  
+  useEffect(() => {
     setMoon(
       converter(
         new Date()
@@ -49,17 +71,7 @@ export default function ModalSelectTime({ setIsLoading , setFlag , doctors , val
     );
   }, []);
 
-  // import sweet alert-2
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-start',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: 'toast-modal',
-  });
-
-  
+ 
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,6 +81,7 @@ export default function ModalSelectTime({ setIsLoading , setFlag , doctors , val
     setOpen(false);
   };
 
+  // select times
   const saveTimeHandler = () => {
     Swal.fire({
       title: 'ثبت زمان پذیرش',
@@ -100,7 +113,7 @@ export default function ModalSelectTime({ setIsLoading , setFlag , doctors , val
           })
           .then((res) => {
             handleClose();
-            setFlag((e)=>!e)
+            setFlag((e) => !e);
             Toast.fire({
               icon: 'success',
               text: 'زمان پذیرش با موفقیت ثبت شد',
@@ -117,13 +130,15 @@ export default function ModalSelectTime({ setIsLoading , setFlag , doctors , val
       }
     });
   };
+
+
   return (
     <React.Fragment>
       <button
         onClick={handleClickOpen}
         className="bg-green-500 px-5 py-2 rounded-md text-white hover:text-green-600 duration-300 font-semibold"
       >
-        افزودن گروهی
+        افزودن ماهانه
       </button>
       <Dialog
         sx={{ '& .MuiDialog-paper': { minHeight: 455 } }}
@@ -303,9 +318,6 @@ export default function ModalSelectTime({ setIsLoading , setFlag , doctors , val
               />
             </div>
           </div>
-          {/* <div className='mt-6 text-start pr-10'>
-            <button className='px-6 py-4 text-white font-semibold bg-green-500 duration-300 hover:bg-green-600 rounded-md'>ثبت</button>
-          </div> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={saveTimeHandler}>ذخیره تغیرات</Button>

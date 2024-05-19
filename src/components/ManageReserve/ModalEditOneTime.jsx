@@ -1,14 +1,4 @@
-import {
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  Switch,
-  TextField,
-} from '@mui/material';
+import { FormControlLabel, IconButton, InputAdornment, Switch, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -17,15 +7,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import axios from 'axios';
 import * as React from 'react';
-import persian from 'react-date-object/calendars/persian';
-import persian_fa from 'react-date-object/locales/persian_fa';
+import { useEffect, useState } from 'react';
+import { MdEdit } from 'react-icons/md';
 import DatePicker from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
-import { mainDomain } from '../../utils/mainDomain';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
-import { MdEdit } from 'react-icons/md';
-import { useEffect } from 'react';
+import { mainDomain } from '../../utils/mainDomain';
 
 export default function ModalEditOneTime({ setIsLoading, setFlag, e }) {
   const [open, setOpen] = useState(false);
@@ -36,6 +23,17 @@ export default function ModalEditOneTime({ setIsLoading, setFlag, e }) {
   const [isEditTimeStart, setIsEditTimeStart] = useState(false);
   const [isEditTimeEnd, setIsEditTimeEnd] = useState(false);
 
+  // import sweet alert-2
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-start',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: 'toast-modal',
+  });
+
+  // set time
   useEffect(() => {
     const timeStart = new Date();
     timeStart.setHours(e.fromTime.slice(0, 2));
@@ -50,36 +48,6 @@ export default function ModalEditOneTime({ setIsLoading, setFlag, e }) {
     setValTimeEnd(new Date(timeEnd.getTime()));
   }, [e]);
 
-  console.log(isEditTimeStart);
-
-  //   const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
-  //   React.useEffect(() => {
-  //     setMoon(
-  //       converter(
-  //         new Date()
-  //           .toLocaleDateString('fa-IR')
-  //           .slice(
-  //             new Date().toLocaleDateString('fa-IR').indexOf('/') + 1,
-  //             new Date().toLocaleDateString('fa-IR').lastIndexOf('/')
-  //           )
-  //       ) * 1
-  //     );
-  //     setYear(
-  //       converter(new Date().toLocaleDateString('fa-IR').slice(0, new Date().toLocaleDateString('fa-IR').indexOf('/'))) *
-  //         1
-  //     );
-  //   }, []);
-
-  // import sweet alert-2
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-start',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    customClass: 'toast-modal',
-  });
-
   //   open modal
   const handleClickOpen = () => {
     setOpen(true);
@@ -90,9 +58,7 @@ export default function ModalEditOneTime({ setIsLoading, setFlag, e }) {
     setOpen(false);
   };
 
-  //   console.log(new Date().getHours());
-  // console.log(new Date().getMinutes());
-  // console.log(new Date().getSeconds());
+  // edit time reserve
   const saveTimeHandler = () => {
     setIsLoading(true);
     const data = {
@@ -132,10 +98,10 @@ export default function ModalEditOneTime({ setIsLoading, setFlag, e }) {
         });
       });
   };
+
   return (
     <React.Fragment>
       <MdEdit onClick={handleClickOpen} className="cursor-pointer text-2xl" />
-
       <Dialog
         sx={{ '& .MuiDialog-paper': { minHeight: 455 }, zIndex: '999999999999999' }}
         fullWidth={true}
@@ -166,7 +132,7 @@ export default function ModalEditOneTime({ setIsLoading, setFlag, e }) {
                 inputClass="border w-full rounded-lg h-14 px-3"
                 disableDayPicker
                 format="HH:mm"
-                plugins={[<TimePicker hideSeconds />]}
+                plugins={[<TimePicker key={e.reservationTimeId} hideSeconds />]}
                 calendarPosition="bottom-right"
                 onChange={(event) => {
                   setValTimeStart(event);
@@ -221,10 +187,6 @@ export default function ModalEditOneTime({ setIsLoading, setFlag, e }) {
               />
             </div>
           </div>
-
-          {/* <div className='mt-6 text-start pr-10'>
-            <button className='px-6 py-4 text-white font-semibold bg-green-500 duration-300 hover:bg-green-600 rounded-md'>ثبت</button>
-          </div> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={saveTimeHandler}>ذخیره تغیرات</Button>

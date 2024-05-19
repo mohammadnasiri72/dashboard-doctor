@@ -2115,6 +2115,11 @@ external-editor@^2.0.4:
     iconv-lite "^0.4.17"
     tmp "^0.0.33"
 
+farvardin@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/farvardin/-/farvardin-1.0.3.tgz"
+  integrity sha512-lEFm4p2TaVa5MvFA6LZIB+XhXJe2u9+pJlt0bVVbFC8Q9otvMGP6U3o/Ntlq8zGE4yhNnbKLO+ctBasSR0R5cA==
+
 fast-deep-equal@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz"

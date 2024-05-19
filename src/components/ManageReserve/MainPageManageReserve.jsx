@@ -14,6 +14,8 @@ export default function MainPageManageReserve() {
   const [flag, setFlag] = useState(flag);
   const [doctors, setDoctors] = useState([]);
 
+  const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
+
   // get list doctors
   useEffect(() => {
     axios
@@ -29,7 +31,7 @@ export default function MainPageManageReserve() {
       .catch((err) => {});
   }, []);
 
-  const converter = (text) => text.replace(/[٠-٩۰-۹]/g, (a) => a.charCodeAt(0) & 15);
+  // set mounth & set years
   useEffect(() => {
     setNumberMoon(
       converter(
@@ -74,10 +76,12 @@ export default function MainPageManageReserve() {
         moon={mount}
         year={year}
         valDoctor={valDoctor}
+        setValDoctor={setValDoctor}
         numberMoon={numberMoon}
         setIsLoading={setIsLoading}
         flag={flag}
         setFlag={setFlag}
+        doctors={doctors}
       />
       {isLoading && <SimpleBackdrop />}
     </>
