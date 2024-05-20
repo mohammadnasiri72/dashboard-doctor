@@ -60,6 +60,7 @@ const sidebarConfig = [
       { title: 'مدیریت پزشک', path: '/dashboard/managDoctor', icon: <CgProfile /> },
       { title: 'مدیریت رزرو', path: '/dashboard/managReserve', icon: <CgProfile /> },
       { title: 'مدیریت اطلاعات پایه', path: '/dashboard/managInformation', icon: <CgProfile /> },
+      { title: 'مدیریت بیمه', path: '/dashboard/managInsuranceCompany', icon: <CgProfile /> },
     ]
   }
 ];
