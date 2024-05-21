@@ -26,9 +26,9 @@ export default function ModalEditType({ item, setIsLoading, setFlag }) {
 
   useEffect(() => {
     setisActive(item.isActive);
-    setDescType(item.description)
-    setTitleType(item.name)
-    setPriority(item.priority)
+    setDescType(item.description);
+    setTitleType(item.name);
+    setPriority(item.priority);
   }, [item]);
 
   // import sweet alert-2
@@ -56,7 +56,7 @@ export default function ModalEditType({ item, setIsLoading, setFlag }) {
     if (titleType.length === 0) {
       Toast.fire({
         icon: 'error',
-        text: 'لطفا عنوان تایپ را وارد کنید',
+        text: 'لطفا عنوان آیتم را وارد کنید',
       });
     } else {
       setIsLoading(true);
@@ -65,7 +65,7 @@ export default function ModalEditType({ item, setIsLoading, setFlag }) {
         name: titleType,
         description: descType,
         isActive,
-        priority: priority
+        priority: priority,
       };
       axios
         .post(mainDomain + '/api/BasicInfo/Item/Update', data, {
@@ -96,13 +96,13 @@ export default function ModalEditType({ item, setIsLoading, setFlag }) {
     <>
       <React.Fragment>
         <Tooltip title="ویرایش">
-          <IconButton>
-            <Iconify onClick={handleClickOpen} className="cursor-pointer text-2xl" icon={'eva:edit-fill'} />
+          <IconButton onClick={handleClickOpen}>
+            <Iconify className="cursor-pointer text-2xl" icon={'eva:edit-fill'} />
           </IconButton>
         </Tooltip>
 
         <Dialog sx={{ zIndex: '99' }} fullWidth={true} maxWidth="sm" open={open} onClose={handleClose}>
-          <DialogTitle>ویرایش تایپ</DialogTitle>
+          <DialogTitle>ویرایش آیتم</DialogTitle>
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -117,18 +117,20 @@ export default function ModalEditType({ item, setIsLoading, setFlag }) {
           </IconButton>
           <DialogContent>
             <div className="flex flex-col items-center justify-start">
+              {/* name item */}
               <div>
                 <TextField
                   onChange={(e) => setTitleType(e.target.value)}
                   className=" text-end duration-300 w-96"
                   id="outlined-multiline-flexible"
-                  label="عنوان تایپ"
+                  label="عنوان آیتم"
                   multiline
                   dir="rtl"
                   value={titleType}
                   maxRows={4}
                 />
               </div>
+              {/* description item */}
               <div className="mt-3">
                 <TextField
                   onChange={(e) => setDescType(e.target.value)}
@@ -141,26 +143,28 @@ export default function ModalEditType({ item, setIsLoading, setFlag }) {
                   maxRows={4}
                 />
               </div>
-              <div className='flex'>
-              <div className="mt-3">
-                <TextField
-                  onChange={(e) => setPriority(e.target.value)}
-                  className=" text-end w-20"
-                  id="outlined-multiline-flexible"
-                  label="اولویت"
-                  multiline
-                  dir="rtl"
-                  value={priority}
-                />
-              </div>
-              <div className="mt-5 pr-2">
-                <FormControlLabel
-                  value={isActive}
-                  onChange={() => setisActive(!isActive)}
-                  control={<Switch checked={isActive} />}
-                  label={isActive ? 'فعال' : 'غیر فعال'}
-                />
-              </div>
+              <div className="flex">
+                {/* priority item */}
+                <div className="mt-3">
+                  <TextField
+                    onChange={(e) => setPriority(e.target.value)}
+                    className=" text-end w-20"
+                    id="outlined-multiline-flexible"
+                    label="اولویت"
+                    multiline
+                    dir="rtl"
+                    value={priority}
+                  />
+                </div>
+                {/* active item */}
+                <div className="mt-5 pr-2">
+                  <FormControlLabel
+                    value={isActive}
+                    onChange={() => setisActive(!isActive)}
+                    control={<Switch checked={isActive} />}
+                    label={isActive ? 'فعال' : 'غیر فعال'}
+                  />
+                </div>
               </div>
             </div>
           </DialogContent>

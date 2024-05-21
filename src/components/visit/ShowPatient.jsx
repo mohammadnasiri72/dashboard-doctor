@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
-import { green } from '@mui/material/colors';
 import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import * as React from 'react';
@@ -40,19 +39,7 @@ function a11yProps(index) {
   };
 }
 
-const fabStyle = {
-  position: 'absolute',
-  bottom: 16,
-  right: 16,
-};
 
-const fabGreenStyle = {
-  color: 'common.white',
-  bgcolor: green[500],
-  '&:hover': {
-    bgcolor: green[600],
-  },
-};
 
 export default function ShowPatient({ patList, setRefreshPatList, setPatSelected, patSelected, pageStateVisit }) {
   const theme = useTheme();

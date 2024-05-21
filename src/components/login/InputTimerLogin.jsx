@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
@@ -51,19 +52,54 @@ export default function InputTimerLogin({ mobileNumber}) {
                   <button
                   type='button'
                     disabled
-                    className="bg-blue-500 text-[#fff8] px-5 py-2 rounded-md cursor-not-allowed w-56"
+                    className="bg-teal-500 text-[#fff8] px-5 py-2 rounded-md cursor-not-allowed w-56"
                   >
                     تا ارسال مجدد: {timeResendCode} ثانیه
                   </button>
+                //    <Button
+                //    disabled
+                //    size="medium"
+                   
+                //    sx={{
+                //      py: 1,
+                //      fontSize: 16,
+                //      cursor: 'not-allowed',
+                //      backgroundColor: 'rgb(20 184 166)',
+                //      '&:hover': {
+                //        backgroundColor: 'rgb(13 148 136)',
+                //      },
+                //    }}
+                //    onClick={resendCodeHandler}
+                //    className="rounded-md  text-white mt-5 duration-300 "
+                //    variant="contained"
+                //  >
+                //   تا ارسال مجدد: {timeResendCode} ثانیه
+                //  </Button>
                 )}
                 {showBtnSendCode && (
-                  <button
-                  type='button'
-                    onClick={resendCodeHandler}
-                    className="bg-blue-500 text-white px-5 py-2 rounded-md"
-                  >
-                    ارسال مجدد کد
-                  </button>
+                   <Button
+                   size="medium"
+                   sx={{
+                     py: 1,
+                     fontSize: 16,
+                     backgroundColor: 'rgb(20 184 166)',
+                     '&:hover': {
+                       backgroundColor: 'rgb(13 148 136)',
+                     },
+                   }}
+                   onClick={resendCodeHandler}
+                   className="rounded-md  text-white mt-5 duration-300"
+                   variant="contained"
+                 >
+                   ارسال مجدد کد
+                 </Button>
+                  // <button
+                  // type='button'
+                  //   onClick={resendCodeHandler}
+                  //   className="bg-blue-500 text-white px-5 py-2 rounded-md"
+                  // >
+                  //   
+                  // </button>
                 )}
               </div>
     </>

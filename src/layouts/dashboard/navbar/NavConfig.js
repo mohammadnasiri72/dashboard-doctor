@@ -23,6 +23,7 @@ const sidebarConfig = [
       { title: 'نوبت های من', path: '/dashboard/viewReservation', icon: <FaRegCalendarAlt /> },
       { title: 'لیست بیماری های من', path: '/dashboard/sicknessList', icon: <CiViewList /> },
       { title: 'مشاوره آنلاین', path: '/dashboard/counseling', icon: <MdSupportAgent /> },
+      { title: 'سابقه پذیرش', path: '/dashboard/historyVisit', icon: <MdSupportAgent /> },
     ],
   },
 

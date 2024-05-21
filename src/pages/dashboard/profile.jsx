@@ -7,6 +7,7 @@ import useSettings from '../../hooks/useSettings';
 import Page from '../../components/Page';
 import { useContext } from 'react';
 import { Account } from '../_app';
+import { useRouter } from 'next/router';
 
 // ----------------------------------------------------------------------
 
@@ -19,33 +20,68 @@ PageOne.getLayout = function getLayout(page) {
 export default function PageOne() {
   const { themeStretch } = useSettings();
   const account = useContext(Account);
+  const route = useRouter();
+  
+  const goToReserve = () => {
+    route.push('/dashboard/reserve');
+  };
+  const goToCounseling = () => {
+    route.push('/dashboard/counseling');
+  };
+  const goTosicknessList = () => {
+    route.push('/dashboard/sicknessList');
+  };
+  const goToUpdateProfile = () => {
+    route.push('/dashboard/updateProfile');
+  };
+  
+  
   return (
     <Page title="Page One">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Typography variant="h3" component="h1" paragraph>
-          <span> سلام </span>
-          {account.firstName}
-          <span> عزیز </span>
+        <Typography variant="h4" component="h1" paragraph>
+          <div className="text-start">
+            <span> سلام </span>
+            {account.firstName}
+            <span> عزیز </span>
+          </div>
         </Typography>
-        <Typography gutterBottom>
-          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون
-          بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع
-          با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و
-          متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ
-          پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط
-          سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود
-          طراحی اساسا مورد استفاده قرار گیرد.
-        </Typography>
-        <Typography gutterBottom>
-          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون
-          بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع
-          با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و
-          متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ
-          پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط
-          سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود
-          طراحی اساسا مورد استفاده قرار گیرد.
-        </Typography>
-        
+        <div className="flex flex-wrap justify-center">
+          <div className="px-10 md:w-1/2 w-full">
+            <div onClick={goToReserve} className="shadow-md hover:shadow-lg duration-300 border-[#0002] border rounded-2xl cursor-pointer">
+              <div className="flex justify-center">
+                <img className="w-40" src={'/images/nobat.png'} alt="" />
+              </div>
+              <span className="text-xl font-semibold">نوبت دهی اینترنتی</span>
+            </div>
+          </div>
+          <div className="px-10 md:w-1/2 w-full flex md:mt-0 mt-5">
+            <div onClick={goToCounseling} className="shadow-md hover:shadow-lg duration-300 border-[#0002] border rounded-2xl cursor-pointer w-full relative">
+              <div className="flex justify-center">
+                <img className="w-40" src={'/images/moshavere.png'} alt="" />
+              </div>
+              <span className="text-xl font-semibold ">مشاوره آنلاین</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-wrap justify-center mt-5">
+          <div className="px-10 md:w-1/2 w-full">
+            <div onClick={goTosicknessList} className="shadow-md hover:shadow-lg duration-300 border-[#0002] border rounded-2xl cursor-pointer">
+              <div className="flex justify-center">
+                <img className="w-40" src={'/images/nobat.png'} alt="" />
+              </div>
+              <span className="text-xl font-semibold">سابقه بیماری‌ها</span>
+            </div>
+          </div>
+          <div className="px-10 md:w-1/2 w-full flex md:mt-0 mt-5">
+            <div onClick={goToUpdateProfile} className="shadow-md hover:shadow-lg duration-300 border-[#0002] border rounded-2xl cursor-pointer w-full relative">
+              <div className="flex justify-center">
+                <img className="w-40" src={'/images/moshavere.png'} alt="" />
+              </div>
+              <span className="text-xl font-semibold">ویرایش پروفایل</span>
+            </div>
+          </div>
+        </div>
       </Container>
     </Page>
   );

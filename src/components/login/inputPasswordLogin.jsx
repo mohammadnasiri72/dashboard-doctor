@@ -6,7 +6,7 @@ export default function InputPasswordLogin({ password, setPassword }) {
 
   return (
     <>
-      <div className="mt-4 px-10">
+      <div className="mt-4 px-5 mx-auto lg:w-2/3 w-full">
         <TextField
           className="w-full"
           onChange={(event) => {
@@ -16,7 +16,8 @@ export default function InputPasswordLogin({ password, setPassword }) {
           label="رمز عبور"
           type="password"
           value={password}
-          InputProps={{className:'textfield-style'}}
+          autoComplete='new-password'
+          // InputProps={{className:'textfield-style'}}
         />
       </div>
     </>

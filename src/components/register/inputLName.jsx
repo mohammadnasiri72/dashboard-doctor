@@ -12,7 +12,7 @@ export default function InputLastName({lastName , setLastName}) {
   
   return (
     <>
-      <div className="px-10 mx-auto mt-4">
+      <div className="px-5 mx-auto mt-4 lg:w-2/3 w-full">
         
             <div className="mt-2 text-start" dir="rtl">
               <TextField
@@ -24,7 +24,7 @@ export default function InputLastName({lastName , setLastName}) {
                 dir="rtl"
                 maxRows={4}
                 color={colorLName}
-                InputProps={{className:'textfield-style'}}
+                // InputProps={{className:'textfield-style'}}
               />
             </div>
           

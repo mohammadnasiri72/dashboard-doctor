@@ -12,7 +12,7 @@ export default function InputName({ fristName, setFristName }) {
 
   return (
     <>
-      <div className="px-10 mx-auto mt-4">
+      <div className="px-5 mx-auto mt-4 lg:w-2/3 w-full">
         <TextField
           onChange={(e) => setFristName(e.target.value)}
           className="w-full"
@@ -21,7 +21,7 @@ export default function InputName({ fristName, setFristName }) {
           multiline
           maxRows={4}
           color={colorName}
-          InputProps={{ className: 'textfield-style' }}
+          // InputProps={{ className: 'textfield-style' }}
         />
       </div>
     </>

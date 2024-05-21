@@ -15,7 +15,7 @@ export default function InputNationalId({ nationalId, setNationalId }) {
 
   return (
     <>
-      <div className="px-10 mx-auto mt-4">
+      <div className="px-5 lg:w-2/3 w-full mx-auto mt-4">
         <div className="mt-2" dir={themeDirection}>
           <TextField
             className="w-full"
@@ -26,7 +26,7 @@ export default function InputNationalId({ nationalId, setNationalId }) {
             value={nationalId}
             color={colorNationId}
             maxRows={4}
-            InputProps={{ className: 'textfield-style' }}
+            // InputProps={{ className: 'textfield-style' }}
           />
         </div>
       </div>

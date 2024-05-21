@@ -22,19 +22,19 @@ export default function InputMobilEmail({ abroad, email, setEmail, mobile, setMo
   
   return (
     <>
-      <div className="px-10 mx-auto mt-6">
+      <div className="px-5 lg:w-2/3 w-full mx-auto mt-4">
       
         <div className="mt-2">
           <TextField
             onChange={(e) => (abroad === false ? `${setMobile(e.target.value)}` : `${setEmail(e.target.value)}`)}
             value={abroad ? email : mobile}
             className="w-full"
-            id="outlined-multiline-flexible"
+            // id="outlined-multiline-flexible"
             label={abroad ? 'ایمیل' : 'شماره موبایل'}
             multiline
             color={colorEmailOrMobile}
             maxRows={4}
-            InputProps={{className:'textfield-style'}}
+            // InputProps={{className:'textfield-style'}}
           />
         </div>
           

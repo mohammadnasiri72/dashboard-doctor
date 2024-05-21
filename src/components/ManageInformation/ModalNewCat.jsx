@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import Iconify from '../Iconify';
 import {
   Button,
   Dialog,
@@ -11,36 +9,20 @@ import {
   MenuItem,
   Switch,
   TextField,
-  Tooltip,
 } from '@mui/material';
 import { GridCloseIcon } from '@mui/x-data-grid';
-import Swal from 'sweetalert2';
 import axios from 'axios';
+import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { mainDomain } from '../../utils/mainDomain';
+import Iconify from '../Iconify';
 
-export default function ModalNewCat({
-  setIsLoading,
-  setFlag2,
-  handleCloseMenu,
-  valTypeList,
-}) {
+export default function ModalNewCat({ setIsLoading, setFlag2, handleCloseMenu, valTypeList }) {
   const [open, setOpen] = useState(false);
   const [titleCat, setTitleCat] = useState('');
   const [priority, setPriority] = useState(0);
   const [isActive, setisActive] = useState(true);
   const [descCat, setDescCat] = useState('');
-
-//   useEffect(() => {
-//     if (typeCategoryList && valTypeCategoryList) {
-//       const cat = typeCategoryList.find((e) => e.categoryId === valTypeCategoryList);
-//       if (cat) {
-//         setPriority(cat.priority);
-//         setisActive(cat.isActive);
-//         setDescCat(cat.description);
-//         setTitleCat(cat.title);
-//       }
-//     }
-//   }, [valTypeCategoryList, typeCategoryList]);
 
   // import sweet alert-2
   const Toast = Swal.mixin({
@@ -111,7 +93,6 @@ export default function ModalNewCat({
         <MenuItem
           onClick={() => {
             handleClickOpen();
-            // handleCloseMenu()
           }}
           className="flex items-center "
         >

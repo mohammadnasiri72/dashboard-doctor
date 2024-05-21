@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IoMdArrowRoundForward } from 'react-icons/io';
 import Swal from 'sweetalert2';
 import InputFillCode from './fillCode';
@@ -10,6 +10,8 @@ import SelectGender from './selectGender';
 import InputPassword from './inputPassword';
 import { useRouter } from 'next/router';
 import { mainDomain } from '../../utils/mainDomain';
+import { Button, IconButton, Tooltip } from '@mui/material';
+import SelectAge from './SelectAge';
 
 export default function SecoundRegisterPage({
   registerModel,
@@ -25,6 +27,16 @@ export default function SecoundRegisterPage({
   const [gender, setGender] = useState('m');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
+  const [dateOfBirthFaPatient, setDateOfBirthFaPatient] = useState('');
+
+  const btnSubmit = useRef(null);
+
+  document.body.addEventListener('keypress', function (ev) {
+    const direction = ev.keyCode;
+    if (direction === 13) {
+      btnSubmit.current.click();
+    }
+  });
 
   const route = useRouter();
   // const paternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
@@ -42,11 +54,13 @@ export default function SecoundRegisterPage({
     registerModel.gender = gender;
     registerModel.password = password;
     registerModel.code = code;
+    registerModel.dateOfBirthFa = dateOfBirthFaPatient;
     if (
       firstName.length > 2 &&
       lastName.length > 2 &&
       gender.length !== 0 &&
       code.length === 6 &&
+      dateOfBirthFaPatient.length !== 0 &&
       (registerModel.abroad === false || password.length > 6)
     ) {
       setIsLoading(true);
@@ -73,8 +87,7 @@ export default function SecoundRegisterPage({
           //   path:"/",
           //   maxAge:60*60*24
           // }))
-          
-           else {
+          else {
             Toast.fire({
               icon: 'success',
               text: 'ثبت نام بیمار با موفقیت انجام شد',
@@ -110,6 +123,11 @@ export default function SecoundRegisterPage({
         icon: 'error',
         text: 'لطفا جنسیت خود را به درستی وارد کنید(جنسیت نمیتواند خالی باشد)',
       });
+    } else if (dateOfBirthFaPatient.length === 0) {
+      Toast.fire({
+        icon: 'error',
+        text: 'لطفا تاریخ تولد را به وارد کنید',
+      });
     } else if (registerModel.abroad === true && password.length <= 6) {
       Toast.fire({
         icon: 'error',
@@ -125,10 +143,13 @@ export default function SecoundRegisterPage({
 
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen bg-login bg-cover bg-no-repeat bg-[#0008] bg-blend-multiply">
-        <div className="lg:w-1/3 sm:w-1/2 w-full bg-[#000d] p-3 shadow-lg rounded-lg min-h-[50vh]">
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="lg:w-1/2 w-full p-3 shadow-lg rounded-lg min-h-screen">
+          <div className="flex justify-center">
+            <img src={'/favicon/favicon.ico'} alt="" />
+          </div>
           <div className="text-start px-5">
-            <button
+            {/* <button
               type="button"
               onClick={() => setIsRegister(false)}
               className="bg-blue-500 px-5 py-2 text-white rounded-md flex items-center duration-300 hover:bg-blue-600"
@@ -136,24 +157,47 @@ export default function SecoundRegisterPage({
               {' '}
               <IoMdArrowRoundForward className="pt-2 text-3xl" />
               <span>مرحله قبل</span>
-            </button>
+            </button> */}
+            <Tooltip title="مرحله قبل">
+              <IconButton onClick={() => setIsRegister(false)}>
+                <IoMdArrowRoundForward className="text-3xl" />
+              </IconButton>
+            </Tooltip>
           </div>
+
           <div className=" mt-5">
             <InputName fristName={firstName} setFristName={setFirstName} />
             <InputLastName lastName={lastName} setLastName={setLastName} />
             <SelectGender gender={gender} setGender={setGender} />
+            <SelectAge setDateOfBirthFaPatient={setDateOfBirthFaPatient} />
             {registerModel.abroad && <InputPassword setPassword={setPassword} password={password} />}
-            <InputFillCode setCode={setCode} />
-            <div className="flex justify-center items-stretch mt-4">
-              <div className="px-2 bg-green-500 rounded-md flex items-center">
-                <button type="submit" onClick={submitHandler} className=" text-white px-5 py-2 ">
+            <InputFillCode setCode={setCode} btnSubmit={btnSubmit} />
+            <div className="px-5 mx-auto lg:w-2/3 w-full mt-4">
+              <div className="px-2 rounded-md flex items-center">
+                <Button
+                  sx={{
+                    py: 1,
+                    fontSize: 20,
+                    backgroundColor: 'rgb(16 185 129)',
+                    '&:hover': {
+                      backgroundColor: 'rgb(5 150 105)',
+                    },
+                  }}
+                  className="w-full text-white px-5 py-2 "
+                  onClick={submitHandler}
+                  ref={btnSubmit}
+                  variant="contained"
+                >
                   تایید
-                </button>
+                </Button>
               </div>
+            </div>
+            <div className="text-start px-5 mx-auto lg:w-2/3 w-full mt-3 text-xs">
               <InputTimer registerModel={registerModel} setIsLoading={setIsLoading} />
             </div>
           </div>
         </div>
+        <div className="lg:w-1/2 w-0 h-screen bg-login bg-cover bg-no-repeat bg-[#0008] bg-blend-multiply" />
       </div>
     </>
   );

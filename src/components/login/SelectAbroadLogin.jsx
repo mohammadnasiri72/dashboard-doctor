@@ -1,10 +1,10 @@
-import { InputLabel } from '@mui/material';
+import { FormControlLabel, InputLabel, Switch } from '@mui/material';
 import React from 'react';
 
 export default function SelectAbroadLogin({ abroad, setAbroad }) {
   return (
     <>
-      <div className="flex justify-center mt-5">
+      {/* <div className="flex justify-center mt-5">
         <div className="px-3 flex items-center">
           <input
             className="cursor-pointer"
@@ -35,7 +35,15 @@ export default function SelectAbroadLogin({ abroad, setAbroad }) {
             ساکن ایران نیستم
           </InputLabel>
         </div>
-      </div>
+      </div> */}
+      <div className="pr-5 mt-1">
+            <FormControlLabel
+              value={abroad}
+              onChange={() => setAbroad(!abroad)}
+              control={<Switch checked={!abroad} />}
+              label={'ساکن ایران'}
+            />
+          </div>
     </>
   );
 }

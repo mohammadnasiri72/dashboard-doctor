@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import axios from 'axios';
 import React from 'react';
 import SelectAbroadLogin from './SelectAbroadLogin';
@@ -15,7 +15,7 @@ export default function MobileLoginPageOne({
   setIsLoading,
 }) {
   const paternMobile = /^09[0|1|2|3|9][0-9]{8}$/;
-  const route = useRouter()
+  const route = useRouter();
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-start',
@@ -37,7 +37,7 @@ export default function MobileLoginPageOne({
     if (mobileNumber.match(paternMobile)) {
       setIsLoading(true);
       axios
-        .post(mainDomain+'/api/Authenticate/SendOtp', mobileNumberData)
+        .post(mainDomain + '/api/Authenticate/SendOtp', mobileNumberData)
         .then((res) => {
           setIsLoading(false);
           if (res.status === 200) {
@@ -52,7 +52,7 @@ export default function MobileLoginPageOne({
           setIsLoading(false);
           Toast.fire({
             icon: 'error',
-            text: err.response? err.response?.data : 'خطای شبکه'
+            text: err.response ? err.response?.data : 'خطای شبکه',
           });
         });
     } else {
@@ -64,9 +64,9 @@ export default function MobileLoginPageOne({
   };
   return (
     <>
-      <h2 className="text-3xl font-semibold text-white">صفحه ورود</h2>
+      <h2 className="text-3xl">صفحه ورود</h2>
       <SelectAbroadLogin abroad={abroad} setAbroad={setAbroad} />
-      <div className="px-10 mt-5">
+      <div className="px-5 lg:w-2/3 w-full mx-auto mt-5">
         <TextField
           onChange={(e) => setMobileNumber(e.target.value)}
           value={mobileNumber}
@@ -76,27 +76,45 @@ export default function MobileLoginPageOne({
           multiline
           color={colorMobile}
           maxRows={4}
-          InputProps={{className:'textfield-style'}}
+          // InputProps={{className:'textfield-style'}}
         />
         <div>
-          <div className="flex justify-center items-center">
-            <div className="px-3">
-              <button
-                onClick={sendData}
-                className="bg-green-500 px-5 py-2 rounded-md text-white mt-5 duration-300 hover:bg-green-700"
-              >
-                مرحله بعد
-              </button>
-            </div>
-            <div className="px-3">
-              <button onClick={()=>{
-                route.replace('/register')
+          <div className=" mt-4">
+            <Button
+              sx={{
+                py: 1,
+                fontSize: 20,
+                backgroundColor: 'rgb(16 185 129)',
+                '&:hover': {
+                  backgroundColor: 'rgb(5 150 105)',
+                },
               }}
-                className="bg-slate-700 px-5 py-2 rounded-md text-white mt-5 duration-300 hover:bg-slate-800"
-              >
-                ساخت حساب جدید
-              </button>
-            </div>
+              onClick={sendData}
+              className="rounded-md w-full text-white mt-5 duration-300"
+              variant="contained"
+            >
+              مرحله بعد
+            </Button>
+          </div>
+          <div className="text-start mt-4 ">
+            <Button
+              size="medium"
+              sx={{
+                py: 1,
+                fontSize: 16,
+                backgroundColor: 'rgb(20 184 166)',
+                '&:hover': {
+                  backgroundColor: 'rgb(13 148 136)',
+                },
+              }}
+              onClick={() => {
+                route.replace('/register');
+              }}
+              className="rounded-md  text-white mt-5 duration-300"
+              variant="contained"
+            >
+              ساخت حساب جدید
+            </Button>
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ export default function InputEmailLogin({setEmail , email}) {
       }
   return (
     <>
-      <div className="mt-5 px-10">
+      <div className="mt-5 px-5 lg:w-2/3 w-full mx-auto">
         <TextField
           onChange={(e) => setEmail(e.target.value)}
           value={email}
@@ -23,7 +23,7 @@ export default function InputEmailLogin({setEmail , email}) {
           multiline
           color={colorEmail}
           maxRows={4}
-          InputProps={{className:'textfield-style'}}
+          // InputProps={{className:'textfield-style'}}
         />
       </div>
     </>

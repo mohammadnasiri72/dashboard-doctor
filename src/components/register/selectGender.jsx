@@ -4,19 +4,19 @@ export default function SelectGender({ gender, setGender }) {
   
   return (
     <>
-      <div className="px-10 mx-auto mt-4 flex items-center">
-        <h3 className="text-start">جنسیت:</h3>
-            <div className="px-4" dir="rtl">
+      <div className="px-5 lg:w-2/3 w-full mx-auto mt-4 flex items-center">
+        {/* <h3 className="text-start">جنسیت:</h3> */}
+            <div className="" dir="rtl">
               <FormControl color="primary">
                 <InputLabel color="primary" className="px-2" id="demo-simple-select-label">
-                  Gender
+                  جنسیت
                 </InputLabel>
                 <Select
                 className='w-36'
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={gender}
-                  label="Gender"
+                  label="جنسیت"
                   color="primary"
                   onChange={(e) => setGender(e.target.value)}
                   InputProps={{className:'textfield-style'}}
