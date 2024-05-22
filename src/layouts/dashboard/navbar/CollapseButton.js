@@ -35,7 +35,7 @@ export default function CollapseButton({ onToggleCollapse, collapseClick }) {
 // ----------------------------------------------------------------------
 
 const icon = (
-  <svg width="64" height="24" xmlns="http://www.w3.org/2000/svg">
+  <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fillRule="evenodd">
       <path d="M0 0h24v24H0z" />
       <g fill="currentColor" fillRule="nonzero">

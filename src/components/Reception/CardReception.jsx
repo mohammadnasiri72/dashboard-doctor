@@ -51,7 +51,7 @@ export default function CardReception({
   let patient = [...patientList];
   useEffect(() => {
     setUser(patient.find((e) => e.nationalId === reception.patientNationalId));
-  }, []);
+  }, [patient , reception]);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -206,10 +206,10 @@ export default function CardReception({
                 <FaMobile className="cursor-pointer" />
               </IconButton>
             </Tooltip>
-            {user.userPhoneNumber ? user.userPhoneNumber : '____'}
+            {user? user.userPhoneNumber ? user.userPhoneNumber : '____' : '____'}
           </p>
-          <p className="mt-2">نام پدر : {user.fatherName ? user.fatherName : '____'}</p>
-          <p className="mt-2">تلفن ثابت : {user.tel ? user.tel : '____'}</p>
+          <p className="mt-2">نام پدر : {user? user.fatherName ? user.fatherName : '____' :'____'}</p>
+          <p className="mt-2">تلفن ثابت : {user?user.tel ? user.tel : '____':'____'}</p>
         </CardContent>
       </Collapse>
     </Card>
